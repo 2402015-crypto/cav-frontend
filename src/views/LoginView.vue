@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import logo from '@/logos/Chable_Maroma-01.png'
+import logo from '@/images/Chable_Maroma-01.png'
 
 const authStore = useAuthStore()
 const router = useRouter()

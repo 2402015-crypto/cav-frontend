@@ -3,6 +3,7 @@ import PlaceholderView from '@/views/PlaceholderView.vue'
 import LoginView from '@/views/LoginView.vue'
 import OperativoView from '@/views/OperativoView.vue'
 import AdminView from '@/views/AdminView.vue'
+import OperativoSectionView from '@/views/OperativoSectionView.vue'
 import UnauthorizedView from '@/views/UnauthorizedView.vue'
 import { useAuthStore } from '@/stores/auth'
 
@@ -22,6 +23,14 @@ const router = createRouter({
       path: '/operativo',
       component: OperativoView,
       meta: { requiresAuth: true, roles: ['OPERATIVO', 'ADMIN'], title: 'Área operativa' },
+      redirect: { name: 'operativo-panel' },
+      children: [
+        { path: 'panel', name: 'operativo-panel', component: OperativoSectionView, meta: { title: 'Panel operativo', sectionTitle: 'Panel Operativo' } },
+        { path: 'entrada', name: 'operativo-entrada', component: OperativoSectionView, meta: { title: 'Entrada', sectionTitle: 'Entrada' } },
+        { path: 'salida', name: 'operativo-salida', component: OperativoSectionView, meta: { title: 'Salida', sectionTitle: 'Salida' } },
+        { path: 'activos', name: 'operativo-activos', component: OperativoSectionView, meta: { title: 'Activos', sectionTitle: 'Activos' } },
+        { path: 'buscar', name: 'operativo-buscar', component: OperativoSectionView, meta: { title: 'Buscar', sectionTitle: 'Buscar' } },
+      ],
     },
     {
       path: '/admin',

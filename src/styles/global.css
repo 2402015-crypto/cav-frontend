@@ -1,3 +1,7 @@
+/* ========================================================================== */
+/* 1. Configuracion global                                                     */
+/* ========================================================================== */
+
 :root {
   font-family: "Avenir Next", "Montserrat", "Segoe UI", sans-serif;
   color: #717773;
@@ -6,16 +10,30 @@
   text-rendering: optimizeLegibility;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
-html, body, #app {
+html,
+body,
+#app {
   min-width: 320px;
   min-height: 100%;
   margin: 0;
 }
 
-body { min-height: 100vh; }
-button, input { font: inherit; }
+body {
+  min-height: 100vh;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+/* ========================================================================== */
+/* 2. Login: estructura y fondo                                               */
+/* ========================================================================== */
 
 .login-page {
   position: relative;
@@ -27,6 +45,7 @@ button, input { font: inherit; }
   background: #eef2ef;
 }
 
+/* Figuras decorativas fijas en las esquinas del login. */
 .login-decoration {
   position: fixed;
   pointer-events: none;
@@ -60,6 +79,10 @@ button, input { font: inherit; }
   padding: 104px 0 36px;
 }
 
+/* ========================================================================== */
+/* 3. Login: identidad visual                                                  */
+/* ========================================================================== */
+
 .brand {
   display: flex;
   flex-direction: column;
@@ -67,8 +90,23 @@ button, input { font: inherit; }
   color: #adabaa;
 }
 
-.brand-logo { display: block; width: 238px; height: auto; }
-.brand h1 { margin: 13px 0 0; color: #717773; font-size: 10px; font-weight: 600; letter-spacing: 1.3px; }
+.brand-logo {
+  display: block;
+  width: 238px;
+  height: auto;
+}
+
+.brand h1 {
+  margin: 13px 0 0;
+  color: #717773;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.3px;
+}
+
+/* ========================================================================== */
+/* 4. Login: tarjeta, campos y acciones                                        */
+/* ========================================================================== */
 
 .login-card {
   width: 100%;
@@ -80,27 +118,321 @@ button, input { font: inherit; }
   box-shadow: 0 12px 18px rgba(113, 119, 115, 0.12);
 }
 
-.field-group + .field-group { margin-top: 15px; }
-.field-group label { display: block; margin: 0 0 7px; color: #717773; font-size: 11px; font-weight: 600; letter-spacing: 0.2px; }
-.field-group input { display: block; width: 100%; height: 44px; padding: 0 14px; border: 1px solid #d8ded9; border-radius: 10px; outline: none; background: #f1f5f9; color: #717773; font-size: 13px; transition: border-color 160ms ease, box-shadow 160ms ease; }
-.field-group input::placeholder { color: #c7cfca; }
-.field-group input:focus { border-color: #7cb09d; box-shadow: 0 0 0 3px rgba(124, 176, 157, 0.18); }
-.login-error { margin: 12px 0 0; color: #a45c5c; font-size: 12px; text-align: center; }
-.login-button { width: 100%; height: 40px; margin-top: 16px; border: 0; border-radius: 9px; background: #7cb09d; color: #fff; cursor: pointer; font-size: 13px; font-weight: 600; transition: background-color 160ms ease, opacity 160ms ease; }
-.login-button:hover:not(:disabled) { background: #6da58f; }
-.login-button:disabled { cursor: wait; opacity: 0.72; }
-.login-version { margin: 31px 0 0; color: #adabaa; font-size: 11px; }
+.field-group + .field-group {
+  margin-top: 15px;
+}
 
-.temporary-panel { display: grid; min-height: 100vh; place-items: center; background: #eef2ef; color: #717773; }
-.temporary-panel h1 { font-size: 28px; font-weight: 500; }
-.temporary-logout { display: block; min-width: 160px; margin: 20px auto 0; padding: 10px 18px; border: 0; border-radius: 8px; background: #7cb09d; color: #fff; cursor: pointer; font-size: 13px; font-weight: 600; }
-.temporary-logout:disabled { cursor: wait; opacity: 0.7; }
+.field-group label {
+  display: block;
+  margin: 0 0 7px;
+  color: #717773;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.field-group input {
+  display: block;
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid #d8ded9;
+  border-radius: 10px;
+  outline: none;
+  background: #f1f5f9;
+  color: #717773;
+  font-size: 13px;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.field-group input::placeholder {
+  color: #c7cfca;
+}
+
+.field-group input:focus {
+  border-color: #7cb09d;
+  box-shadow: 0 0 0 3px rgba(124, 176, 157, 0.18);
+}
+
+.login-error {
+  margin: 12px 0 0;
+  color: #a45c5c;
+  font-size: 12px;
+  text-align: center;
+}
+
+.login-button {
+  width: 100%;
+  height: 40px;
+  margin-top: 16px;
+  border: 0;
+  border-radius: 9px;
+  background: #7cb09d;
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background-color 160ms ease, opacity 160ms ease;
+}
+
+.login-button:hover:not(:disabled) {
+  background: #6da58f;
+}
+
+.login-button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.login-version {
+  margin: 31px 0 0;
+  color: #adabaa;
+  font-size: 11px;
+}
+
+/* ========================================================================== */
+/* 5. Plantilla operativa: superficie y encabezado                            */
+/* ========================================================================== */
+
+.operative-shell {
+  min-height: 100vh;
+  background: #fcfdfb;
+  color: #717773;
+}
+
+.operative-header {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  height: 68px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  border-bottom: 1px solid #d8ded9;
+  background: #fff;
+}
+
+.operative-logo {
+  display: block;
+  width: 142px;
+  height: auto;
+}
+
+.operative-profile {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  padding: 1px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: #7cb09d;
+  color: #fff;
+}
+
+.operative-profile:disabled {
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.operative-profile img {
+  display: block;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.operative-main {
+  min-height: 100vh;
+  padding: 68px 0 86px;
+}
+
+/* ========================================================================== */
+/* 6. Plantilla operativa: contenido temporal                                 */
+/* ========================================================================== */
+
+.operative-section {
+  display: grid;
+  min-height: calc(100vh - 154px);
+  place-items: center;
+  align-content: center;
+  gap: 20px;
+}
+
+.operative-section h1 {
+  margin: 0;
+  color: #717773;
+  font-size: 30px;
+  font-weight: 500;
+}
+
+/* ========================================================================== */
+/* 7. Plantilla operativa: menu inferior                                      */
+/* ========================================================================== */
+
+.operative-nav {
+  position: fixed;
+  z-index: 10;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  height: 86px;
+  grid-template-columns: repeat(5, 1fr);
+  border-top: 1px solid #d8ded9;
+  background: #fff;
+}
+
+.operative-nav__item {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #717773;
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+.operative-nav__item svg {
+  width: 31px;
+  height: 31px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.operative-nav__item span {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.operative-nav__item--active {
+  color: #7cb09d;
+}
+
+/* ========================================================================== */
+/* 8. Componentes temporales                                                  */
+/* ========================================================================== */
+
+.temporary-logout {
+  display: block;
+  min-width: 160px;
+  margin: 20px auto 0;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 8px;
+  background: #7cb09d;
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.temporary-logout:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+/* ========================================================================== */
+/* 9. Ajustes responsive para la plantilla operativa y el login                */
+/* ========================================================================== */
 
 @media (max-width: 600px) {
-  .login-decoration--top { width: 205px; height: 205px; top: -42px; right: -68px; }
-  .login-decoration--bottom { width: 270px; height: 270px; bottom: -143px; left: -129px; border-width: 6px; }
-  .login-content { width: min(100% - 68px, 368px); padding-top: 181px; }
-  .brand-logo { width: 205px; }
-  .brand h1 { margin-top: 11px; font-size: 8px; letter-spacing: 1px; }
-  .login-card { margin-top: 36px; padding: 20px; border-radius: 18px; }
+  /* Plantilla operativa en movil. */
+  .operative-header {
+    height: 50px;
+    padding: 0 18px;
+  }
+
+  .operative-logo {
+    width: 112px;
+  }
+
+  .operative-profile {
+    width: 42px;
+    height: 42px;
+    padding: 1px;
+  }
+
+  .operative-profile img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .operative-main {
+    padding-top: 50px;
+    padding-bottom: 49px;
+  }
+
+  .operative-section {
+    min-height: calc(100vh - 99px);
+  }
+
+  .operative-section h1 {
+    font-size: 24px;
+  }
+
+  .operative-nav {
+    height: 49px;
+  }
+
+  .operative-nav__item {
+    gap: 2px;
+  }
+
+  .operative-nav__item svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 1.6;
+  }
+
+  .operative-nav__item span {
+    font-size: 9px;
+    font-weight: 500;
+  }
+
+  /* Login en movil. */
+  .login-decoration--top {
+    width: 205px;
+    height: 205px;
+    top: -42px;
+    right: -68px;
+  }
+
+  .login-decoration--bottom {
+    width: 270px;
+    height: 270px;
+    bottom: -143px;
+    left: -129px;
+    border-width: 6px;
+  }
+
+  .login-content {
+    width: min(100% - 68px, 368px);
+    padding-top: 181px;
+  }
+
+  .brand-logo {
+    width: 205px;
+  }
+
+  .brand h1 {
+    margin-top: 11px;
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+
+  .login-card {
+    margin-top: 36px;
+    padding: 20px;
+    border-radius: 18px;
+  }
 }
