@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import PlaceholderView from '@/views/PlaceholderView.vue'
-import IntegrationStatusView from '@/views/IntegrationStatusView.vue'
 import LoginView from '@/views/LoginView.vue'
+import OperativoView from '@/views/OperativoView.vue'
+import AdminView from '@/views/AdminView.vue'
 import UnauthorizedView from '@/views/UnauthorizedView.vue'
 import { useAuthStore } from '@/stores/auth'
 
@@ -10,12 +11,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/integration-status',
-    },
-    {
-      path: '/integration-status',
-      component: IntegrationStatusView,
-      meta: { public: true, title: 'Estado de integración' },
+      redirect: '/login',
     },
     {
       path: '/login',
@@ -24,12 +20,12 @@ const router = createRouter({
     },
     {
       path: '/operativo',
-      component: PlaceholderView,
+      component: OperativoView,
       meta: { requiresAuth: true, roles: ['OPERATIVO', 'ADMIN'], title: 'Área operativa' },
     },
     {
       path: '/admin',
-      component: PlaceholderView,
+      component: AdminView,
       meta: { requiresAuth: true, roles: ['ADMIN'], title: 'Administración' },
     },
     {

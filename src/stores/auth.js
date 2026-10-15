@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import * as authApi from '@/services/api/auth'
+import * as authApi from '@/services/api/authService'
 
 const TOKEN_KEY = 'cav_access_token'
 const USER_KEY = 'cav_authenticated_user'

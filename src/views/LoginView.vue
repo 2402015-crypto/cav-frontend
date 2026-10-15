@@ -1,11 +1,11 @@
 <script setup>
 import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import logo from '@/logos/Chable_Maroma-01.png'
 
 const authStore = useAuthStore()
 const router = useRouter()
-const route = useRoute()
 const usuario = ref('')
 const contrasena = ref('')
 const error = ref('')
@@ -16,9 +16,9 @@ async function iniciarSesion() {
   enviando.value = true
   try {
     await authStore.login({ usuario: usuario.value, contrasena: contrasena.value })
-    await router.push(route.query.redirect || '/operativo')
+    await router.push(authStore.user.rol === 'ADMIN' ? '/admin' : '/operativo')
   } catch (exception) {
-    error.value = exception.response?.data?.message || 'No fue posible iniciar sesión'
+    error.value = exception.response?.data?.message || 'Usuario o contraseña incorrectos'
   } finally {
     enviando.value = false
   }
@@ -26,21 +26,35 @@ async function iniciarSesion() {
 </script>
 
 <template>
-  <main class="container py-5" style="max-width: 480px">
-    <h1 class="h3 mb-4">Iniciar sesión</h1>
-    <form @submit.prevent="iniciarSesion">
-      <div class="mb-3">
-        <label class="form-label" for="usuario">Usuario</label>
-        <input id="usuario" v-model.trim="usuario" class="form-control" autocomplete="username" required />
-      </div>
-      <div class="mb-3">
-        <label class="form-label" for="contrasena">Contraseña</label>
-        <input id="contrasena" v-model="contrasena" class="form-control" type="password" autocomplete="current-password" required />
-      </div>
-      <div v-if="error" class="alert alert-danger" role="alert">{{ error }}</div>
-      <button class="btn btn-primary w-100" type="submit" :disabled="enviando">
-        {{ enviando ? 'Validando...' : 'Entrar' }}
-      </button>
-    </form>
+  <main class="login-page">
+    <div class="login-decoration login-decoration--top" aria-hidden="true"></div>
+    <div class="login-decoration login-decoration--bottom" aria-hidden="true"></div>
+
+    <section class="login-content" aria-labelledby="login-title">
+      <header class="brand" aria-label="Chablé Maroma, Control de Acceso Vehicular">
+        <img class="brand-logo" :src="logo" alt="Chablé Maroma" />
+        <h1 id="login-title">CONTROL DE ACCESO VEHICULAR</h1>
+      </header>
+
+      <form class="login-card" @submit.prevent="iniciarSesion" novalidate>
+        <div class="field-group">
+          <label for="usuario">USUARIO</label>
+          <input id="usuario" v-model.trim="usuario" autocomplete="username" placeholder="nombre de usuario" required />
+        </div>
+
+        <div class="field-group">
+          <label for="contrasena">CONTRASEÑA</label>
+          <input id="contrasena" v-model="contrasena" type="password" autocomplete="current-password" placeholder="••••••••" required />
+        </div>
+
+        <p v-if="error" class="login-error" role="alert">{{ error }}</p>
+
+        <button class="login-button" type="submit" :disabled="enviando">
+          {{ enviando ? 'Validando...' : 'Iniciar sesión' }}
+        </button>
+      </form>
+
+      <p class="login-version">Chablé Maroma · CAV v1.1</p>
+    </section>
   </main>
 </template>
