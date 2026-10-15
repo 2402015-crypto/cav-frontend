@@ -57,15 +57,6 @@ La aplicacion se sirve normalmente en `http://localhost:5173`.
 | `VITE_API_URL` | URL base de la API backend | `http://localhost:8080/api/v1` |
 | `VITE_API_TIMEOUT` | Tiempo maximo de espera en milisegundos | `10000` |
 
-No subas `.env`; usa `.env.example` como plantilla.
-
-## Buenas practicas
-
-- Ejecutar `npm run build` antes de crear un release.
-- Mantener las URL y secretos fuera del codigo fuente.
-- No subir `node_modules`, `dist`, logs ni caches.
-- Mantener los cambios pequenos y revisar el diff antes de hacer commit.
-
 ## Autor
 
 Bryan Martinez Jimenez  
