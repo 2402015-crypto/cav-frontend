@@ -4,8 +4,8 @@
 
 .admin-shell {
   width: 100%;
-  min-height: 100dvh;
-  overflow-x: hidden;
+  height: 100dvh;
+  overflow: hidden;
   overscroll-behavior: none;
   background: #24211f;
   color: #adabaa;
@@ -170,8 +170,11 @@
 }
 
 .admin-main {
-  min-height: 100dvh;
+  height: 100dvh;
   margin-left: 230px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   background: #24211f;
 }
 
@@ -191,7 +194,447 @@
 }
 
 /* ========================================================================== */
-/* 2. Ajustes responsive de la plantilla administrativa                       */
+/* 2. Gestión de usuarios                                                     */
+/* ========================================================================== */
+
+.users-page {
+  min-height: 100dvh;
+  padding: 26px 24px 72px;
+  background: #24211f;
+  color: #d8ded9;
+}
+
+.users-page__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  max-width: 1062px;
+  margin: 0 auto 19px;
+}
+
+.users-page__header h1 {
+  margin: 0;
+  color: #eef2ef;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.users-page__header p {
+  margin: 6px 0 0;
+  color: #717773;
+  font-size: 13px;
+}
+
+.create-user-button {
+  display: inline-flex;
+  height: 28px;
+  align-items: center;
+  gap: 7px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 12px;
+  background: #7cb09d;
+  color: #fff;
+  cursor: not-allowed;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 1;
+}
+
+.create-user-button span {
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.user-form {
+  max-width: 1062px;
+  margin: 0 auto 16px;
+  padding: 20px 19px 14px;
+  border: 1px solid rgba(216, 222, 217, 0.16);
+  border-radius: 17px;
+  background: #332e2b;
+  box-shadow: 0 14px 25px rgba(0, 0, 0, 0.12);
+}
+
+.user-form__heading h2 {
+  margin: 0 0 17px;
+  color: #eef2ef;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.user-form__heading p {
+  margin: -10px 0 15px;
+  color: #9baaa4;
+  font-size: 11px;
+}
+
+.user-form__fields {
+  display: grid;
+  grid-template-columns: 1.05fr 1.1fr 1.05fr 1.1fr;
+  gap: 16px;
+}
+
+.user-form__field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.user-form__field > span {
+  color: #9baaa4;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+}
+
+.user-form__field input,
+.user-form__field select {
+  width: 100%;
+  height: 40px;
+  padding: 0 13px;
+  border: 1px solid rgba(216, 222, 217, 0.2);
+  border-radius: 10px;
+  outline: none;
+  background: #292623;
+  color: #eef2ef;
+  font-size: 13px;
+}
+
+.user-form__field select {
+  cursor: pointer;
+}
+
+.user-form__field input::placeholder {
+  color: #717773;
+}
+
+.user-form__field input:focus,
+.user-form__field select:focus {
+  border-color: #7cb09d;
+  box-shadow: 0 0 0 3px rgba(124, 176, 157, 0.12);
+}
+
+.user-form__field small,
+.user-form__error {
+  color: #d99487;
+  font-size: 11px;
+}
+
+.user-form__field small {
+  min-height: 13px;
+}
+
+.user-form__actions {
+  display: flex;
+  gap: 9px;
+  margin-top: 12px;
+}
+
+.user-form__submit,
+.user-form__cancel {
+  height: 29px;
+  padding: 0 14px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.user-form__submit {
+  border: 0;
+  background: #7cb09d;
+  color: #fff;
+  cursor: pointer;
+}
+
+.user-form__submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
+.user-form__cancel {
+  border: 1px solid rgba(216, 222, 217, 0.2);
+  background: transparent;
+  color: #eef2ef;
+  cursor: pointer;
+}
+
+.user-form__cancel:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.user-form__error {
+  margin: 10px 0 0;
+}
+
+.users-table-wrap {
+  max-width: 1062px;
+  margin: 0 auto;
+  overflow-x: auto;
+  border: 1px solid rgba(216, 222, 217, 0.18);
+  border-radius: 17px;
+  background: #332e2b;
+  box-shadow: 0 14px 25px rgba(0, 0, 0, 0.12);
+}
+
+.users-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.users-table th,
+.users-table td {
+  height: 53px;
+  padding: 0 15px;
+  border-bottom: 1px solid rgba(216, 222, 217, 0.22);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.users-table th {
+  height: 38px;
+  color: #9baaa4;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+}
+
+.users-table td {
+  color: #d8ded9;
+  font-size: 13px;
+}
+
+.users-table th:nth-child(1) { width: 23%; }
+.users-table th:nth-child(2) { width: 12%; }
+.users-table th:nth-child(3) { width: 16%; }
+.users-table th:nth-child(4) { width: 12%; }
+.users-table th:nth-child(5) { width: 37%; }
+
+.users-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.user-name,
+.user-actions {
+  display: flex;
+  align-items: center;
+}
+
+.user-name {
+  gap: 11px;
+}
+
+.user-avatar {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(148, 197, 179, 0.1);
+  color: #7cb09d;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.users-table code {
+  padding: 3px 5px;
+  border-radius: 3px;
+  background: rgba(24, 21, 19, 0.48);
+  color: #d8ded9;
+  font-family: inherit;
+  font-size: 11px;
+}
+
+.user-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  background: rgba(124, 176, 157, 0.12);
+  color: #7cb09d;
+  font-size: 11px;
+}
+
+.user-status--inactive {
+  background: rgba(155, 170, 164, 0.14);
+  color: #9baaa4;
+}
+
+.user-status__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.user-actions {
+  gap: 7px;
+}
+
+.table-action {
+  display: inline-flex;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 0 11px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.table-action svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.6;
+}
+
+.table-action--edit {
+  border: 1px solid rgba(216, 222, 217, 0.16);
+  background: transparent;
+  color: #d8ded9;
+  cursor: not-allowed;
+}
+
+.table-action--toggle {
+  border: 0;
+  background: #7cb09d;
+  color: #fff;
+  cursor: pointer;
+}
+
+.table-action--toggle:hover {
+  background: #94c5b3;
+}
+
+.table-action--toggle:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.table-action--delete {
+  padding-right: 4px;
+  padding-left: 4px;
+  border: 0;
+  background: transparent;
+  color: #9baaa4;
+  cursor: pointer;
+}
+
+.table-action--delete:hover {
+  color: #eef2ef;
+}
+
+.users-table__empty {
+  height: 100px !important;
+  color: #9baaa4 !important;
+  text-align: center !important;
+}
+
+.users-feedback {
+  max-width: 1062px;
+  margin: 25px auto;
+  color: #9baaa4;
+  font-size: 13px;
+}
+
+.users-feedback--error {
+  color: #d99487;
+}
+
+.users-feedback--success {
+  color: #7cb09d;
+}
+
+.confirm-modal {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(14, 12, 11, 0.7);
+}
+
+.confirm-modal__dialog {
+  position: relative;
+  width: min(100%, 390px);
+  padding: 28px;
+  border: 1px solid rgba(216, 222, 217, 0.2);
+  border-radius: 14px;
+  background: #332e2b;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.confirm-modal__dialog h2 {
+  margin: 0;
+  color: #eef2ef;
+  font-size: 18px;
+}
+
+.confirm-modal__dialog p {
+  margin: 12px 0 24px;
+  color: #d8ded9;
+  font-size: 14px;
+}
+
+.confirm-modal__close {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  border: 0;
+  background: transparent;
+  color: #9baaa4;
+  cursor: pointer;
+  font-size: 23px;
+  line-height: 1;
+}
+
+.confirm-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+}
+
+.confirm-button {
+  height: 34px;
+  padding: 0 15px;
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.confirm-button--cancel {
+  border: 1px solid rgba(216, 222, 217, 0.2);
+  background: transparent;
+  color: #d8ded9;
+}
+
+.confirm-button--danger {
+  border: 0;
+  background: #9baaa4;
+  color: #181513;
+}
+
+/* ========================================================================== */
+/* 3. Ajustes responsive de la plantilla administrativa                       */
 /* ========================================================================== */
 
 @media (max-width: 600px) {
@@ -202,5 +645,33 @@
 
   .admin-main {
     margin-left: 0;
+  }
+
+  .users-page {
+    padding: 22px 14px 32px;
+  }
+
+  .users-page__header {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .create-user-button {
+    width: fit-content;
+  }
+
+  .users-table-wrap {
+    border-radius: 12px;
+  }
+
+  .user-form {
+    padding: 18px 14px 14px;
+    border-radius: 12px;
+  }
+
+  .user-form__fields {
+    grid-template-columns: 1fr;
+    gap: 11px;
   }
 }
