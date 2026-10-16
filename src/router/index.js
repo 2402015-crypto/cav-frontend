@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import PlaceholderView from '@/views/PlaceholderView.vue'
 import LoginView from '@/views/LoginView.vue'
-import OperativoView from '@/views/OperativoView.vue'
-import AdminView from '@/views/AdminView.vue'
-import OperativoSectionView from '@/views/OperativoSectionView.vue'
+import OperativoView from '@/views/operativo/OperativoView.vue'
+import AdminView from '@/views/admin/AdminView.vue'
+import OperativoSectionView from '@/views/operativo/OperativoSectionView.vue'
+import AdminSectionView from '@/views/admin/AdminSectionView.vue'
 import UnauthorizedView from '@/views/UnauthorizedView.vue'
 import { useAuthStore } from '@/stores/auth'
 
@@ -36,6 +37,14 @@ const router = createRouter({
       path: '/admin',
       component: AdminView,
       meta: { requiresAuth: true, roles: ['ADMIN'], title: 'Administración' },
+      redirect: { name: 'admin-dashboard' },
+      children: [
+        { path: 'dashboard', name: 'admin-dashboard', component: AdminSectionView, meta: { title: 'Dashboard administrativo', sectionTitle: 'Dashboard Administrativo' } },
+        { path: 'usuarios', name: 'admin-usuarios', component: AdminSectionView, meta: { title: 'Usuarios', sectionTitle: 'Usuarios' } },
+        { path: 'bitacora', name: 'admin-bitacora', component: AdminSectionView, meta: { title: 'Bitácora', sectionTitle: 'Bitácora' } },
+        { path: 'historial', name: 'admin-historial', component: AdminSectionView, meta: { title: 'Historial', sectionTitle: 'Historial' } },
+        { path: 'configuracion', name: 'admin-configuracion', component: AdminSectionView, meta: { title: 'Configuración', sectionTitle: 'Configuración' } },
+      ],
     },
     {
       path: '/unauthorized',

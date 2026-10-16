@@ -1,0 +1,206 @@
+/* ========================================================================== */
+/* 1. Plantilla administrativa: menu lateral y contenido                      */
+/* ========================================================================== */
+
+.admin-shell {
+  width: 100%;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  overscroll-behavior: none;
+  background: #24211f;
+  color: #adabaa;
+}
+
+.admin-sidebar {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  width: 230px;
+  flex-direction: column;
+  background: #181513;
+}
+
+.admin-sidebar__brand {
+  display: flex;
+  height: 111px;
+  flex-direction: column;
+  justify-content: center;
+  padding: 17px 20px 14px;
+  border-bottom: 1px solid rgba(216, 222, 217, 0.16);
+}
+
+.admin-sidebar__brand img {
+  display: block;
+  width: 173px;
+  height: auto;
+}
+
+.admin-sidebar__brand span,
+.admin-sidebar__label {
+  color: #adabaa;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1.3px;
+}
+
+.admin-sidebar__brand span {
+  margin-top: 7px;
+}
+
+.admin-sidebar__body {
+  flex: 1;
+  padding: 18px 11px;
+}
+
+.admin-sidebar__label {
+  margin: 0 9px 10px;
+}
+
+.admin-menu {
+  display: grid;
+  gap: 3px;
+}
+
+.admin-menu__item {
+  display: flex;
+  min-height: 39px;
+  align-items: center;
+  gap: 12px;
+  padding: 0 11px;
+  border-radius: 10px;
+  color: #adabaa;
+  text-decoration: none;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.admin-menu__item svg {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.admin-menu__item span {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.admin-menu__item--active {
+  background: #7cb09d;
+  color: #0d1412;
+}
+
+.admin-sidebar__footer {
+  padding: 14px 19px 19px;
+  border-top: 1px solid rgba(216, 222, 217, 0.16);
+}
+
+.admin-user {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.admin-user__avatar {
+  display: grid;
+  width: 31px;
+  height: 31px;
+  place-items: center;
+  border-radius: 50%;
+  background: #7cb09d;
+  color: #0d1412;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.admin-user__details {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.admin-user__details strong {
+  overflow: hidden;
+  color: #fff;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-user__details small {
+  color: #adabaa;
+  font-size: 11px;
+}
+
+.admin-logout {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 12px;
+  margin-top: 13px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #adabaa;
+  cursor: pointer;
+  font-size: 12px;
+  text-align: left;
+}
+
+.admin-logout svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.admin-logout:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.admin-main {
+  min-height: 100dvh;
+  margin-left: 230px;
+  background: #24211f;
+}
+
+.admin-section {
+  display: grid;
+  min-height: 100dvh;
+  place-items: start;
+  padding: 24px;
+  background: #24211f;
+}
+
+.admin-section h1 {
+  margin: 0;
+  color: #f2efe3;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* ========================================================================== */
+/* 2. Ajustes responsive de la plantilla administrativa                       */
+/* ========================================================================== */
+
+@media (max-width: 600px) {
+  .admin-sidebar {
+    width: 205px;
+    transform: translateX(-100%);
+  }
+
+  .admin-main {
+    margin-left: 0;
+  }
+}

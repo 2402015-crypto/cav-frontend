@@ -1,0 +1,208 @@
+/* ========================================================================== */
+/* 1. Plantilla operativa: superficie y encabezado                            */
+/* ========================================================================== */
+
+.operative-shell {
+  min-height: 100vh;
+  background: #fcfdfb;
+  color: #717773;
+}
+
+.operative-header {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  height: 68px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  border-bottom: 1px solid #d8ded9;
+  background: #fff;
+}
+
+.operative-logo {
+  display: block;
+  width: 142px;
+  height: auto;
+}
+
+.operative-profile {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  padding: 1px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: #7cb09d;
+  color: #fff;
+}
+
+.operative-profile:disabled {
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.operative-profile img {
+  display: block;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.operative-main {
+  min-height: 100vh;
+  padding: 68px 0 86px;
+}
+
+/* ========================================================================== */
+/* 2. Plantilla operativa: contenido temporal                                 */
+/* ========================================================================== */
+
+.operative-section {
+  display: grid;
+  min-height: calc(100vh - 154px);
+  place-items: center;
+  align-content: center;
+  gap: 20px;
+}
+
+.operative-section h1 {
+  margin: 0;
+  color: #717773;
+  font-size: 30px;
+  font-weight: 500;
+}
+
+/* ========================================================================== */
+/* 3. Plantilla operativa: menu inferior                                      */
+/* ========================================================================== */
+
+.operative-nav {
+  position: fixed;
+  z-index: 10;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  height: 86px;
+  grid-template-columns: repeat(5, 1fr);
+  border-top: 1px solid #d8ded9;
+  background: #fff;
+}
+
+.operative-nav__item {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #717773;
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+.operative-nav__item svg {
+  width: 31px;
+  height: 31px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.operative-nav__item span {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.operative-nav__item--active {
+  color: #7cb09d;
+}
+
+/* ========================================================================== */
+/* 4. Accion temporal compartida por las pantallas operativas                 */
+/* ========================================================================== */
+
+.temporary-logout {
+  display: block;
+  min-width: 160px;
+  margin: 20px auto 0;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 8px;
+  background: #7cb09d;
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.temporary-logout:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+/* ========================================================================== */
+/* 5. Ajustes responsive de la plantilla operativa                            */
+/* ========================================================================== */
+
+@media (max-width: 600px) {
+  .operative-header {
+    height: 50px;
+    padding: 0 18px;
+  }
+
+  .operative-logo {
+    width: 112px;
+  }
+
+  .operative-profile {
+    width: 42px;
+    height: 42px;
+    padding: 1px;
+  }
+
+  .operative-profile img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .operative-main {
+    padding-top: 50px;
+    padding-bottom: 49px;
+  }
+
+  .operative-section {
+    min-height: calc(100vh - 99px);
+  }
+
+  .operative-section h1 {
+    font-size: 24px;
+  }
+
+  .operative-nav {
+    height: 49px;
+  }
+
+  .operative-nav__item {
+    gap: 2px;
+  }
+
+  .operative-nav__item svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 1.6;
+  }
+
+  .operative-nav__item span {
+    font-size: 9px;
+    font-weight: 500;
+  }
+}

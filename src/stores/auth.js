@@ -18,7 +18,7 @@ export const useAuthStore = defineStore('auth', {
       const response = await authApi.login(credentials)
       const data = response.data.data
       this.token = data.token
-      this.user = { id: data.id, nombre: data.nombre, rol: data.rol }
+      this.user = { id: data.id, nombre: data.nombre, usuario: credentials.usuario, rol: data.rol }
       sessionStorage.setItem(TOKEN_KEY, this.token)
       sessionStorage.setItem(USER_KEY, JSON.stringify(this.user))
     },
