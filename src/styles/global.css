@@ -32,6 +32,52 @@ input {
   font: inherit;
 }
 
+.unauthorized-page {
+  display: grid;
+  min-height: 100dvh;
+  place-items: center;
+  padding: 24px;
+  background: #24211f;
+  color: #eef2ef;
+  text-align: center;
+}
+
+.unauthorized-page__content {
+  max-width: 430px;
+}
+
+.unauthorized-page__code {
+  color: #7cb09d;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.unauthorized-page h1 {
+  margin: 10px 0 8px;
+  color: #eef2ef;
+  font-size: 30px;
+}
+
+.unauthorized-page p {
+  margin: 0 0 22px;
+  color: #d8ded9;
+  font-size: 14px;
+}
+
+.unauthorized-page__link {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  padding: 0 16px;
+  border-radius: 10px;
+  background: #7cb09d;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
 /* ========================================================================== */
 /* 2. Login: estructura y fondo                                               */
 /* ========================================================================== */
