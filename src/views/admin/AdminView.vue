@@ -48,7 +48,7 @@ async function cerrarSesion() {
           </RouterLink>
           <RouterLink class="admin-menu__item" active-class="admin-menu__item--active" :to="{ name: 'admin-configuracion' }">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5 13.7 5l2.3-.2 1 2.1 2.1 1-.2 2.3 1.6 1.8-1.6 1.8.2 2.3-2.1 1-1 2.1-2.3-.2-1.7 1.5-1.7-1.5-2.3.2-1-2.1-2.1-1 .2-2.3L3.5 12l1.6-1.8-.2-2.3 2.1-1 1-2.1 2.3.2L12 3.5Z" /><circle cx="12" cy="12" r="3" /></svg>
-            <span>Configuración</span>
+            <span>Catálogos</span>
           </RouterLink>
         </nav>
       </div>

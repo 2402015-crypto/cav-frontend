@@ -44,7 +44,7 @@ const router = createRouter({
         { path: 'usuarios', name: 'admin-usuarios', component: UsersView, meta: { title: 'Usuarios', sectionTitle: 'Usuarios' } },
         { path: 'bitacora', name: 'admin-bitacora', component: AdminSectionView, meta: { title: 'Bitácora', sectionTitle: 'Bitácora' } },
         { path: 'historial', name: 'admin-historial', component: AdminSectionView, meta: { title: 'Historial', sectionTitle: 'Historial' } },
-        { path: 'configuracion', name: 'admin-configuracion', component: AdminSectionView, meta: { title: 'Configuración', sectionTitle: 'Configuración' } },
+        { path: 'configuracion', name: 'admin-configuracion', component: AdminSectionView, meta: { title: 'Catálogo', sectionTitle: 'Catálogo' } },
       ],
     },
     {
