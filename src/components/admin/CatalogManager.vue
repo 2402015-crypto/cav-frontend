@@ -28,6 +28,13 @@ defineEmits(['update:search', 'update:newName', 'update:editingName', 'add', 'ed
           <p>{{ records.length }} {{ records.length === 1 ? 'registro' : 'registros' }} en el catálogo</p>
         </div>
       </div>
+    </header>
+
+    <div class="catalog-manager__toolbar">
+      <div class="catalog-manager__search">
+        <label for="catalog-search">BUSCAR REGISTROS</label>
+        <input id="catalog-search" :value="search" type="search" placeholder="Buscar en el catálogo..." @input="$emit('update:search', $event.target.value)" />
+      </div>
       <div class="catalog-manager__add">
         <label for="catalog-new-name">AGREGAR NUEVO</label>
         <div class="catalog-manager__add-row">
@@ -35,11 +42,6 @@ defineEmits(['update:search', 'update:newName', 'update:editingName', 'add', 'ed
           <button type="button" :disabled="saving || !newName.trim()" @click="$emit('add')"><span aria-hidden="true">+</span> Agregar</button>
         </div>
       </div>
-    </header>
-
-    <div class="catalog-manager__search">
-      <label for="catalog-search">BUSCAR REGISTROS</label>
-      <input id="catalog-search" :value="search" type="search" placeholder="Buscar en el catálogo..." @input="$emit('update:search', $event.target.value)" />
     </div>
 
     <div v-if="loading" class="catalog-manager__status">Cargando registros...</div>

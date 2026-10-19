@@ -176,6 +176,11 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   background: #24211f;
+  scrollbar-width: none;
+}
+
+.admin-main::-webkit-scrollbar {
+  display: none;
 }
 
 .admin-section {
@@ -533,7 +538,7 @@
   padding-left: 4px;
   border: 0;
   background: transparent;
-  color: #9baaa4;
+  color: #7CB09D;
   cursor: pointer;
 }
 
@@ -629,7 +634,7 @@
 
 .confirm-button--danger {
   border: 0;
-  background: #9baaa4;
+  background: #7CB09D;
   color: #181513;
 }
 
@@ -783,8 +788,7 @@
 
 .catalog-manager__header {
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+  align-items: center;
   gap: 22px;
   padding: 16px 15px 13px;
 }
@@ -878,9 +882,16 @@
   opacity: 0.45;
 }
 
-.catalog-manager__search {
-  width: 49%;
+.catalog-manager__toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: end;
+  gap: 22px;
   padding: 0 15px 15px;
+}
+
+.catalog-manager__search {
+  min-width: 0;
 }
 
 .catalog-manager__search input {
@@ -1054,13 +1065,9 @@
     flex-direction: column;
   }
 
-  .catalog-manager__add,
-  .catalog-manager__search {
-    width: 100%;
-  }
-
-  .catalog-manager__search {
-    padding-top: 0;
+  .catalog-manager__toolbar {
+    grid-template-columns: 1fr;
+    gap: 15px;
   }
 
   .catalog-row {
