@@ -6,6 +6,7 @@ import AdminView from '@/views/admin/AdminView.vue'
 import OperativoSectionView from '@/views/operativo/OperativoSectionView.vue'
 import AdminSectionView from '@/views/admin/AdminSectionView.vue'
 import UsersView from '@/views/admin/UsersView.vue'
+import CatalogosView from '@/views/admin/CatalogosView.vue'
 import UnauthorizedView from '@/views/UnauthorizedView.vue'
 import { useAuthStore } from '@/stores/auth'
 
@@ -44,7 +45,7 @@ const router = createRouter({
         { path: 'usuarios', name: 'admin-usuarios', component: UsersView, meta: { title: 'Usuarios', sectionTitle: 'Usuarios' } },
         { path: 'bitacora', name: 'admin-bitacora', component: AdminSectionView, meta: { title: 'Bitácora', sectionTitle: 'Bitácora' } },
         { path: 'historial', name: 'admin-historial', component: AdminSectionView, meta: { title: 'Historial', sectionTitle: 'Historial' } },
-        { path: 'configuracion', name: 'admin-configuracion', component: AdminSectionView, meta: { title: 'Catálogo', sectionTitle: 'Catálogo' } },
+        { path: 'configuracion', name: 'admin-configuracion', component: CatalogosView, meta: { title: 'Catálogos', sectionTitle: 'Catálogos' } },
       ],
     },
     {

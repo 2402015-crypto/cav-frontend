@@ -634,7 +634,369 @@
 }
 
 /* ========================================================================== */
-/* 3. Ajustes responsive de la plantilla administrativa                       */
+/* 3. Catálogos                                                               */
+/* ========================================================================== */
+
+.catalogs-page {
+  min-height: 100dvh;
+  padding: 25px 24px 72px;
+  background: #24211f;
+  color: #d8ded9;
+}
+
+.catalogs-page__header,
+.catalog-selector,
+.catalog-manager,
+.catalog-empty-state,
+.catalogs-feedback {
+  width: min(100%, 1062px);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.catalogs-page__header {
+  margin-bottom: 18px;
+}
+
+.catalogs-page__header h1 {
+  margin: 0;
+  color: #eef2ef;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.catalogs-page__header p {
+  margin: 6px 0 0;
+  color: #9baaa4;
+  font-size: 13px;
+}
+
+/* Tarjetas de selección */
+.catalog-selector,
+.catalog-manager,
+.catalog-empty-state {
+  border: 1px solid rgba(216, 222, 217, 0.16);
+  border-radius: 17px;
+  background: #332e2b;
+  box-shadow: 0 14px 25px rgba(0, 0, 0, 0.12);
+}
+
+.catalog-selector {
+  padding: 15px 15px 14px;
+}
+
+.catalog-selector__label,
+.catalog-manager__add label,
+.catalog-manager__search label {
+  display: block;
+  margin: 0 0 10px;
+  color: #9baaa4;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+}
+
+.catalog-selector__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 11px;
+}
+
+.catalog-card {
+  position: relative;
+  display: flex;
+  min-height: 116px;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 16px;
+  border: 1px solid rgba(216, 222, 217, 0.14);
+  border-radius: 16px;
+  background: transparent;
+  color: #eef2ef;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.catalog-card:hover,
+.catalog-card--active {
+  border-color: #7cb09d;
+  background: rgba(124, 176, 157, 0.035);
+}
+
+.catalog-card__icon,
+.catalog-manager__icon,
+.catalog-empty-state__icon {
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--catalog-color, #7cb09d) 36%, transparent);
+  color: var(--catalog-color, #7cb09d);
+}
+
+.catalog-card__icon {
+  width: 39px;
+  height: 39px;
+  margin-bottom: 11px;
+  border-radius: 11px;
+}
+
+.catalog-card svg,
+.catalog-manager svg,
+.catalog-empty-state svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.catalog-card strong {
+  color: #eef2ef;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.catalog-card small {
+  margin-top: 4px;
+  color: #9baaa4;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.catalog-card__count {
+  position: absolute;
+  top: 18px;
+  right: 16px;
+  color: #94c5b3;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+/* Gestión y buscador */
+.catalog-manager {
+  margin-top: 16px;
+  overflow: hidden;
+}
+
+.catalog-manager__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 22px;
+  padding: 16px 15px 13px;
+}
+
+.catalog-manager__title {
+  display: flex;
+  min-width: 180px;
+  align-items: center;
+  gap: 11px;
+}
+
+.catalog-manager__icon {
+  width: 39px;
+  height: 39px;
+  flex: 0 0 39px;
+  border-radius: 11px;
+}
+
+.catalog-manager__title h2 {
+  margin: 0;
+  color: #eef2ef;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.catalog-manager__title p {
+  margin: 4px 0 0;
+  color: #9baaa4;
+  font-size: 11px;
+}
+
+.catalog-manager__add {
+  width: min(100%, 506px);
+}
+
+.catalog-manager__add-row {
+  display: flex;
+  gap: 11px;
+}
+
+.catalog-manager input {
+  height: 40px;
+  min-width: 0;
+  padding: 0 13px;
+  border: 1px solid rgba(216, 222, 217, 0.2);
+  border-radius: 10px;
+  outline: none;
+  background: #292623;
+  color: #eef2ef;
+  font-size: 13px;
+}
+
+.catalog-manager input::placeholder {
+  color: #717773;
+}
+
+.catalog-manager input:focus {
+  border-color: #7cb09d;
+  box-shadow: 0 0 0 3px rgba(124, 176, 157, 0.12);
+}
+
+.catalog-manager__add-row input {
+  flex: 1;
+}
+
+.catalog-manager__add-row button {
+  display: inline-flex;
+  height: 28px;
+  align-items: center;
+  gap: 7px;
+  align-self: center;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 12px;
+  background: #7cb09d;
+  color: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.catalog-manager__add-row button span {
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.catalog-manager__add-row button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.catalog-manager__search {
+  width: 49%;
+  padding: 0 15px 15px;
+}
+
+.catalog-manager__search input {
+  width: 100%;
+}
+
+/* Tabla de registros */
+.catalog-manager__list {
+  border-top: 1px solid rgba(216, 222, 217, 0.16);
+}
+
+.catalog-row {
+  display: grid;
+  min-height: 52px;
+  grid-template-columns: 31px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 11px;
+  padding: 0 15px;
+  border-bottom: 1px solid rgba(216, 222, 217, 0.13);
+}
+
+.catalog-row:last-child {
+  border-bottom: 0;
+}
+
+.catalog-row__number {
+  display: grid;
+  width: 29px;
+  height: 29px;
+  place-items: center;
+  border-radius: 7px;
+  background: rgba(24, 21, 19, 0.48);
+  color: #9baaa4;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.catalog-row strong {
+  overflow: hidden;
+  color: #d8ded9;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.catalog-row__actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.catalog-row .table-action {
+  cursor: pointer;
+}
+
+.catalog-row .table-action:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.catalog-row__edit-input {
+  width: 100%;
+}
+
+.catalog-manager__status {
+  padding: 33px 15px;
+  border-top: 1px solid rgba(216, 222, 217, 0.16);
+  color: #9baaa4;
+  font-size: 13px;
+  text-align: center;
+}
+
+.catalogs-feedback {
+  margin-top: 14px;
+  margin-bottom: -3px;
+  color: #d99487;
+  font-size: 12px;
+}
+
+/* Estado inicial */
+.catalog-empty-state {
+  display: grid;
+  min-height: 194px;
+  margin-top: 16px;
+  place-content: center;
+  justify-items: center;
+  text-align: center;
+}
+
+.catalog-empty-state__icon {
+  width: 47px;
+  height: 47px;
+  --catalog-color: #7cb09d;
+  border-radius: 15px;
+}
+
+.catalog-empty-state__icon svg {
+  width: 23px;
+  height: 23px;
+}
+
+.catalog-empty-state h2 {
+  margin: 13px 0 0;
+  color: #eef2ef;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.catalog-empty-state p {
+  margin: 5px 0 0;
+  color: #9baaa4;
+  font-size: 12px;
+}
+
+/* ========================================================================== */
+/* 4. Ajustes responsive de la plantilla administrativa                       */
 /* ========================================================================== */
 
 @media (max-width: 600px) {
@@ -673,5 +1035,47 @@
   .user-form__fields {
     grid-template-columns: 1fr;
     gap: 11px;
+  }
+
+  .catalogs-page {
+    padding: 22px 14px 32px;
+  }
+
+  .catalog-selector__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .catalog-card small {
+    white-space: normal;
+  }
+
+  .catalog-manager__header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .catalog-manager__add,
+  .catalog-manager__search {
+    width: 100%;
+  }
+
+  .catalog-manager__search {
+    padding-top: 0;
+  }
+
+  .catalog-row {
+    grid-template-columns: 31px minmax(0, 1fr);
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .catalog-row__actions {
+    grid-column: 2;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+  .catalog-selector__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
