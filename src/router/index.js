@@ -4,6 +4,7 @@ import LoginView from '@/views/LoginView.vue'
 import OperativoView from '@/views/operativo/OperativoView.vue'
 import AdminView from '@/views/admin/AdminView.vue'
 import OperativoSectionView from '@/views/operativo/OperativoSectionView.vue'
+import HistorialAccesosView from '@/views/operativo/HistorialAccesosView.vue'
 import AdminSectionView from '@/views/admin/AdminSectionView.vue'
 import UsersView from '@/views/admin/UsersView.vue'
 import CatalogosView from '@/views/admin/CatalogosView.vue'
@@ -33,6 +34,7 @@ const router = createRouter({
         { path: 'salida', name: 'operativo-salida', component: OperativoSectionView, meta: { title: 'Salida', sectionTitle: 'Salida' } },
         { path: 'activos', name: 'operativo-activos', component: OperativoSectionView, meta: { title: 'Activos', sectionTitle: 'Activos' } },
         { path: 'buscar', name: 'operativo-buscar', component: OperativoSectionView, meta: { title: 'Buscar', sectionTitle: 'Buscar' } },
+        { path: 'historial', name: 'operativo-historial', component: HistorialAccesosView, meta: { title: 'Historial de accesos', sectionTitle: 'Historial de accesos' } },
       ],
     },
     {

@@ -1,13 +1,73 @@
 <script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import AccountDrawer from '@/components/operativo/AccountDrawer.vue'
+import AboutModal from '@/components/operativo/AboutModal.vue'
+import ConfirmModal from '@/components/admin/ConfirmModal.vue'
 import logo from '@/images/Chable_Maroma-01.png'
 import avatar from '@/images/Avatar.png'
+
+const authStore = useAuthStore()
+const router = useRouter()
+const accountOpen = ref(false)
+const aboutOpen = ref(false)
+const logoutConfirmationOpen = ref(false)
+const signingOut = ref(false)
+
+function openAccount() {
+  accountOpen.value = true
+}
+
+function closeAccount() {
+  accountOpen.value = false
+}
+
+async function goToHistory() {
+  closeAccount()
+  await router.push({ name: 'operativo-historial' })
+}
+
+async function logout() {
+  signingOut.value = true
+  try {
+    await authStore.logout()
+    await router.push('/login')
+  } finally {
+    signingOut.value = false
+    closeAccount()
+  }
+}
+
+function openAbout() {
+  closeAccount()
+  aboutOpen.value = true
+}
+
+function closeAbout() {
+  aboutOpen.value = false
+}
+
+function requestLogout() {
+  closeAccount()
+  logoutConfirmationOpen.value = true
+}
+
+function cancelLogout() {
+  logoutConfirmationOpen.value = false
+}
+
+async function confirmLogout() {
+  logoutConfirmationOpen.value = false
+  await logout()
+}
 </script>
 
 <template>
   <div class="operative-shell">
     <header class="operative-header">
       <img class="operative-logo" :src="logo" alt="Chablé Maroma" />
-      <button class="operative-profile" type="button" disabled aria-label="Perfil de usuario próximamente disponible">
+      <button class="operative-profile" type="button" aria-label="Abrir menú de cuenta" @click="openAccount">
         <img :src="avatar" alt="" />
       </button>
     </header>
@@ -38,5 +98,26 @@ import avatar from '@/images/Avatar.png'
         <span>Buscar</span>
       </RouterLink>
     </nav>
+
+    <AccountDrawer
+      :open="accountOpen"
+      :user="authStore.user"
+      :signing-out="signingOut"
+      @close="closeAccount"
+      @history="goToHistory"
+      @about="openAbout"
+      @logout-request="requestLogout"
+    />
+
+    <AboutModal :open="aboutOpen" @close="closeAbout" />
+    <ConfirmModal
+      :open="logoutConfirmationOpen"
+      variant="operative"
+      title="¿Desea cerrar sesión?"
+      message="Se cerrará su sesión actual"
+      confirm-label="Cerrar Sesión"
+      @cancel="cancelLogout"
+      @confirm="confirmLogout"
+    />
   </div>
 </template>

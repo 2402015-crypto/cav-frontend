@@ -638,6 +638,135 @@
   color: #181513;
 }
 
+.confirm-modal__icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  margin: 0 auto 12px;
+  place-items: center;
+  border-radius: 12px;
+  background: #f5eae7;
+  color: #a86459;
+}
+
+.confirm-modal__icon svg {
+  width: 21px;
+  height: 21px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.confirm-modal--operative .confirm-modal__dialog {
+  width: min(100%, 264px);
+  padding: 20px 16px 16px;
+  border: 0;
+  border-radius: 16px;
+  background: #fff;
+  color: #414846;
+  text-align: center;
+}
+
+.confirm-modal--operative .confirm-modal__close {
+  top: 12px;
+  right: 13px;
+  color: #a1aaa6;
+}
+
+.confirm-modal--operative .confirm-modal__dialog h2,
+.confirm-modal--admin .confirm-modal__dialog h2 {
+  margin-top: 0;
+  font-size: 14px;
+}
+
+.confirm-modal--operative .confirm-modal__dialog h2 {
+  color: #414846;
+}
+
+.confirm-modal--operative .confirm-modal__dialog p {
+  margin: 5px 0 20px;
+  color: #89918e;
+  font-size: 10px;
+}
+
+.confirm-modal--operative .confirm-modal__actions {
+  justify-content: stretch;
+}
+
+.confirm-modal--operative .confirm-button {
+  flex: 1;
+  height: 36px;
+  border-radius: 9px;
+  font-size: 11px;
+}
+
+.confirm-modal--operative .confirm-button--cancel {
+  border: 0;
+  background: #eef4f1;
+  color: #414846;
+}
+
+.confirm-modal--operative .confirm-button--danger {
+  background: #a86459;
+  color: #fff;
+}
+
+.confirm-modal--admin {
+  background: rgba(14, 12, 11, 0.76);
+}
+
+.confirm-modal--admin .confirm-modal__dialog {
+  width: min(100%, 340px);
+  padding: 20px;
+  border-color: rgba(216, 222, 217, 0.2);
+  background: #332e2b;
+  text-align: center;
+}
+
+.confirm-modal--admin .confirm-modal__dialog h2 {
+  color: #eef2ef;
+}
+
+.confirm-modal--admin .confirm-modal__dialog p {
+  color: #d8ded9;
+}
+
+.confirm-modal--admin .confirm-modal__actions {
+  justify-content: center;
+}
+
+.confirm-modal--admin .confirm-modal__icon {
+  width: 38px;
+  height: 38px;
+  margin-bottom: 8px;
+}
+
+.confirm-modal--admin .confirm-modal__icon svg {
+  width: 19px;
+  height: 19px;
+}
+
+.confirm-modal--admin .confirm-modal__dialog p {
+  margin: 8px 0 16px;
+}
+
+.confirm-modal--admin .confirm-button {
+  height: 32px;
+  padding: 0 13px;
+}
+
+.confirm-modal--admin .confirm-modal__icon {
+  background: rgba(124, 176, 157, 0.16);
+  color: #7cb09d;
+}
+
+.confirm-modal--admin .confirm-button--danger {
+  background: #7cb09d;
+  color: #181513;
+}
+
 /* ========================================================================== */
 /* 3. Catálogos                                                               */
 /* ========================================================================== */

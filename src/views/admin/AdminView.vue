@@ -2,11 +2,13 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import ConfirmModal from '@/components/admin/ConfirmModal.vue'
 import logo from '@/images/Chable_Maroma-02.png'
 
 const authStore = useAuthStore()
 const router = useRouter()
 const cerrandoSesion = ref(false)
+const confirmarCierre = ref(false)
 
 async function cerrarSesion() {
   cerrandoSesion.value = true
@@ -16,6 +18,19 @@ async function cerrarSesion() {
   } finally {
     cerrandoSesion.value = false
   }
+}
+
+function solicitarCierre() {
+  confirmarCierre.value = true
+}
+
+function cancelarCierre() {
+  confirmarCierre.value = false
+}
+
+async function confirmarLogout() {
+  confirmarCierre.value = false
+  await cerrarSesion()
 }
 </script>
 
@@ -61,7 +76,7 @@ async function cerrarSesion() {
             <small>{{ (authStore.user?.rol || 'ADMIN').toLowerCase() }}</small>
           </span>
         </div>
-        <button class="admin-logout" type="button" :disabled="cerrandoSesion" @click="cerrarSesion">
+        <button class="admin-logout" type="button" :disabled="cerrandoSesion" @click="solicitarCierre">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h5M14 8l4 4-4 4M9 12h9" /></svg>
           <span>{{ cerrandoSesion ? 'Cerrando sesión...' : 'Cerrar sesión' }}</span>
         </button>
@@ -71,5 +86,15 @@ async function cerrarSesion() {
     <main class="admin-main">
       <RouterView />
     </main>
+
+    <ConfirmModal
+      :open="confirmarCierre"
+      variant="admin"
+      title="Cerrar sesión"
+      message="¿Deseas cerrar tu sesión actual?"
+      confirm-label="Cerrar Sesión"
+      @cancel="cancelarCierre"
+      @confirm="confirmarLogout"
+    />
   </div>
 </template>
