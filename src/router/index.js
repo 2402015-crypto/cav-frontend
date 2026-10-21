@@ -5,6 +5,7 @@ import OperativoView from '@/views/operativo/OperativoView.vue'
 import AdminView from '@/views/admin/AdminView.vue'
 import OperativoSectionView from '@/views/operativo/OperativoSectionView.vue'
 import HistorialAccesosView from '@/views/operativo/HistorialAccesosView.vue'
+import EntradaView from '@/views/operativo/EntradaView.vue'
 import AdminSectionView from '@/views/admin/AdminSectionView.vue'
 import UsersView from '@/views/admin/UsersView.vue'
 import CatalogosView from '@/views/admin/CatalogosView.vue'
@@ -30,7 +31,7 @@ const router = createRouter({
       redirect: { name: 'operativo-panel' },
       children: [
         { path: 'panel', name: 'operativo-panel', component: OperativoSectionView, meta: { title: 'Panel operativo', sectionTitle: 'Panel Operativo' } },
-        { path: 'entrada', name: 'operativo-entrada', component: OperativoSectionView, meta: { title: 'Entrada', sectionTitle: 'Entrada' } },
+        { path: 'entrada', name: 'operativo-entrada', component: EntradaView, meta: { title: 'Registrar entrada', sectionTitle: 'Registrar Entrada' } },
         { path: 'salida', name: 'operativo-salida', component: OperativoSectionView, meta: { title: 'Salida', sectionTitle: 'Salida' } },
         { path: 'activos', name: 'operativo-activos', component: OperativoSectionView, meta: { title: 'Activos', sectionTitle: 'Activos' } },
         { path: 'buscar', name: 'operativo-buscar', component: OperativoSectionView, meta: { title: 'Buscar', sectionTitle: 'Buscar' } },
