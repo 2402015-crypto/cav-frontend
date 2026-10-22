@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { onBeforeUnmount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import AccountDrawer from '@/components/operativo/AccountDrawer.vue'
@@ -7,6 +7,7 @@ import AboutModal from '@/components/operativo/AboutModal.vue'
 import ConfirmModal from '@/components/admin/ConfirmModal.vue'
 import logo from '@/images/Chable_Maroma-01.png'
 import avatar from '@/images/Avatar.png'
+import { getDailyStats } from '@/services/api/entradas'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -14,13 +15,28 @@ const accountOpen = ref(false)
 const aboutOpen = ref(false)
 const logoutConfirmationOpen = ref(false)
 const signingOut = ref(false)
+const dailyStats = ref({ registros: 0, entradas: 0, salidas: 0 })
+let dailyStatsTimer = null
 
 function openAccount() {
   accountOpen.value = true
+  refreshDailyStats()
+  dailyStatsTimer = window.setInterval(refreshDailyStats, 30000)
 }
 
 function closeAccount() {
   accountOpen.value = false
+  window.clearInterval(dailyStatsTimer)
+  dailyStatsTimer = null
+}
+
+async function refreshDailyStats() {
+  try {
+    const response = await getDailyStats()
+    dailyStats.value = response.data.data || dailyStats.value
+  } catch {
+    // El drawer conserva el último conteo disponible si el backend no responde.
+  }
 }
 
 async function goToHistory() {
@@ -61,6 +77,8 @@ async function confirmLogout() {
   logoutConfirmationOpen.value = false
   await logout()
 }
+
+onBeforeUnmount(() => window.clearInterval(dailyStatsTimer))
 </script>
 
 <template>
@@ -103,10 +121,12 @@ async function confirmLogout() {
       :open="accountOpen"
       :user="authStore.user"
       :signing-out="signingOut"
+      :daily-stats="dailyStats"
       @close="closeAccount"
       @history="goToHistory"
       @about="openAbout"
       @logout-request="requestLogout"
+      @stats-refresh="refreshDailyStats"
     />
 
     <AboutModal :open="aboutOpen" @close="closeAbout" />

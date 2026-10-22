@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue'
-import EntryFormPlaceholder from '@/components/operativo/entrada/EntryFormPlaceholder.vue'
+import EntradaForm from '@/components/operativo/entrada/FormularioEntrada.vue'
 import EntrySuccessView from '@/components/operativo/entrada/EntrySuccessView.vue'
 import EntryMethodSelector from '@/components/operativo/entrada/EntryMethodSelector.vue'
 import ManualEntryPanel from '@/components/operativo/entrada/ManualEntryPanel.vue'
@@ -18,6 +18,7 @@ const step = ref('type')
 const selectedType = ref(null)
 const selectedMethod = ref(null)
 const capturedPlate = ref('')
+const manualLookup = ref(null)
 const registeredAt = ref(null)
 
 const stepLabel = computed(() => step.value === 'type' ? 'Paso 1 de 3' : 'Paso 2 de 3')
@@ -27,6 +28,7 @@ function selectType(type) {
   selectedType.value = type
   selectedMethod.value = null
   capturedPlate.value = ''
+  manualLookup.value = null
   step.value = 'method'
 }
 
@@ -58,13 +60,15 @@ function confirmPlate(plate) {
   step.value = 'form'
 }
 
-function completeManual(plate) {
-  capturedPlate.value = plate
+function completeManual(payload) {
+  capturedPlate.value = payload.plate
+  manualLookup.value = payload.lookup
   step.value = 'form'
 }
 
-function finishRegistration() {
-  registeredAt.value = new Date()
+function completeRegistration(response) {
+  capturedPlate.value = response.placa
+  registeredAt.value = new Date(response.fechaEntrada)
   step.value = 'success'
 }
 
@@ -72,6 +76,7 @@ function returnToPanel() {
   selectedType.value = null
   selectedMethod.value = null
   capturedPlate.value = ''
+  manualLookup.value = null
   registeredAt.value = null
   step.value = 'type'
 }
@@ -98,7 +103,7 @@ function goBack() {
     <EntryMethodSelector v-else-if="step === 'method'" @automatic="selectAutomatic" @manual="selectManual" @back="returnToTypes" />
     <ManualEntryPanel v-else-if="step === 'manual'" @back="returnToMethod" @complete="completeManual" />
     <OcrCapturePanel v-else-if="step === 'capture'" @back="returnToMethod" @confirm="confirmPlate" />
-    <EntryFormPlaceholder v-else-if="step === 'form'" :title="selectedType?.formTitle || 'Registro de entrada'" @back="capturedPlate ? returnToMethod : returnToTypes" @complete="finishRegistration" />
+    <EntradaForm v-else-if="step === 'form'" :type-key="selectedType?.key || 'general'" :type-label="selectedType?.label || 'Colaborador'" :plate="capturedPlate" :initial-data="manualLookup" @back="capturedPlate ? returnToMethod : returnToTypes" @registered="completeRegistration" />
     <EntrySuccessView v-else :plate="capturedPlate" :registered-at="registeredAt" @panel="returnToPanel" />
   </section>
 </template>

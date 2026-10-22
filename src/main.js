@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import './styles/global.css'
 import './styles/globalop.css'
+import './styles/formulariosop.css'
 import './styles/globaladmin.css'
 
 import App from './App.vue'

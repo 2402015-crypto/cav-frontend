@@ -1,0 +1,187 @@
+/* ========================================================================== */
+/* Formularios operativos                                                     */
+/* ========================================================================== */
+
+.entry-manual-error,
+.entry-form-error {
+  margin: 10px 0 0;
+  color: #b56559;
+  font-size: 11px;
+}
+
+.entry-form-card {
+  width: 100%;
+  padding: 0 0 14px;
+  border: 1px solid #dce4df;
+  border-radius: 15px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(60, 75, 68, 0.08);
+  overflow: hidden;
+}
+
+.entry-form-type {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 16px;
+  border-bottom: 1px solid #e4ebe7;
+}
+
+.entry-form-type__icon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 11px;
+  background: rgba(124, 176, 157, 0.2);
+  color: #7cb09d;
+}
+
+.entry-form-type__icon svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.entry-form-type label,
+.entry-form-fields label {
+  display: block;
+  color: #68736f;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.25px;
+}
+
+.entry-form-type strong {
+  display: block;
+  margin-top: 3px;
+  color: #303734;
+  font-size: 13px;
+}
+
+.entry-form-fields {
+  display: grid;
+  gap: 11px;
+  padding: 16px;
+}
+
+.entry-form-fields input,
+.entry-form-fields textarea {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 0 11px;
+  border: 1px solid #dce4df;
+  border-radius: 9px;
+  outline: 0;
+  background: #eef3f0;
+  color: #4a5450;
+  font: inherit;
+  font-size: 11px;
+}
+
+.entry-form-fields input {
+  height: 35px;
+}
+
+.entry-form-fields textarea {
+  min-height: 35px;
+  padding-top: 9px;
+  resize: vertical;
+}
+
+.entry-form-fields input::placeholder,
+.entry-form-fields textarea::placeholder {
+  color: #adbbb5;
+}
+
+.entry-form-fields input:focus,
+.entry-form-fields textarea:focus {
+  border-color: #7cb09d;
+  box-shadow: 0 0 0 3px rgba(124, 176, 157, 0.12);
+}
+
+.entry-autocomplete {
+  position: relative;
+}
+
+.entry-suggestions {
+  position: absolute;
+  z-index: 3;
+  top: 100%;
+  right: 0;
+  left: 0;
+  display: grid;
+  overflow: hidden;
+  border: 1px solid #dce4df;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 7px 16px rgba(45, 65, 56, 0.14);
+}
+
+.entry-suggestions button {
+  padding: 9px 11px;
+  border: 0;
+  border-bottom: 1px solid #edf1ef;
+  background: #fff;
+  color: #4a5450;
+  cursor: pointer;
+  font-size: 11px;
+  text-align: left;
+}
+
+.entry-suggestions button:last-child {
+  border-bottom: 0;
+}
+
+.entry-suggestions button:hover {
+  background: #eef6f2;
+}
+
+.entry-form-submit {
+  display: inline-flex;
+  width: calc(100% - 32px);
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin: 0 16px;
+  border: 0;
+  border-radius: 10px;
+  background: #639781;
+  color: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.entry-form-submit svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.entry-form-submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+@media (max-width: 600px) {
+  .entry-form-fields {
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .entry-form-submit {
+    width: calc(100% - 28px);
+    margin: 0 14px;
+  }
+}

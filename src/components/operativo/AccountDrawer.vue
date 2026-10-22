@@ -9,9 +9,13 @@ defineProps({
     default: null,
   },
   signingOut: Boolean,
+  dailyStats: {
+    type: Object,
+    default: () => ({ registros: 0, entradas: 0, salidas: 0 }),
+  },
 })
 
-defineEmits(['close', 'history', 'about', 'logout-request'])
+defineEmits(['close', 'history', 'about', 'logout-request', 'stats-refresh'])
 
 const dailyStatsOpen = ref(false)
 </script>
@@ -38,18 +42,17 @@ const dailyStatsOpen = ref(false)
           <span class="account-drawer__chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9 5 7 7-7 7" /></svg></span>
         </button>
 
-        <button class="account-drawer__link account-drawer__link--expandable" :class="{ 'account-drawer__link--expanded': dailyStatsOpen }" type="button" :aria-expanded="dailyStatsOpen" @click="dailyStatsOpen = !dailyStatsOpen">
+        <button class="account-drawer__link account-drawer__link--expandable" :class="{ 'account-drawer__link--expanded': dailyStatsOpen }" type="button" :aria-expanded="dailyStatsOpen" @click="dailyStatsOpen = !dailyStatsOpen; $emit('stats-refresh')">
           <span class="account-drawer__link-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h12M6 12h12M6 17h12" /></svg></span>
           <span><strong>Registros del día</strong><small>Estadísticas de hoy</small></span>
           <span class="account-drawer__chevron" :class="{ 'account-drawer__chevron--up': dailyStatsOpen }" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></svg></span>
         </button>
 
         <div v-if="dailyStatsOpen" class="account-daily-stats" aria-live="polite">
-          <div><strong>--</strong><small>Registros<br />hoy</small></div>
-          <div><strong>--</strong><small>Entradas</small></div>
-          <div><strong>--</strong><small>Salidas</small></div>
+          <div><strong>{{ dailyStats.registros }}</strong><small>Registros<br />hoy</small></div>
+          <div><strong>{{ dailyStats.entradas }}</strong><small>Entradas</small></div>
+          <div><strong>{{ dailyStats.salidas }}</strong><small>Salidas</small></div>
         </div>
-        <p v-if="dailyStatsOpen" class="account-daily-stats__note">Datos disponibles cuando se habilite el servicio de estadísticas.</p>
       </div>
 
       <footer class="account-drawer__footer">

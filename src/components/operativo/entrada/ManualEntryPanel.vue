@@ -1,22 +1,38 @@
 <script setup>
 import { computed, ref } from 'vue'
+import { searchManualEntry } from '@/services/api/entradas'
 
 const emit = defineEmits(['back', 'complete'])
 
 const plate = ref('')
 const searched = ref(false)
 const vehicleFound = ref(false)
+const loading = ref(false)
+const errorMessage = ref('')
+const lookup = ref(null)
 
 const canSearch = computed(() => plate.value.trim().length > 0)
 
-function searchVehicle() {
+async function searchVehicle() {
   if (!canSearch.value) return
-  searched.value = true
-  vehicleFound.value = plate.value.trim().toUpperCase() === 'FAP-528-D'
+  loading.value = true
+  errorMessage.value = ''
+  lookup.value = null
+  searched.value = false
+  try {
+    const response = await searchManualEntry(plate.value.trim().toUpperCase())
+    lookup.value = response.data.data
+    vehicleFound.value = lookup.value.vehiculoRegistrado
+    searched.value = true
+  } catch (error) {
+    errorMessage.value = error.response?.data?.message || 'No fue posible consultar la placa.'
+  } finally {
+    loading.value = false
+  }
 }
 
 function continueToForm() {
-  if (searched.value) emit('complete', plate.value.trim().toUpperCase())
+  if (searched.value) emit('complete', { plate: plate.value.trim().toUpperCase(), lookup: lookup.value })
 }
 </script>
 
@@ -26,8 +42,10 @@ function continueToForm() {
     <label for="manual-plate">NÚMERO DE PLACA</label>
     <div class="entry-manual-search">
       <input id="manual-plate" v-model="plate" type="text" maxlength="30" placeholder="AAA-000-A" @keyup.enter="searchVehicle" />
-      <button type="button" :disabled="!canSearch" @click="searchVehicle">Buscar</button>
+      <button type="button" :disabled="!canSearch || loading" @click="searchVehicle">{{ loading ? 'Buscando...' : 'Buscar' }}</button>
     </div>
+
+    <p v-if="errorMessage" class="entry-manual-error" role="alert">{{ errorMessage }}</p>
 
     <template v-if="searched">
       <div v-if="vehicleFound" class="entry-manual-notice entry-manual-notice--found"><span aria-hidden="true">☆</span> Vehículo reconocido · datos autocompletados</div>
