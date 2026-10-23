@@ -105,6 +105,15 @@
   box-shadow: 0 0 0 3px rgba(124, 176, 157, 0.12);
 }
 
+.entry-field-help {
+  display: block;
+  margin-top: 5px;
+  color: #89918e;
+  font-size: 9px;
+  font-weight: 400;
+  line-height: 1.25;
+}
+
 .entry-autocomplete {
   position: relative;
 }

@@ -20,3 +20,7 @@ export function suggestBrands(query) {
 export function suggestColors(query) {
   return suggestCatalog('colores', query)
 }
+
+export function suggestCompanies(query) {
+  return suggestCatalog('empresas', query)
+}
