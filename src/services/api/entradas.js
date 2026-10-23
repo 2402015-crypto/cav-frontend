@@ -24,3 +24,7 @@ export function suggestColors(query) {
 export function suggestCompanies(query) {
   return suggestCatalog('empresas', query)
 }
+
+export function suggestTransporters(query) {
+  return suggestCatalog('transportadoras', query)
+}

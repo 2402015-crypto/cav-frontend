@@ -194,3 +194,27 @@
     margin: 0 14px;
   }
 }
+
+.entry-movement-options {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.entry-movement-options button {
+  height: 35px;
+  flex: 1;
+  border: 1px solid #dce4df;
+  border-radius: 10px;
+  background: #fff;
+  color: #3d4542;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.entry-movement-options .entry-movement-option--active {
+  border-color: #7cb09d;
+  background: #7cb09d;
+  color: #fff;
+}
