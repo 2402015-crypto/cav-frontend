@@ -409,7 +409,7 @@
   overflow: hidden;
   place-items: center;
   border-radius: 13px 13px 0 0;
-  background: #cfddd8;
+  background: #0c1b2d;
 }
 
 .entry-camera-view video,
@@ -668,6 +668,16 @@
   color: #639781;
   font-size: 34px;
   font-weight: 400;
+}
+
+.entry-success-view__check svg {
+  width: 30px;
+  height: 30px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
 }
 
 .entry-success-view h2 {

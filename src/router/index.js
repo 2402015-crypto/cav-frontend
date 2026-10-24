@@ -6,6 +6,7 @@ import AdminView from '@/views/admin/AdminView.vue'
 import OperativoSectionView from '@/views/operativo/OperativoSectionView.vue'
 import HistorialAccesosView from '@/views/operativo/HistorialAccesosView.vue'
 import EntradaView from '@/views/operativo/EntradaView.vue'
+import SalidaView from '@/views/operativo/SalidaView.vue'
 import AdminSectionView from '@/views/admin/AdminSectionView.vue'
 import UsersView from '@/views/admin/UsersView.vue'
 import CatalogosView from '@/views/admin/CatalogosView.vue'
@@ -32,7 +33,7 @@ const router = createRouter({
       children: [
         { path: 'panel', name: 'operativo-panel', component: OperativoSectionView, meta: { title: 'Panel operativo', sectionTitle: 'Panel Operativo' } },
         { path: 'entrada', name: 'operativo-entrada', component: EntradaView, meta: { title: 'Registrar entrada', sectionTitle: 'Registrar Entrada' } },
-        { path: 'salida', name: 'operativo-salida', component: OperativoSectionView, meta: { title: 'Salida', sectionTitle: 'Salida' } },
+        { path: 'salida', name: 'operativo-salida', component: SalidaView, meta: { title: 'Registrar salida', sectionTitle: 'Registrar Salida' } },
         { path: 'activos', name: 'operativo-activos', component: OperativoSectionView, meta: { title: 'Activos', sectionTitle: 'Activos' } },
         { path: 'buscar', name: 'operativo-buscar', component: OperativoSectionView, meta: { title: 'Buscar', sectionTitle: 'Buscar' } },
         { path: 'historial', name: 'operativo-historial', component: HistorialAccesosView, meta: { title: 'Historial de accesos', sectionTitle: 'Historial de accesos' } },
