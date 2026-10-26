@@ -54,7 +54,7 @@ onBeforeUnmount(stopCamera)
       <p v-else-if="cameraError">{{ cameraError }}</p>
       <span v-else class="exit-camera-placeholder">···</span>
     </div>
-    <button v-if="!captured" class="exit-camera-button" type="button" :disabled="reading" aria-label="Capturar placa" @click="capture"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="12" rx="2" /><path d="M8 7 9.5 4h5L16 7M12 11a3 3 0 1 0 0 6 3 3 0 0 0-3-3Z" /></svg></button>
+    <button v-if="!captured" class="exit-camera-button" type="button" :disabled="reading" aria-label="Capturar placa" @click="capture"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="12" rx="2" /><path d="M8 7 9.5 4h5L16 7M12 11a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z" /></svg></button>
     <div v-if="captured" class="exit-captured-card">
       <strong class="exit-captured-card__plate">FAP-528-D</strong>
       <div><span>Conductor</span><strong>Datos pendientes de OCR</strong></div>

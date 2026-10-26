@@ -1208,7 +1208,7 @@
   .entry-type-panel,
   .entry-ocr-panel,
   .entry-form-placeholder {
-    padding: 16px;
+    padding: 0px;
   }
 
   .entry-success-view {
