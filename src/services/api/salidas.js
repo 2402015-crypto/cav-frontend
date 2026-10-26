@@ -7,3 +7,11 @@ export function searchActiveExit(placa) {
 export function registerExit(id, observaciones) {
   return http.put(`/salidas/${id}`, { observaciones })
 }
+
+export function listActiveExits(query = '') {
+  return http.get('/salidas/activos', { params: query ? { q: query } : {} })
+}
+
+export function getExitDetails(id) {
+  return http.get(`/salidas/activos/${id}`)
+}
