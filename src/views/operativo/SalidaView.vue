@@ -32,14 +32,19 @@ function reset() {
 <template>
   <section class="exit-page">
     <header v-if="stage !== 'success'" class="exit-page__header">
-      <div><h1>Registrar Salida</h1><p>{{ stage === 'details' ? 'Vehículo encontrado' : 'Captura la placa para comenzar' }}</p></div>
+      <div>
+        <h1>Registrar Salida</h1>
+        <p>{{ stage === 'details' ? 'Detalle del vehículo' : 'Captura la placa para comenzar' }}</p>
+      </div>
       <button v-if="stage !== 'capture'" class="exit-page__back" type="button" @click="reset">‹&nbsp; Volver</button>
     </header>
 
     <template v-if="stage !== 'success'">
       <div v-if="stage !== 'details'" class="exit-mode-tabs">
-        <button type="button" :class="{ 'exit-mode-tabs__active': mode === 'automatic' }" @click="setMode('automatic')">Capturar Placa</button>
-        <button type="button" :class="{ 'exit-mode-tabs__active': mode === 'manual' }" @click="setMode('manual')">Buscar Visitante</button>
+        <button type="button" :class="{ 'exit-mode-tabs__active': mode === 'automatic' }"
+          @click="setMode('automatic')">Capturar Placa</button>
+        <button type="button" :class="{ 'exit-mode-tabs__active': mode === 'manual' }" @click="setMode('manual')">Buscar
+          Visitante</button>
       </div>
       <SalidaCameraPanel v-if="stage === 'capture' && mode === 'automatic'" @back="reset" />
       <SalidaManualPanel v-else-if="stage === 'capture'" @found="showRecord" />

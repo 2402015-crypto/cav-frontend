@@ -8,6 +8,10 @@ export function registerExit(id, observaciones) {
   return http.put(`/salidas/${id}`, { observaciones })
 }
 
+export function updateExitObservations(id, observaciones) {
+  return http.patch(`/salidas/${id}/observaciones`, { observaciones })
+}
+
 export function listActiveExits(query = '') {
   return http.get('/salidas/activos', { params: query ? { q: query } : {} })
 }
