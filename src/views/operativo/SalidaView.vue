@@ -47,7 +47,7 @@ function reset() {
           Visitante</button>
       </div>
       <SalidaCameraPanel v-if="stage === 'capture' && mode === 'automatic'" @back="reset" />
-      <SalidaManualPanel v-else-if="stage === 'capture'" @found="showRecord" />
+      <SalidaManualPanel v-else-if="stage === 'capture'" @found="showRecord" @registered="record = $event; stage = 'success'" />
       <SalidaDetails v-else :record="record" @back="reset" @registered="record = $event; stage = 'success'" />
     </template>
     <SalidaSuccessView v-else :record="record" @panel="reset" />

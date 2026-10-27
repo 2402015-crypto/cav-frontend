@@ -1,8 +1,8 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue'
-import { getExitDetails, listActiveExits } from '@/services/api/salidas'
+import { getExitDetails, listActiveExits, registerExit } from '@/services/api/salidas'
 
-const emit = defineEmits(['found'])
+const emit = defineEmits(['found', 'registered'])
 const query = ref('')
 const records = ref([])
 const loading = ref(true)
@@ -42,7 +42,17 @@ async function openDetails(record) {
 
 async function registerSelected() {
   const record = records.value.find((item) => item.idRegistro === selectedId.value)
-  if (record) await openDetails(record)
+  if (!record || selecting.value) return
+  selecting.value = record.idRegistro
+  errorMessage.value = ''
+  try {
+    const response = await registerExit(record.idRegistro, '')
+    emit('registered', response.data.data)
+  } catch (error) {
+    errorMessage.value = error.response?.data?.message || 'No fue posible registrar la salida.'
+  } finally {
+    selecting.value = null
+  }
 }
 
 watch(query, () => {
@@ -58,8 +68,7 @@ onMounted(load)
     <label for="active-exit-search">BUSCAR POR PLACA O CONDUCTOR</label>
     <input id="active-exit-search" v-model="query" type="search" placeholder="Placa o nombre..." />
     <p v-if="errorMessage" class="exit-form-error" role="alert">{{ errorMessage }}</p>
-    <button v-if="selectedId" class="exit-register-selected" type="button" @click="registerSelected">&nbsp; Registrar
-      Salida · {{ new Date().toLocaleTimeString('es-MX', { hour: 'numeric', minute: '2-digit' }) }}</button>
+    <button v-if="selectedId" class="exit-register-selected" type="button" :disabled="selecting === selectedId" @click="registerSelected">&nbsp; {{ selecting === selectedId ? 'Registrando...' : 'Registrar Salida · ' + new Date().toLocaleTimeString('es-MX', { hour: 'numeric', minute: '2-digit' }) }}</button>
     <p v-if="loading" class="exit-active-status">Cargando vehículos activos...</p>
     <p v-else-if="!records.length" class="exit-active-status">No hay vehículos dentro del hotel.</p>
     <div v-else class="exit-active-list">

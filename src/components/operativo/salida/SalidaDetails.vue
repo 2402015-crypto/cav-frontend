@@ -63,20 +63,41 @@ async function saveObservations() {
     <div class="exit-details-card__body">
       <section class="exit-detail-block exit-detail-block--conductor">
         <small>CONDUCTOR</small>
-        <div><span>Nombre<strong>{{ record.conductor || 'N/A' }}</strong></span><span v-if="isProvider || isTransporter">Compañía/Agencia<strong>{{ record.empresa || record.transportadora || 'N/A' }}</strong></span></div>
+        <div><span>Nombre<strong>{{ record.conductor || 'N/A' }}</strong></span><span
+            v-if="isProvider || isTransporter">Compañía/Agencia<strong>{{ record.empresa || record.transportadora ||
+              'N/A' }}</strong></span></div>
       </section>
       <section class="exit-detail-block exit-detail-block--data">
         <small>DATOS DEL REGISTRO</small>
-        <div v-if="isTransporter" class="exit-detail-grid"><span>Marca<strong>{{ record.marca || 'N/A' }}</strong></span><span>Tipo de movimiento<strong>{{ record.tipoMovimiento || 'N/A' }}</strong></span><span>Villa<strong>{{ record.villa || 'N/A' }}</strong></span><span>Pasajeros (PAX)<strong>{{ record.numeroPax ?? 'N/A' }}</strong></span></div>
-        <div v-else-if="isTaxi" class="exit-detail-grid"><span>Número de unidad<strong>{{ record.numeroUnidad || 'N/A' }}</strong></span><span>Villa<strong>{{ record.villa || 'N/A' }}</strong></span><span>Destino<strong>{{ record.destino || 'N/A' }}</strong></span></div>
-        <div v-else-if="isProvider" class="exit-detail-grid"><span>Marca<strong>{{ record.marca || 'N/A' }}</strong></span><span>Color<strong>{{ record.color || 'N/A' }}</strong></span><span>Área<strong>{{ record.area || 'N/A' }}</strong></span></div>
-        <div v-else class="exit-detail-grid"><span>Departamento<strong>{{ record.area || 'N/A' }}</strong></span><span>Marca<strong>{{ record.marca || 'N/A' }}</strong></span><span>Color<strong>{{ record.color || 'N/A' }}</strong></span></div>
+        <div v-if="isTransporter" class="exit-detail-grid"><span>Marca<strong>{{ record.marca || 'N/A'
+              }}</strong></span><span>Tipo de movimiento<strong>{{ record.tipoMovimiento || 'N/A'
+              }}</strong></span><span>Villa<strong>{{ record.villa || 'N/A' }}</strong></span><span>Pasajeros
+            (PAX)<strong>{{ record.numeroPax ?? 'N/A' }}</strong></span></div>
+        <div v-else-if="isTaxi" class="exit-detail-grid"><span>Número de unidad<strong>{{ record.numeroUnidad || 'N/A'
+              }}</strong></span><span>Villa<strong>{{ record.villa || 'N/A' }}</strong></span><span>Destino<strong>{{
+                record.destino || 'N/A' }}</strong></span></div>
+        <div v-else-if="isProvider" class="exit-detail-grid"><span>Marca<strong>{{ record.marca || 'N/A'
+              }}</strong></span><span>Color<strong>{{ record.color || 'N/A' }}</strong></span><span>Área<strong>{{
+                record.area || 'N/A' }}</strong></span></div>
+        <div v-else class="exit-detail-grid"><span>Departamento<strong>{{ record.area || 'N/A'
+              }}</strong></span><span>Marca<strong>{{ record.marca || 'N/A' }}</strong></span><span>Color<strong>{{
+                record.color || 'N/A' }}</strong></span></div>
       </section>
-      <label class="exit-observations"><span>OBSERVACIONES <button type="button" @click="observationsEditing ? saveObservations() : observationsEditing = true">{{ observationsSaving ? 'Guardando...' : observationsEditing ? 'Guardar' : '✎ Añadir' }}</button></span><textarea v-model="observations" :readonly="!observationsEditing" placeholder="Sin observaciones" /></label>
+      <label class="exit-observations"><span>OBSERVACIONES <button type="button"
+            @click="observationsEditing ? saveObservations() : observationsEditing = true">{{ observationsSaving ?
+              'Guardando...' : observationsEditing ? 'Guardar' : 'Añadir' }}</button></span><textarea
+          v-model="observations" :readonly="!observationsEditing" placeholder="Sin observaciones" /></label>
       <section v-if="record.historial?.length" class="exit-history">
         <header><strong>HISTORIAL DE VISITAS</strong><span>{{ record.totalVisitas }} total</span></header>
-        <div class="exit-history__latest"><span>ÚLTIMA VISITA</span><div><span>Entrada<strong>{{ entryTime }}</strong></span><span>Salida<strong>{{ record.fechaSalida ? formatDate(record.fechaSalida) : '-' }}</strong></span><span>Duración<strong>{{ record.permanencia || '-' }}</strong></span></div></div>
-        <div v-for="(visit, index) in record.historial" :key="index" class="exit-history__row"><span>{{ new Date(visit.entrada).toLocaleDateString('es-MX') }}</span><span class="exit-history__times">{{ formatDate(visit.entrada) }} · {{ visit.salida ? formatDate(visit.salida) : 'Activa' }}</span><span>{{ visit.permanencia }}</span></div>
+        <div class="exit-history__latest"><span>ÚLTIMA VISITA</span>
+          <div><span>Entrada<strong>{{ entryTime }}</strong></span><span>Salida<strong>{{ record.fechaSalida ?
+            formatDate(record.fechaSalida) : '-' }}</strong></span><span>Duración<strong>{{ record.permanencia ||
+                '-' }}</strong></span></div>
+        </div>
+        <div v-for="(visit, index) in record.historial" :key="index" class="exit-history__row"><span>{{ new
+          Date(visit.entrada).toLocaleDateString('es-MX') }}</span><span class="exit-history__times">{{
+              formatDate(visit.entrada) }} · {{ visit.salida ? formatDate(visit.salida) : 'Activa' }}</span><span>{{
+              visit.permanencia }}</span></div>
       </section>
     </div>
     <p v-if="errorMessage" class="exit-form-error" role="alert">{{ errorMessage }}</p>

@@ -4,6 +4,7 @@ import { computed } from 'vue'
 const props = defineProps({ record: { type: Object, required: true } })
 defineEmits(['panel'])
 const exitTime = computed(() => new Date(props.record.fechaSalida).toLocaleTimeString('es-MX', { hour: 'numeric', minute: '2-digit' }))
+const exitDate = computed(() => new Date(props.record.fechaSalida).toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' }).replace('.', ''))
 const permanence = computed(() => props.record.permanencia || 'N/A')
 </script>
 
@@ -13,7 +14,7 @@ const permanence = computed(() => props.record.permanencia || 'N/A')
     <h2>Salida Registrada</h2>
     <p>Placa: <strong>{{ record.placa }}</strong></p>
     <p>Permanencia: <strong>{{ permanence }}</strong></p>
-    <small>{{ exitTime }}</small>
+    <small>{{ exitTime }} · {{ exitDate }}</small>
     <button type="button" @click="$emit('panel')">Volver al panel</button>
   </section>
 </template>
