@@ -16,6 +16,7 @@ coverage/
 .env
 .env.*
 !.env.example
+.certs/
 
 # Editor directories and files
 .vscode/*

@@ -12,7 +12,7 @@ export function createManualEntry(payload) {
 export function recognizePlate(image) {
   const formData = new FormData()
   formData.append('image', image, 'capture.jpg')
-  return http.post('/ocr/recognize', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+  return http.post('/ocr/recognize', formData)
 }
 
 export function getDailyStats() {

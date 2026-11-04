@@ -47,9 +47,31 @@ Vite queda disponible en todas las interfaces de red. Abre `http://<IP-DE-ESTE-E
 desde otro dispositivo conectado a la misma red. Si Windows Firewall muestra un aviso,
 permite el acceso para Node.js en redes privadas.
 
-El acceso a la cámara en navegadores móviles requiere un contexto seguro (HTTPS).
-La aplicación sí será accesible por HTTP en la red local, pero para usar OCR desde
-otro dispositivo tendrás que servir Vite con HTTPS o instalar un certificado local.
+### HTTPS local para la cámara
+
+Genera el certificado una sola vez desde la raíz de `cav-frontend`:
+
+```powershell
+mkcert -install
+New-Item -ItemType Directory -Force .certs
+mkcert -key-file .certs\cav-key.pem -cert-file .certs\cav.pem localhost 127.0.0.1 172.18.130.80
+```
+
+Después ejecuta:
+
+```powershell
+npm run dev
+```
+
+Accede desde otro dispositivo con:
+
+```text
+https://172.18.130.80:5173
+```
+
+El dispositivo remoto debe confiar en la CA local de `mkcert`; copia el archivo
+mostrado por `mkcert -CAROOT` al dispositivo e instálalo como certificado raíz.
+El certificado y la clave están en `.certs/`, una carpeta excluida de Git.
 
 ## 5. Build de produccion
 
