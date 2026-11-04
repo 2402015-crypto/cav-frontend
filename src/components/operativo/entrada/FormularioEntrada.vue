@@ -7,6 +7,7 @@ const props = defineProps({
   typeLabel: { type: String, required: true },
   plate: { type: String, required: true },
   initialData: { type: Object, default: null },
+  ocrId: { type: Number, default: null },
 })
 
 const emit = defineEmits(['back', 'registered'])
@@ -92,6 +93,7 @@ async function submit() {
       numeroPax: isTransporter.value ? form.value.numeroPax : null,
       numeroUnidad: isTaxi.value ? form.value.numeroUnidad : null,
       destino: isTaxi.value || isProvider.value ? form.value.area : null,
+      idOcr: props.ocrId,
       marca: isProvider.value && form.value.marca === 'N/A' ? null : form.value.marca,
       color: isProvider.value && form.value.color === 'N/A' ? null : form.value.color,
     })

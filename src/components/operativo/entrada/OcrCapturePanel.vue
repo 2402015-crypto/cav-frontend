@@ -1,7 +1,8 @@
 <script setup>
 import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+import { recognizePlate } from '@/services/api/entradas'
 
-defineEmits(['back', 'confirm'])
+const emit = defineEmits(['back', 'confirm'])
 
 const video = ref(null)
 const cameraError = ref('')
@@ -10,6 +11,18 @@ const capturedImage = ref('')
 const reading = ref(false)
 const detected = ref(false)
 const editablePlate = ref('FAP-528-D')
+const detectedPlate = ref('')
+const ocrId = ref(null)
+const ocrError = ref('')
+const retryTimer = ref(null)
+
+function scheduleCaptureRestart() {
+  if (retryTimer.value) clearTimeout(retryTimer.value)
+  retryTimer.value = setTimeout(() => {
+    retryTimer.value = null
+    retake()
+  }, 1800)
+}
 
 async function startCamera() {
   if (!navigator.mediaDevices?.getUserMedia) {
@@ -29,7 +42,7 @@ function stopCamera() {
   cameraStream.value = null
 }
 
-function capturePlate() {
+async function capturePlate() {
   if (reading.value) return
   if (video.value?.videoWidth) {
     const canvas = document.createElement('canvas')
@@ -39,24 +52,55 @@ function capturePlate() {
     capturedImage.value = canvas.toDataURL('image/jpeg', 0.85)
   }
   reading.value = true
-  window.setTimeout(() => {
+  ocrError.value = ''
+  if (!capturedImage.value) {
+    ocrError.value = 'La cámara todavía no tiene una imagen disponible. Intenta nuevamente.'
     reading.value = false
+    scheduleCaptureRestart()
+    return
+  }
+  try {
+    const blob = await fetch(capturedImage.value).then((response) => response.blob())
+    const response = await recognizePlate(blob)
+    const result = response.data.data
+    ocrId.value = result.idOcr
+    if (!result.detectada || !result.placa) {
+      ocrError.value = result.mensaje || 'No se detectó una placa en la captura.'
+      capturedImage.value = ''
+      scheduleCaptureRestart()
+      return
+    }
+    detectedPlate.value = result.placa
+    editablePlate.value = result.placa
     detected.value = true
     stopCamera()
-  }, 900)
+  } catch (error) {
+    ocrError.value = error.response?.data?.message || 'No fue posible procesar la captura OCR.'
+    capturedImage.value = ''
+    scheduleCaptureRestart()
+  } finally {
+    reading.value = false
+  }
 }
 
 async function retake() {
+  stopCamera()
   capturedImage.value = ''
   detected.value = false
   editablePlate.value = 'FAP-528-D'
+  detectedPlate.value = ''
+  ocrId.value = null
+  ocrError.value = ''
   cameraError.value = ''
   await nextTick()
-  startCamera()
+  await startCamera()
 }
 
 onMounted(startCamera)
-onBeforeUnmount(stopCamera)
+onBeforeUnmount(() => {
+  if (retryTimer.value) clearTimeout(retryTimer.value)
+  stopCamera()
+})
 </script>
 
 <template>
@@ -68,6 +112,7 @@ onBeforeUnmount(stopCamera)
         <div class="entry-camera-frame" aria-hidden="true"><i /><i /><i /><i /></div>
         <div v-if="reading" class="entry-camera-reading"><span class="entry-loading-dots">···</span><span>Leyendo placa</span></div>
         <div v-else-if="detected" class="entry-camera-detected"><span>✓</span><strong>Placa detectada</strong></div>
+        <p v-else-if="ocrError" class="entry-camera-error">{{ ocrError }}</p>
         <p v-else-if="cameraError" class="entry-camera-error">{{ cameraError }}</p>
         <span v-else class="entry-camera-placeholder" aria-hidden="true">···</span>
       </div>
@@ -76,7 +121,7 @@ onBeforeUnmount(stopCamera)
 
     <div v-if="detected" class="entry-plate-result">
       <label>PLACA DETECTADA</label>
-      <strong>FAP-528-D</strong>
+      <strong>{{ detectedPlate }}</strong>
       <p>Puedes editar la placa si el sistema no fue preciso:</p>
       <label for="editable-plate">PLACA EDITABLE</label>
       <div class="entry-plate-input"><input id="editable-plate" v-model="editablePlate" type="text" maxlength="30" /><span aria-hidden="true">↗</span></div>
@@ -84,7 +129,7 @@ onBeforeUnmount(stopCamera)
 
     <div v-if="detected" class="entry-ocr-actions">
       <button class="entry-secondary-button" type="button" @click="retake">‹&nbsp; Retomar</button>
-      <button v-if="detected" class="entry-primary-button" type="button" @click="$emit('confirm', editablePlate)">✓&nbsp; Confirmar</button>
+      <button v-if="detected" class="entry-primary-button" type="button" @click="emit('confirm', { plate: editablePlate, idOcr })">✓&nbsp; Confirmar</button>
     </div>
   </section>
 </template>

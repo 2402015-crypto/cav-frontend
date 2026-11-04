@@ -92,7 +92,7 @@ async function saveObservations() {
         <div class="exit-history__latest"><span>ÚLTIMA VISITA</span>
           <div><span>Entrada<strong>{{ entryTime }}</strong></span><span>Salida<strong>{{ record.fechaSalida ?
             formatDate(record.fechaSalida) : '-' }}</strong></span><span>Duración<strong>{{ record.permanencia ||
-                '-' }}</strong></span></div>
+                  '-' }}</strong></span></div>
         </div>
         <div v-for="(visit, index) in record.historial" :key="index" class="exit-history__row"><span>{{ new
           Date(visit.entrada).toLocaleDateString('es-MX') }}</span><span class="exit-history__times">{{

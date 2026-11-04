@@ -30,7 +30,8 @@ Copy-Item .env.example .env
 Edita `.env` cuando sea necesario:
 
 ```dotenv
-VITE_API_URL=http://localhost:8080/api/v1
+VITE_API_URL=
+VITE_DEV_API_TARGET=http://localhost:8080
 VITE_API_TIMEOUT=10000
 ```
 
@@ -42,7 +43,13 @@ Vite solo expone al navegador variables con prefijo `VITE_`. No coloques secreto
 npm run dev
 ```
 
-Abre `http://localhost:5173`.
+Vite queda disponible en todas las interfaces de red. Abre `http://<IP-DE-ESTE-EQUIPO>:5173`
+desde otro dispositivo conectado a la misma red. Si Windows Firewall muestra un aviso,
+permite el acceso para Node.js en redes privadas.
+
+El acceso a la cámara en navegadores móviles requiere un contexto seguro (HTTPS).
+La aplicación sí será accesible por HTTP en la red local, pero para usar OCR desde
+otro dispositivo tendrás que servir Vite con HTTPS o instalar un certificado local.
 
 ## 5. Build de produccion
 

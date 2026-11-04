@@ -9,6 +9,12 @@ export function createManualEntry(payload) {
   return http.post('/entradas/manual', payload)
 }
 
+export function recognizePlate(image) {
+  const formData = new FormData()
+  formData.append('image', image, 'capture.jpg')
+  return http.post('/ocr/recognize', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+}
+
 export function getDailyStats() {
   return http.get('/entradas/manual/estadisticas-hoy')
 }

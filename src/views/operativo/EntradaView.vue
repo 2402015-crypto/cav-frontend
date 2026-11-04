@@ -6,6 +6,7 @@ import EntryMethodSelector from '@/components/operativo/entrada/EntryMethodSelec
 import ManualEntryPanel from '@/components/operativo/entrada/ManualEntryPanel.vue'
 import OcrCapturePanel from '@/components/operativo/entrada/OcrCapturePanel.vue'
 import RegistroTypeSelector from '@/components/operativo/entrada/RegistroTypeSelector.vue'
+import { searchManualEntry } from '@/services/api/entradas'
 
 const registrationTypes = [
   { key: 'general', label: 'Colaborador', formTitle: 'Registro general', icon: 'person' },
@@ -18,6 +19,7 @@ const step = ref('type')
 const selectedType = ref(null)
 const selectedMethod = ref(null)
 const capturedPlate = ref('')
+const ocrId = ref(null)
 const manualLookup = ref(null)
 const registeredAt = ref(null)
 
@@ -55,8 +57,15 @@ function returnToMethod() {
   step.value = 'method'
 }
 
-function confirmPlate(plate) {
-  capturedPlate.value = plate
+async function confirmPlate(payload) {
+  capturedPlate.value = payload.plate
+  ocrId.value = payload.idOcr
+  try {
+    const response = await searchManualEntry(payload.plate)
+    manualLookup.value = response.data.data
+  } catch {
+    manualLookup.value = null
+  }
   step.value = 'form'
 }
 
@@ -103,7 +112,7 @@ function goBack() {
     <EntryMethodSelector v-else-if="step === 'method'" @automatic="selectAutomatic" @manual="selectManual" @back="returnToTypes" />
     <ManualEntryPanel v-else-if="step === 'manual'" @back="returnToMethod" @complete="completeManual" />
     <OcrCapturePanel v-else-if="step === 'capture'" @back="returnToMethod" @confirm="confirmPlate" />
-    <EntradaForm v-else-if="step === 'form'" :type-key="selectedType?.key || 'general'" :type-label="selectedType?.label || 'Colaborador'" :plate="capturedPlate" :initial-data="manualLookup" @back="capturedPlate ? returnToMethod : returnToTypes" @registered="completeRegistration" />
+    <EntradaForm v-else-if="step === 'form'" :type-key="selectedType?.key || 'general'" :type-label="selectedType?.label || 'Colaborador'" :plate="capturedPlate" :ocr-id="ocrId" :initial-data="manualLookup" @back="capturedPlate ? returnToMethod : returnToTypes" @registered="completeRegistration" />
     <EntrySuccessView v-else :plate="capturedPlate" :registered-at="registeredAt" @panel="returnToPanel" />
   </section>
 </template>
