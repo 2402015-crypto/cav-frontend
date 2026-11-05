@@ -9,7 +9,7 @@ const http = axios.create({
 })
 
 http.interceptors.request.use((config) => {
-  const token = sessionStorage.getItem('cav_access_token')
+  const token = localStorage.getItem('cav_access_token') || sessionStorage.getItem('cav_access_token')
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
@@ -24,6 +24,8 @@ http.interceptors.response.use(
     if (error.response?.status === 401) {
       sessionStorage.removeItem('cav_access_token')
       sessionStorage.removeItem('cav_authenticated_user')
+      localStorage.removeItem('cav_access_token')
+      localStorage.removeItem('cav_authenticated_user')
     }
 
     return Promise.reject(error)
