@@ -8,6 +8,7 @@ const props = defineProps({
   plate: { type: String, required: true },
   initialData: { type: Object, default: null },
   ocrId: { type: Number, default: null },
+  registrationMethod: { type: String, default: 'Manual' },
 })
 
 const emit = defineEmits(['back', 'registered'])
@@ -25,7 +26,7 @@ const form = ref({
   placa: props.initialData?.placa || props.plate,
   color: props.initialData?.color || '',
   numeroUnidad: props.initialData?.numeroUnidad || '',
-  villa: props.initialData?.villa || '',
+  villa: isTransporter.value || isTaxi.value ? '' : props.initialData?.villa || '',
   tipoMovimiento: isTransporter.value ? '' : props.initialData?.tipoMovimiento || '',
   numeroPax: isTransporter.value ? null : props.initialData?.numeroPax ?? null,
   observaciones: '',
@@ -99,6 +100,7 @@ async function submit() {
       numeroUnidad: isTaxi.value ? form.value.numeroUnidad : null,
       destino: isTaxi.value || isProvider.value ? form.value.area : null,
       idOcr: props.ocrId,
+      metodoRegistro: props.registrationMethod,
       marca: form.value.marca.trim() || null,
       color: form.value.color.trim() || null,
     })

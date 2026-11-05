@@ -119,7 +119,7 @@ function goBack() {
     <EntryMethodSelector v-else-if="step === 'method'" @automatic="selectAutomatic" @manual="selectManual" @back="returnToTypes" />
     <ManualEntryPanel v-else-if="step === 'manual'" @back="returnToMethod" @complete="completeManual" />
     <OcrCapturePanel v-else-if="step === 'capture'" @back="returnToMethod" @confirm="confirmPlate" />
-    <EntradaForm v-else-if="step === 'form'" :type-key="selectedType?.key || 'general'" :type-label="selectedType?.label || 'Colaborador'" :plate="capturedPlate" :ocr-id="ocrId" :initial-data="manualLookup" @back="capturedPlate ? returnToMethod : returnToTypes" @registered="completeRegistration" />
+    <EntradaForm v-else-if="step === 'form'" :type-key="selectedType?.key || 'general'" :type-label="selectedType?.label || 'Colaborador'" :plate="capturedPlate" :ocr-id="ocrId" :registration-method="selectedMethod === 'automatic' ? 'Automatico' : 'Manual'" :initial-data="manualLookup" @back="capturedPlate ? returnToMethod : returnToTypes" @registered="completeRegistration" />
     <EntrySuccessView v-else :plate="capturedPlate" :registered-at="registeredAt" @panel="returnToPanel" />
   </section>
 </template>

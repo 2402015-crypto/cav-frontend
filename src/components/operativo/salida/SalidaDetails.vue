@@ -73,7 +73,8 @@ async function saveObservations() {
               }}</strong></span><span>Tipo de movimiento<strong>{{ record.tipoMovimiento || 'N/A'
               }}</strong></span><span>Villa<strong>{{ record.villa || 'N/A' }}</strong></span><span>Pasajeros
             (PAX)<strong>{{ record.numeroPax ?? 'N/A' }}</strong></span></div>
-        <div v-else-if="isTaxi" class="exit-detail-grid"><span>Número de unidad<strong>{{ record.numeroUnidad || 'N/A'
+        <div v-else-if="isTaxi" class="exit-detail-grid"><span>Marca<strong>{{ record.marca || 'N/A'
+              }}</strong></span><span>Número de unidad<strong>{{ record.numeroUnidad || 'N/A'
               }}</strong></span><span>Villa<strong>{{ record.villa || 'N/A' }}</strong></span><span>Destino<strong>{{
                 record.destino || 'N/A' }}</strong></span></div>
         <div v-else-if="isProvider" class="exit-detail-grid"><span>Marca<strong>{{ record.marca || 'N/A'

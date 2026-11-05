@@ -16,6 +16,15 @@ const ocrId = ref(null)
 const ocrError = ref('')
 const retryTimer = ref(null)
 
+function normalizeEditablePlate() {
+  editablePlate.value = editablePlate.value.toUpperCase()
+}
+
+function confirmCapture() {
+  normalizeEditablePlate()
+  emit('confirm', { plate: editablePlate.value, idOcr: ocrId.value })
+}
+
 function captureFrame() {
   const source = video.value
   if (!source?.videoWidth || !source.videoHeight) return ''
@@ -140,7 +149,7 @@ onBeforeUnmount(() => {
       <div class="entry-camera-view">
         <video v-if="!capturedImage" ref="video" autoplay muted playsinline aria-label="Vista de cámara para capturar placa" />
         <img v-else :src="capturedImage" alt="Captura temporal de la placa" />
-        <div class="entry-camera-frame" aria-hidden="true"><i /><i /><i /><i /></div>
+        <div v-if="!capturedImage" class="entry-camera-frame" aria-hidden="true"><i /><i /><i /><i /></div>
         <div v-if="reading" class="entry-camera-reading"><span class="entry-loading-dots">···</span><span>Leyendo placa</span></div>
         <div v-else-if="detected" class="entry-camera-detected"><span>✓</span><strong>Placa detectada</strong></div>
         <p v-else-if="ocrError" class="entry-camera-error">{{ ocrError }}</p>
@@ -155,12 +164,12 @@ onBeforeUnmount(() => {
       <strong>{{ detectedPlate }}</strong>
       <p>Puedes editar la placa si el sistema no fue preciso:</p>
       <label for="editable-plate">PLACA EDITABLE</label>
-      <div class="entry-plate-input"><input id="editable-plate" v-model="editablePlate" type="text" maxlength="30" /><span aria-hidden="true">↗</span></div>
+      <div class="entry-plate-input"><input id="editable-plate" v-model="editablePlate" type="text" maxlength="30" @input="normalizeEditablePlate" /><span aria-hidden="true">↗</span></div>
     </div>
 
     <div v-if="detected" class="entry-ocr-actions">
       <button class="entry-secondary-button" type="button" @click="retake">‹&nbsp; Retomar</button>
-      <button v-if="detected" class="entry-primary-button" type="button" @click="emit('confirm', { plate: editablePlate, idOcr })">✓&nbsp; Confirmar</button>
+      <button v-if="detected" class="entry-primary-button" type="button" @click="confirmCapture">✓&nbsp; Confirmar</button>
     </div>
   </section>
 </template>
