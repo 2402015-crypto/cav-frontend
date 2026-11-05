@@ -40,8 +40,9 @@ const activeSuggestion = ref('')
 const saving = ref(false)
 const errorMessage = ref('')
 
-function sanitizePax(value) {
-  const digitsOnly = String(value ?? '').replace(/\D/g, '')
+function sanitizePax(event) {
+  const digitsOnly = event.target.value.replace(/\D/g, '')
+  event.target.value = digitsOnly
   form.value.numeroPax = digitsOnly === '' ? null : Number(digitsOnly)
 }
 
@@ -130,7 +131,7 @@ async function submit() {
         <span class="entry-movement-options"><button type="button" :class="{ 'entry-movement-option--active': form.tipoMovimiento === 'IN' }" @click="form.tipoMovimiento = 'IN'">▣&nbsp; IN</button><button type="button" :class="{ 'entry-movement-option--active': form.tipoMovimiento === 'OUT' }" @click="form.tipoMovimiento = 'OUT'">□&nbsp; OUT</button></span>
       </label>
       <label v-if="isTransporter">VILLA<input v-model="form.villa" type="text" placeholder="Número de villa" /></label>
-      <label v-if="isTransporter">NÚMERO DE PASAJEROS (PAX)<input :value="form.numeroPax ?? ''" type="text" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="Número de pasajeros" @input="sanitizePax($event.target.value)" /></label>
+      <label v-if="isTransporter">NÚMERO DE PASAJEROS (PAX)<input :value="form.numeroPax ?? ''" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" placeholder="Número de pasajeros" @input="sanitizePax($event)" /></label>
       <label v-if="isTaxi">NÚMERO DE UNIDAD<input v-model="form.numeroUnidad" type="text" placeholder="Unidad" /></label>
       <label v-if="isTaxi">VILLA<input v-model="form.villa" type="text" placeholder="Número de villa" /></label>
       <label v-if="isTaxi">DESTINO<input v-model="form.area" type="text" placeholder="Destino" /></label>

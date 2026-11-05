@@ -16,6 +16,43 @@ const ocrId = ref(null)
 const ocrError = ref('')
 const retryTimer = ref(null)
 
+function captureFrame() {
+  const source = video.value
+  if (!source?.videoWidth || !source.videoHeight) return ''
+
+  const view = source.getBoundingClientRect()
+  const scale = Math.max(view.width / source.videoWidth, view.height / source.videoHeight)
+  const renderedWidth = source.videoWidth * scale
+  const renderedHeight = source.videoHeight * scale
+  const offsetX = (view.width - renderedWidth) / 2
+  const offsetY = (view.height - renderedHeight) / 2
+  const frameInset = 14
+  const frameLeft = frameInset
+  const frameTop = frameInset
+  const frameWidth = Math.max(1, view.width - frameInset * 2)
+  const frameHeight = Math.max(1, view.height - frameInset * 2)
+  const sourceX = Math.max(0, (frameLeft - offsetX) / scale)
+  const sourceY = Math.max(0, (frameTop - offsetY) / scale)
+  const sourceWidth = Math.min(video.value.videoWidth - sourceX, frameWidth / scale)
+  const sourceHeight = Math.min(video.value.videoHeight - sourceY, frameHeight / scale)
+  const canvas = document.createElement('canvas')
+  canvas.width = Math.max(1, Math.round(sourceWidth))
+  canvas.height = Math.max(1, Math.round(sourceHeight))
+  const context = canvas.getContext('2d')
+  context.drawImage(
+    source,
+    sourceX,
+    sourceY,
+    sourceWidth,
+    sourceHeight,
+    0,
+    0,
+    canvas.width,
+    canvas.height,
+  )
+  return canvas.toDataURL('image/jpeg', 0.92)
+}
+
 function scheduleCaptureRestart() {
   if (retryTimer.value) clearTimeout(retryTimer.value)
   retryTimer.value = setTimeout(() => {
@@ -44,13 +81,7 @@ function stopCamera() {
 
 async function capturePlate() {
   if (reading.value) return
-  if (video.value?.videoWidth) {
-    const canvas = document.createElement('canvas')
-    canvas.width = video.value.videoWidth
-    canvas.height = video.value.videoHeight
-    canvas.getContext('2d').drawImage(video.value, 0, 0)
-    capturedImage.value = canvas.toDataURL('image/jpeg', 0.85)
-  }
+  capturedImage.value = captureFrame()
   reading.value = true
   ocrError.value = ''
   if (!capturedImage.value) {
