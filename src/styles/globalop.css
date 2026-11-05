@@ -419,6 +419,11 @@
   object-fit: cover;
 }
 
+.entry-camera-view img {
+  object-fit: contain;
+  background: #0c1b2d;
+}
+
 .entry-camera-frame {
   position: absolute;
   inset: 14px;

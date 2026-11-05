@@ -21,13 +21,12 @@ const form = ref({
   area: props.initialData?.destino || props.initialData?.area || '',
   empresa: props.initialData?.empresa || '',
   transportadora: props.initialData?.transportadora || '',
-  marca: props.initialData?.marca || (isProvider.value || isTransporter.value || isTaxi.value ? 'N/A' : ''),
+  marca: props.initialData?.marca || '',
   placa: props.initialData?.placa || props.plate,
-  color: isTransporter.value || isTaxi.value ? 'N/A' : props.initialData?.color || (isProvider.value ? 'N/A' : ''),
+  color: props.initialData?.color || '',
   numeroUnidad: props.initialData?.numeroUnidad || '',
-  villa: isTransporter.value || isTaxi.value ? '' : props.initialData?.villa || '',
+  villa: props.initialData?.villa || '',
   tipoMovimiento: isTransporter.value ? '' : props.initialData?.tipoMovimiento || '',
-  villa: isTransporter.value ? '' : props.initialData?.villa || '',
   numeroPax: isTransporter.value ? null : props.initialData?.numeroPax ?? null,
   observaciones: '',
 })
@@ -40,6 +39,11 @@ const transporterSuggestions = ref([])
 const activeSuggestion = ref('')
 const saving = ref(false)
 const errorMessage = ref('')
+
+function sanitizePax(value) {
+  const digitsOnly = String(value ?? '').replace(/\D/g, '')
+  form.value.numeroPax = digitsOnly === '' ? null : Number(digitsOnly)
+}
 
 const valid = computed(() => form.value.nombreCompleto.trim() && form.value.placa.trim()
   && (isProvider.value ? form.value.empresa.trim()
@@ -94,8 +98,8 @@ async function submit() {
       numeroUnidad: isTaxi.value ? form.value.numeroUnidad : null,
       destino: isTaxi.value || isProvider.value ? form.value.area : null,
       idOcr: props.ocrId,
-      marca: isProvider.value && form.value.marca === 'N/A' ? null : form.value.marca,
-      color: isProvider.value && form.value.color === 'N/A' ? null : form.value.color,
+      marca: form.value.marca.trim() || null,
+      color: form.value.color.trim() || null,
     })
     emit('registered', response.data.data)
   } catch (error) {
@@ -119,14 +123,14 @@ async function submit() {
       <label v-if="isProvider" class="entry-autocomplete">NOMBRE DE LA EMPRESA<input v-model="form.empresa" type="text" placeholder="Escribe para buscar o crear una empresa" @input="suggest('empresa', form.empresa)" @focus="suggest('empresa', form.empresa)" /><small class="entry-field-help">Si la empresa no existe, se guardará automáticamente para futuras sugerencias.</small><span v-if="activeSuggestion === 'empresa' && companySuggestions.length" class="entry-suggestions"><button v-for="item in companySuggestions" :key="item.id" type="button" @mousedown.prevent="chooseSuggestion('empresa', item)">{{ item.nombre }}</button></span></label>
       <label v-if="isTransporter" class="entry-autocomplete">COMPAÑÍA O AGENCIA<input v-model="form.transportadora" type="text" placeholder="Nombre de la compañía" @input="suggest('transportadora', form.transportadora)" @focus="suggest('transportadora', form.transportadora)" /><small class="entry-field-help">Si la transportadora no existe, se guardará automáticamente para futuras sugerencias.</small><span v-if="activeSuggestion === 'transportadora' && transporterSuggestions.length" class="entry-suggestions"><button v-for="item in transporterSuggestions" :key="item.id" type="button" @mousedown.prevent="chooseSuggestion('transportadora', item)">{{ item.nombre }}</button></span></label>
       <label v-if="!isTransporter && !isTaxi">{{ isProvider ? 'ÁREA DE DESTINO' : 'ÁREA' }}<input v-model="form.area" type="text" :placeholder="isProvider ? 'Área de destino' : 'Nombre del área'" /></label>
-      <label class="entry-autocomplete">MARCA DEL VEHÍCULO<input v-model="form.marca" type="text" :placeholder="isProvider ? 'N/A' : 'Marca'" @input="suggest('marca', form.marca)" @focus="suggest('marca', form.marca)" /><span v-if="activeSuggestion === 'marca' && brandSuggestions.length" class="entry-suggestions"><button v-for="item in brandSuggestions" :key="item.id" type="button" @mousedown.prevent="chooseSuggestion('marca', item)">{{ item.nombre }}</button></span></label>
+      <label class="entry-autocomplete">MARCA DEL VEHÍCULO<input v-model="form.marca" type="text" :placeholder="isProvider || isTransporter || isTaxi ? 'N/A' : 'Marca'" @input="suggest('marca', form.marca)" @focus="suggest('marca', form.marca)" /><span v-if="activeSuggestion === 'marca' && brandSuggestions.length" class="entry-suggestions"><button v-for="item in brandSuggestions" :key="item.id" type="button" @mousedown.prevent="chooseSuggestion('marca', item)">{{ item.nombre }}</button></span></label>
       <label>PLACA VEHICULAR<input v-model="form.placa" type="text" readonly /></label>
       <label v-if="!isTransporter && !isTaxi" class="entry-autocomplete">COLOR<input v-model="form.color" type="text" :placeholder="isProvider ? 'N/A' : 'Color'" @input="suggest('color', form.color)" @focus="suggest('color', form.color)" /><span v-if="activeSuggestion === 'color' && colorSuggestions.length" class="entry-suggestions"><button v-for="item in colorSuggestions" :key="item.id" type="button" @mousedown.prevent="chooseSuggestion('color', item)">{{ item.nombre }}</button></span></label>
       <label v-if="isTransporter">TIPO DE MOVIMIENTO
         <span class="entry-movement-options"><button type="button" :class="{ 'entry-movement-option--active': form.tipoMovimiento === 'IN' }" @click="form.tipoMovimiento = 'IN'">▣&nbsp; IN</button><button type="button" :class="{ 'entry-movement-option--active': form.tipoMovimiento === 'OUT' }" @click="form.tipoMovimiento = 'OUT'">□&nbsp; OUT</button></span>
       </label>
       <label v-if="isTransporter">VILLA<input v-model="form.villa" type="text" placeholder="Número de villa" /></label>
-      <label v-if="isTransporter">NÚMERO DE PASAJEROS (PAX)<input v-model.number="form.numeroPax" type="number" min="0" placeholder="N/A" /></label>
+      <label v-if="isTransporter">NÚMERO DE PASAJEROS (PAX)<input :value="form.numeroPax ?? ''" type="text" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="Número de pasajeros" @input="sanitizePax($event.target.value)" /></label>
       <label v-if="isTaxi">NÚMERO DE UNIDAD<input v-model="form.numeroUnidad" type="text" placeholder="Unidad" /></label>
       <label v-if="isTaxi">VILLA<input v-model="form.villa" type="text" placeholder="Número de villa" /></label>
       <label v-if="isTaxi">DESTINO<input v-model="form.area" type="text" placeholder="Destino" /></label>

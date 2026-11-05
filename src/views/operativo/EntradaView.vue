@@ -30,17 +30,20 @@ function selectType(type) {
   selectedType.value = type
   selectedMethod.value = null
   capturedPlate.value = ''
+  ocrId.value = null
   manualLookup.value = null
   step.value = 'method'
 }
 
 function selectAutomatic() {
   selectedMethod.value = 'automatic'
+  ocrId.value = null
   step.value = 'capture'
 }
 
 function selectManual() {
   selectedMethod.value = 'manual'
+  ocrId.value = null
   step.value = 'manual'
 }
 
@@ -48,12 +51,14 @@ function returnToTypes() {
   selectedType.value = null
   selectedMethod.value = null
   capturedPlate.value = ''
+  ocrId.value = null
   step.value = 'type'
 }
 
 function returnToMethod() {
   selectedMethod.value = null
   capturedPlate.value = ''
+  ocrId.value = null
   step.value = 'method'
 }
 
@@ -71,6 +76,7 @@ async function confirmPlate(payload) {
 
 function completeManual(payload) {
   capturedPlate.value = payload.plate
+  ocrId.value = null
   manualLookup.value = payload.lookup
   step.value = 'form'
 }
@@ -85,6 +91,7 @@ function returnToPanel() {
   selectedType.value = null
   selectedMethod.value = null
   capturedPlate.value = ''
+  ocrId.value = null
   manualLookup.value = null
   registeredAt.value = null
   step.value = 'type'
