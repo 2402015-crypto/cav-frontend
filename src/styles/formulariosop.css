@@ -306,6 +306,12 @@
   object-fit: cover;
 }
 
+.exit-camera-view img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .exit-camera-frame {
   position: absolute;
   inset: 14px;
@@ -414,8 +420,13 @@
   flex-direction: column;
   align-items: center;
   gap: 5px;
-  color: #00c77a;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: rgba(12, 27, 45, .78);
+  color: #b7ffe5;
   font-size: 12px;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .45);
 }
 
 .exit-camera-detected span {
@@ -438,15 +449,49 @@
   background: #fff;
 }
 
-.exit-captured-card__plate {
+.exit-captured-card__plate-row {
   grid-column: 1 / -1;
+  position: relative;
+}
+
+.exit-captured-card__plate {
   padding: 9px;
   border-radius: 9px;
   background: #10172e;
-  color: #fff;
+  color: #fff !important;
   font-size: 20px;
+  font-weight: 800;
   letter-spacing: 4px;
   text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .35);
+}
+
+.exit-details-menu {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  display: grid;
+  width: 28px;
+  height: 28px;
+  padding: 6px 5px;
+  gap: 3px;
+  transform: translateY(-50%);
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.exit-details-menu:hover,
+.exit-details-menu:focus-visible {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.exit-details-menu span {
+  display: block;
+  height: 2px;
+  border-radius: 2px;
+  background: #fff;
 }
 
 .exit-captured-card div span {
@@ -462,6 +507,15 @@
   font-size: 11px;
 }
 
+.exit-captured-card__type-value {
+  display: inline-block !important;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: #e4f0eb;
+  color: #70ad99 !important;
+  font-size: 13px !important;
+}
+
 .exit-captured-card__actions {
   display: flex !important;
   grid-column: 1 / -1;
@@ -471,6 +525,12 @@
 
 .exit-captured-card__actions button {
   flex: 1;
+}
+
+.exit-captured-card__actions .entry-secondary-button {
+  flex: 0 1 34%;
+  min-width: 0;
+  white-space: nowrap;
 }
 
 .exit-captured-card__actions .entry-primary-button {

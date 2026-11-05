@@ -4,8 +4,8 @@ export function searchActiveExit(placa) {
   return http.get('/salidas/buscar', { params: { placa } })
 }
 
-export function registerExit(id, observaciones) {
-  return http.put(`/salidas/${id}`, { observaciones })
+export function registerExit(id, observaciones, fechaSalida = null, idOcr = null) {
+  return http.put(`/salidas/${id}`, { observaciones, fechaSalida, idOcr })
 }
 
 export function updateExitObservations(id, observaciones) {

@@ -27,6 +27,14 @@ function reset() {
   errorMessage.value = ''
   stage.value = 'capture'
 }
+
+function returnFromDetails() {
+  if (mode.value === 'automatic' && record.value) {
+    stage.value = 'capture'
+    return
+  }
+  reset()
+}
 </script>
 
 <template>
@@ -36,7 +44,7 @@ function reset() {
         <h1>Registrar Salida</h1>
         <p>{{ stage === 'details' ? 'Detalle del vehículo' : 'Captura la placa para comenzar' }}</p>
       </div>
-      <button v-if="stage !== 'capture'" class="exit-page__back" type="button" @click="reset">‹&nbsp; Volver</button>
+      <button v-if="stage !== 'capture'" class="exit-page__back" type="button" @click="returnFromDetails">‹&nbsp; Volver</button>
     </header>
 
     <template v-if="stage !== 'success'">
@@ -46,7 +54,7 @@ function reset() {
         <button type="button" :class="{ 'exit-mode-tabs__active': mode === 'manual' }" @click="setMode('manual')">Buscar
           Visitante</button>
       </div>
-      <SalidaCameraPanel v-if="stage === 'capture' && mode === 'automatic'" @back="reset" />
+      <SalidaCameraPanel v-if="stage === 'capture' && mode === 'automatic'" :initial-record="record" @back="reset" @found="showRecord" @registered="record = $event; stage = 'success'" />
       <SalidaManualPanel v-else-if="stage === 'capture'" @found="showRecord" @registered="record = $event; stage = 'success'" />
       <SalidaDetails v-else :record="record" @back="reset" @registered="record = $event; stage = 'success'" />
     </template>
