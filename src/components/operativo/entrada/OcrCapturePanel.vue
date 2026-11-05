@@ -29,36 +29,12 @@ function captureFrame() {
   const source = video.value
   if (!source?.videoWidth || !source.videoHeight) return ''
 
-  const view = source.getBoundingClientRect()
-  const scale = Math.max(view.width / source.videoWidth, view.height / source.videoHeight)
-  const renderedWidth = source.videoWidth * scale
-  const renderedHeight = source.videoHeight * scale
-  const offsetX = (view.width - renderedWidth) / 2
-  const offsetY = (view.height - renderedHeight) / 2
-  const frameInset = 14
-  const frameLeft = frameInset
-  const frameTop = frameInset
-  const frameWidth = Math.max(1, view.width - frameInset * 2)
-  const frameHeight = Math.max(1, view.height - frameInset * 2)
-  const sourceX = Math.max(0, (frameLeft - offsetX) / scale)
-  const sourceY = Math.max(0, (frameTop - offsetY) / scale)
-  const sourceWidth = Math.min(video.value.videoWidth - sourceX, frameWidth / scale)
-  const sourceHeight = Math.min(video.value.videoHeight - sourceY, frameHeight / scale)
   const canvas = document.createElement('canvas')
-  canvas.width = Math.max(1, Math.round(sourceWidth))
-  canvas.height = Math.max(1, Math.round(sourceHeight))
+  canvas.width = source.videoWidth
+  canvas.height = source.videoHeight
   const context = canvas.getContext('2d')
-  context.drawImage(
-    source,
-    sourceX,
-    sourceY,
-    sourceWidth,
-    sourceHeight,
-    0,
-    0,
-    canvas.width,
-    canvas.height,
-  )
+  if (!context) return ''
+  context.drawImage(source, 0, 0)
   return canvas.toDataURL('image/jpeg', 0.92)
 }
 
