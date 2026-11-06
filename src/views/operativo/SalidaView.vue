@@ -56,7 +56,13 @@ function returnFromDetails() {
       </div>
       <SalidaCameraPanel v-if="stage === 'capture' && mode === 'automatic'" :initial-record="record" @back="reset" @found="showRecord" @registered="record = $event; stage = 'success'" />
       <SalidaManualPanel v-else-if="stage === 'capture'" @found="showRecord" @registered="record = $event; stage = 'success'" />
-      <SalidaDetails v-else :record="record" @back="reset" @registered="record = $event; stage = 'success'" />
+      <div v-else class="active-modal-backdrop exit-details-backdrop">
+        <div class="active-details-modal" role="dialog" aria-modal="true" aria-label="Detalle del vehículo">
+          <div class="active-details-modal__scroll"><SalidaDetails :record="record" @back="reset"
+              @registered="record = $event; stage = 'success'" /></div>
+          <button class="active-details-modal__close" type="button" @click="returnFromDetails">Cerrar</button>
+        </div>
+      </div>
     </template>
     <SalidaSuccessView v-else :record="record" @panel="reset" />
   </section>
