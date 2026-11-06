@@ -460,6 +460,9 @@
 .exit-camera-card .exit-camera-detected {
   position: absolute;
   display: flex;
+  width: auto;
+  max-width: max-content;
+  box-sizing: border-box;
   flex-direction: column;
   align-items: center;
   gap: 5px;
@@ -477,10 +480,18 @@
 }
 
 .exit-loading-dots {
+  position: static;
   color: #d07064;
   font-size: 25px;
   line-height: 12px;
   letter-spacing: 5px;
+}
+
+.exit-camera-card .exit-camera-reading > span:last-child {
+  color: #a86459;
+  font-size: 12px;
+  letter-spacing: normal;
+  line-height: normal;
 }
 
 .exit-camera-card .exit-camera-detected span {
