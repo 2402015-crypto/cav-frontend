@@ -405,7 +405,8 @@
 .entry-camera-view {
   position: relative;
   display: grid;
-  height: 218px;
+  aspect-ratio: 16 / 9;
+  height: auto;
   overflow: hidden;
   place-items: center;
   border-radius: 13px 13px 0 0;
@@ -1230,6 +1231,6 @@
   }
 
   .entry-camera-view {
-    height: 210px;
+    aspect-ratio: 16 / 9;
   }
 }

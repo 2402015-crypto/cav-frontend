@@ -8,6 +8,8 @@ const http = axios.create({
   },
 })
 
+let redirectingAfterExpiration = false
+
 http.interceptors.request.use((config) => {
   const token = localStorage.getItem('cav_access_token') || sessionStorage.getItem('cav_access_token')
 
@@ -26,6 +28,11 @@ http.interceptors.response.use(
       sessionStorage.removeItem('cav_authenticated_user')
       localStorage.removeItem('cav_access_token')
       localStorage.removeItem('cav_authenticated_user')
+      if (!redirectingAfterExpiration && window.location.pathname !== '/login') {
+        redirectingAfterExpiration = true
+        const redirect = `${window.location.pathname}${window.location.search}`
+        window.location.assign(`/login?sessionExpired=1&redirect=${encodeURIComponent(redirect)}`)
+      }
     }
 
     return Promise.reject(error)

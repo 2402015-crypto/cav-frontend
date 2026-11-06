@@ -1,10 +1,12 @@
 <script setup>
 import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { recognizePlate } from '@/services/api/entradas'
+import { captureVideoView } from '@/utils/captureFrame'
 
 const emit = defineEmits(['back', 'confirm'])
 
 const video = ref(null)
+const cameraView = ref(null)
 const cameraError = ref('')
 const cameraStream = ref(null)
 const capturedImage = ref('')
@@ -26,16 +28,7 @@ function confirmCapture() {
 }
 
 function captureFrame() {
-  const source = video.value
-  if (!source?.videoWidth || !source.videoHeight) return ''
-
-  const canvas = document.createElement('canvas')
-  canvas.width = source.videoWidth
-  canvas.height = source.videoHeight
-  const context = canvas.getContext('2d')
-  if (!context) return ''
-  context.drawImage(source, 0, 0)
-  return canvas.toDataURL('image/jpeg', 0.92)
+  return captureVideoView(video.value, cameraView.value)
 }
 
 function scheduleCaptureRestart() {
@@ -52,8 +45,21 @@ async function startCamera() {
     return
   }
   try {
-    cameraStream.value = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false })
-    if (video.value) video.value.srcObject = cameraStream.value
+    if (!cameraStream.value?.getTracks().some((track) => track.readyState === 'live')) {
+      cameraStream.value = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: { ideal: 'environment' },
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
+        },
+        audio: false,
+      })
+    }
+    if (video.value) {
+      video.value.srcObject = cameraStream.value
+      await video.value.play()
+    }
+    cameraError.value = ''
   } catch {
     cameraError.value = 'Permite el acceso a la cámara para capturar la placa.'
   }
@@ -62,6 +68,15 @@ async function startCamera() {
 function stopCamera() {
   cameraStream.value?.getTracks().forEach((track) => track.stop())
   cameraStream.value = null
+}
+
+async function handleVisibilityChange() {
+  if (document.visibilityState === 'hidden') {
+    stopCamera()
+  } else if (!detected.value && !reading.value) {
+    await nextTick()
+    await startCamera()
+  }
 }
 
 async function capturePlate() {
@@ -112,9 +127,13 @@ async function retake() {
   await startCamera()
 }
 
-onMounted(startCamera)
+onMounted(() => {
+  document.addEventListener('visibilitychange', handleVisibilityChange)
+  startCamera()
+})
 onBeforeUnmount(() => {
   if (retryTimer.value) clearTimeout(retryTimer.value)
+  document.removeEventListener('visibilitychange', handleVisibilityChange)
   stopCamera()
 })
 </script>
@@ -122,7 +141,7 @@ onBeforeUnmount(() => {
 <template>
   <section class="entry-ocr-panel">
     <div class="entry-camera-card" :class="{ 'entry-camera-card--detected': detected }">
-      <div class="entry-camera-view">
+      <div ref="cameraView" class="entry-camera-view">
         <video v-if="!capturedImage" ref="video" autoplay muted playsinline aria-label="Vista de cámara para capturar placa" />
         <img v-else :src="capturedImage" alt="Captura temporal de la placa" />
         <div v-if="!capturedImage" class="entry-camera-frame" aria-hidden="true"><i /><i /><i /><i /></div>

@@ -1,14 +1,15 @@
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import logo from '@/images/Chable_Maroma-01.png'
 
 const authStore = useAuthStore()
+const route = useRoute()
 const router = useRouter()
 const usuario = ref('')
 const contrasena = ref('')
-const error = ref('')
+const error = ref(route.query.sessionExpired ? 'Tu sesión expiró. Inicia sesión nuevamente para continuar.' : '')
 const enviando = ref(false)
 
 async function iniciarSesion() {
@@ -16,7 +17,12 @@ async function iniciarSesion() {
   enviando.value = true
   try {
     await authStore.login({ usuario: usuario.value, contrasena: contrasena.value })
-    await router.push(authStore.user.rol === 'ADMIN' ? '/admin' : '/operativo')
+    const redirect = typeof route.query.redirect === 'string'
+      && route.query.redirect.startsWith('/')
+      && !route.query.redirect.startsWith('//')
+      ? route.query.redirect
+      : null
+    await router.push(redirect || (authStore.user.rol === 'ADMIN' ? '/admin' : '/operativo'))
   } catch (exception) {
     error.value = exception.response?.data?.message || 'Usuario o contraseña incorrectos'
   } finally {

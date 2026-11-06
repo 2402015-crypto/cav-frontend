@@ -294,7 +294,8 @@
 .exit-camera-view {
   position: relative;
   display: grid;
-  height: 218px;
+  aspect-ratio: 16 / 9;
+  height: auto;
   overflow: hidden;
   place-items: center;
   background: #0c1b2d;
@@ -438,6 +439,68 @@
   background: #639781;
   color: #fff;
   font-size: 20px;
+}
+
+.exit-camera-card {
+  overflow: visible;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.exit-camera-card .exit-camera-view {
+  border-radius: 13px 13px 0 0;
+}
+
+.exit-camera-card .exit-camera-view img {
+  object-fit: contain;
+  background: #0c1b2d;
+}
+
+.exit-camera-card .exit-camera-reading,
+.exit-camera-card .exit-camera-detected {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: rgba(12, 27, 45, .78);
+  color: #ffd5d0;
+  font-size: 12px;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .45);
+}
+
+.exit-camera-card .exit-camera-reading {
+  justify-content: center;
+}
+
+.exit-loading-dots {
+  color: #d07064;
+  font-size: 25px;
+  line-height: 12px;
+  letter-spacing: 5px;
+}
+
+.exit-camera-card .exit-camera-detected span {
+  background: #a86459;
+}
+
+.exit-camera-card .exit-camera-detected strong {
+  color: #ffd5d0;
+  font-size: 12px;
+}
+
+.exit-camera-error {
+  max-width: 220px;
+  color: #d5a19a;
+  font-size: 12px;
+  text-align: center;
+}
+
+.exit-camera-button {
+  position: relative;
 }
 
 .exit-captured-card {
