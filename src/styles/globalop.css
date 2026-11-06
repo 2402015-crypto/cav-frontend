@@ -457,6 +457,7 @@
 .entry-camera-reading,
 .entry-camera-detected {
   position: absolute;
+  transform: translateY(-18px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -495,6 +496,7 @@
 
 .entry-camera-error {
   max-width: 220px;
+  transform: translateY(-18px);
   color: #77827d;
   font-size: 12px;
   text-align: center;

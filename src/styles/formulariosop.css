@@ -459,6 +459,7 @@
 .exit-camera-card .exit-camera-reading,
 .exit-camera-card .exit-camera-detected {
   position: absolute;
+  transform: translateY(-18px);
   display: flex;
   width: auto;
   max-width: max-content;
@@ -505,6 +506,7 @@
 
 .exit-camera-error {
   max-width: 220px;
+  transform: translateY(-18px);
   color: #d5a19a;
   font-size: 12px;
   text-align: center;
