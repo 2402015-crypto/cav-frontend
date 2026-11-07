@@ -19,3 +19,10 @@ export function listActiveExits(query = '') {
 export function getExitDetails(id) {
   return http.get(`/salidas/activos/${id}`)
 }
+
+export function listAccessHistory(filters = {}) {
+  const params = Object.fromEntries(
+    Object.entries(filters).filter(([, value]) => value !== '' && value !== null && value !== undefined),
+  )
+  return http.get('/salidas/historial', { params })
+}
