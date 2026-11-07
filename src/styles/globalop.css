@@ -83,7 +83,7 @@
   width: min(100%, 720px);
   min-height: calc(100vh - 154px);
   margin: 0 auto;
-  padding: 28px 14px 35px;
+  padding: 20px 14px 35px;
   color: #536b8b;
 }
 
@@ -96,40 +96,40 @@
 
 .active-vehicles-header h1 {
   margin: 0;
-  color: #252b2a;
-  font-size: clamp(26px, 5vw, 37px);
-  font-weight: 800;
-  letter-spacing: -0.8px;
+  color: #303734;
+  font-size: 19px;
+  font-weight: 700;
 }
 
 .active-vehicles-header p {
-  margin: 5px 0 0;
+  margin: 4px 0 0;
   color: #717773;
-  font-size: clamp(17px, 3vw, 24px);
+  font-size: 12px;
 }
 
 .active-new-entry {
   display: inline-flex;
-  min-height: 53px;
+  min-height: 34px;
   align-items: center;
-  gap: 10px;
-  padding: 0 22px;
+  gap: 7px;
+  padding: 0 11px;
   border: 0;
-  border-radius: 17px;
+  border-radius: 10px;
   background: #7cb09d;
   box-shadow: 0 2px 4px rgba(58, 112, 90, 0.18);
   color: #fff;
   cursor: pointer;
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 11px;
+  font-weight: 600;
   white-space: nowrap;
 }
 
 .active-new-entry svg,
 .active-vehicle-card__meta svg,
-.active-type-badge svg {
-  width: 21px;
-  height: 21px;
+.active-type-badge svg,
+.active-exit-button svg {
+  width: 15px;
+  height: 15px;
   fill: none;
   stroke: currentColor;
   stroke-linecap: round;
@@ -139,9 +139,9 @@
 
 .active-filters {
   display: flex;
-  gap: 12px;
+  gap: 9px;
   overflow-x: auto;
-  margin: 38px 0 45px;
+  margin: 20px 0 16px;
   padding: 0 0 5px;
   scrollbar-width: none;
 }
@@ -152,34 +152,35 @@
 
 .active-filters button {
   flex: 0 0 auto;
-  min-height: 55px;
-  padding: 0 25px;
+  min-height: 35px;
+  padding: 0 15px;
   border: 1px solid #dce5ed;
-  border-radius: 28px;
+  border-radius: 18px;
   background: #fff;
   color: #53617a;
   cursor: pointer;
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .active-filters button.active-filters__selected {
-  border-color: #7cb09d;
-  background: #7cb09d;
+  border-color: rgba(124, 176, 157, 0.95);
+  background: rgba(124, 176, 157, 0.95);
   color: #fff;
+  box-shadow: 0 2px 6px rgba(80, 139, 113, 0.2);
 }
 
 .active-vehicles-list {
   overflow-y: auto;
-  max-height: calc(100vh - 300px);
+  max-height: calc(100vh - 245px);
   border: 1px solid #dce4df;
-  border-radius: 28px;
+  border-radius: 15px;
   background: #fff;
   box-shadow: 0 1px 3px rgba(60, 75, 68, 0.08);
 }
 
 .active-vehicle-card {
-  padding: 30px 31px 29px;
+  padding: 10px 14px;
   border-bottom: 1px solid #d8ded9;
   cursor: pointer;
   outline: 0;
@@ -196,64 +197,64 @@
 .active-vehicle-card__top,
 .active-vehicle-card__footer {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
 }
 
 .active-vehicle-card h2 {
   margin: 0;
   color: #111a31;
-  font-size: 29px;
-  font-weight: 800;
-  letter-spacing: 1.4px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
 .active-vehicle-card__top p {
-  margin: 5px 0 0;
+  margin: 2px 0 0;
   color: #70819d;
-  font-size: 21px;
+  font-size: 12px;
 }
 
 .active-type-badge,
 .active-status {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 7px 13px;
-  border-radius: 18px;
+  gap: 5px;
+  padding: 4px 8px;
+  border-radius: 14px;
   background: #e6f1ed;
   color: #7cb09d;
-  font-size: 17px;
-  font-weight: 700;
+  font-size: 11px;
+  font-weight: 600;
   white-space: nowrap;
 }
 
 .active-vehicle-card__meta {
   display: flex;
   align-items: center;
-  gap: 22px;
-  margin-top: 20px;
+  gap: 9px;
+  margin-top: 6px;
   color: #536b8b;
-  font-size: 19px;
+  font-size: 12px;
 }
 
 .active-vehicle-card__meta span {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  gap: 5px;
 }
 
 .active-vehicle-card__meta strong {
   color: #7cb09d;
-  font-size: 20px;
+  font-size: 13px;
 }
 
 .active-vehicle-card__observations {
-  min-height: 26px;
-  margin: 16px 0 20px;
+  min-height: 14px;
+  margin: 5px 0 7px;
   color: #717773;
-  font-size: 17px;
+  font-size: 11px;
 }
 
 .active-vehicle-card__observations strong {
@@ -261,23 +262,27 @@
 }
 
 .active-status i {
-  width: 10px;
-  height: 10px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: #62a689;
 }
 
 .active-exit-button {
-  min-width: 255px;
-  min-height: 55px;
-  padding: 0 20px;
-  border: 2px solid #e99591;
-  border-radius: 17px;
-  background: #fff;
+  min-width: 116px;
+  min-height: 28px;
+  padding: 0 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: 1px solid #e99591;
+  border-radius: 9px;
+  background: rgba(243, 234, 231, 0.7);
   color: #a7aaa8;
   cursor: pointer;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 10px;
+  font-weight: 500;
 }
 
 .active-exit-button:hover {
@@ -287,9 +292,11 @@
 
 .active-vehicles-state,
 .active-vehicles-error {
-  padding: 25px;
-  border-radius: 16px;
+  padding: 17px;
+  border-radius: 12px;
   background: #fff;
+  color: #7a8480;
+  font-size: 12px;
   text-align: center;
 }
 
@@ -300,10 +307,10 @@
 .active-modal-backdrop {
   position: fixed;
   z-index: 30;
-  inset: 0;
+  inset: 68px 0 86px;
   display: grid;
   overflow: auto;
-  padding: 24px 14px 90px;
+  padding: 12px 14px;
   place-items: center;
   background: rgba(31, 40, 36, 0.52);
 }
@@ -311,10 +318,11 @@
 .active-details-modal {
   display: flex;
   width: min(100%, 620px);
-  max-height: calc(100vh - 48px);
+  height: 100%;
+  max-height: none;
   flex-direction: column;
   overflow: hidden;
-  border-radius: 27px;
+  border-radius: 20px;
   background: #fff;
   box-shadow: 0 18px 45px rgba(30, 45, 37, 0.3);
 }
@@ -330,6 +338,12 @@
   box-shadow: none;
 }
 
+.active-details-modal__scroll .exit-details-card__hero {
+  position: sticky;
+  z-index: 2;
+  top: 0;
+}
+
 .active-details-modal__close {
   flex: 0 0 auto;
   min-height: 54px;
@@ -343,11 +357,73 @@
   font-weight: 700;
 }
 
-.active-success-modal {
-  width: min(100%, 480px);
-  border-radius: 24px;
-  background: #fff;
+.active-success-screen {
+  width: min(100%, 720px);
+  min-height: calc(100vh - 154px);
+  margin: 0 auto;
+  padding: 20px 14px 35px;
+}
+
+/* Modal compartido de detalles para activos y salidas */
+.vehicle-details-modal {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: grid;
+  padding: 68px 14px 86px;
+  place-items: stretch;
+  background: rgba(31, 40, 36, 0.62);
+  overscroll-behavior: contain;
+}
+
+.vehicle-details-modal__card {
+  display: flex;
+  width: min(100%, 620px);
+  min-height: 0;
+  margin: 0 auto;
+  flex-direction: column;
   overflow: hidden;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 18px 45px rgba(30, 45, 37, 0.3);
+}
+
+.vehicle-details-modal__content {
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.vehicle-details-modal__content .exit-details-card {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.vehicle-details-modal__content .exit-details-card__hero {
+  position: sticky;
+  z-index: 2;
+  top: 0;
+}
+
+.vehicle-details-modal__close {
+  flex: 0 0 auto;
+  width: calc(100% - 28px);
+  min-height: 34px;
+  margin: 8px 14px 10px;
+  border: 1px solid #dce5ed;
+  border-radius: 9px;
+  background: #fff;
+  color: #53617a;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.vehicle-details-modal__close:hover {
+  border-color: #7cb09d;
+  background: #f2f7f4;
 }
 
 @media (max-width: 600px) {
@@ -356,87 +432,102 @@
   }
 
   .active-new-entry {
-    min-height: 43px;
-    padding: 0 13px;
-    border-radius: 13px;
-    font-size: 13px;
+    min-height: 34px;
+    padding: 0 10px;
+    border-radius: 10px;
+    font-size: 10px;
   }
 
   .active-new-entry svg {
-    width: 17px;
-    height: 17px;
+    width: 15px;
+    height: 15px;
   }
 
   .active-filters {
-    margin: 27px 0 25px;
+    margin: 20px 0 16px;
   }
 
   .active-filters button {
-    min-height: 45px;
-    padding: 0 18px;
-    font-size: 15px;
+    min-height: 35px;
+    padding: 0 15px;
+    font-size: 12px;
   }
 
   .active-vehicles-list {
     max-height: calc(100vh - 245px);
-    border-radius: 20px;
+    border-radius: 15px;
   }
 
   .active-vehicle-card {
-    padding: 22px 18px;
+    padding: 10px 14px;
   }
 
   .active-vehicle-card h2 {
-    font-size: 23px;
+    font-size: 14px;
   }
 
   .active-vehicle-card__top p {
-    font-size: 16px;
+    font-size: 12px;
   }
 
   .active-type-badge {
     padding: 5px 9px;
-    font-size: 13px;
+    font-size: 11px;
   }
 
   .active-vehicle-card__meta {
     flex-wrap: wrap;
-    gap: 9px 14px;
-    margin-top: 16px;
-    font-size: 15px;
+    gap: 8px 12px;
+    margin-top: 6px;
+    font-size: 12px;
   }
 
   .active-vehicle-card__meta strong {
-    font-size: 16px;
+    font-size: 13px;
   }
 
   .active-vehicle-card__observations {
-    margin: 13px 0 17px;
-    font-size: 14px;
+    margin: 5px 0 7px;
+    font-size: 11px;
   }
 
   .active-status {
-    padding: 6px 10px;
-    font-size: 14px;
+    padding: 5px 9px;
+    font-size: 11px;
   }
 
   .active-exit-button {
     min-width: 0;
-    min-height: 43px;
-    padding: 0 12px;
-    border-radius: 13px;
-    font-size: 14px;
+    min-height: 28px;
+    padding: 0 9px;
+    border-radius: 9px;
+    font-size: 10px;
   }
 
   .active-modal-backdrop {
-    align-items: flex-end;
-    padding: 0 0 70px;
+    inset: 68px 0 70px;
+    padding: 12px;
+    place-items: stretch;
   }
 
   .active-details-modal {
     width: 100%;
-    max-height: calc(100vh - 86px);
-    border-radius: 25px 25px 0 0;
+    max-height: none;
+    border-radius: 20px;
+  }
+
+  .vehicle-details-modal {
+    padding: 76px 16px 78px;
+  }
+
+  .vehicle-details-modal__card {
+    border-radius: 18px;
+  }
+
+  .vehicle-details-modal__close {
+    min-height: 32px;
+    margin: 7px 12px 9px;
+    width: calc(100% - 24px);
   }
 }
 

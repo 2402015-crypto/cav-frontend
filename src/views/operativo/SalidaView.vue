@@ -1,13 +1,14 @@
 <script setup>
 import { ref } from 'vue'
 import SalidaCameraPanel from '@/components/operativo/salida/SalidaCameraPanel.vue'
-import SalidaDetails from '@/components/operativo/salida/SalidaDetails.vue'
 import SalidaManualPanel from '@/components/operativo/salida/SalidaManualPanel.vue'
 import SalidaSuccessView from '@/components/operativo/salida/SalidaSuccessView.vue'
+import VehicleDetailsModal from '@/components/operativo/salida/VehicleDetailsModal.vue'
 
 const mode = ref('automatic')
 const stage = ref('capture')
 const record = ref(null)
+const detailsOpen = ref(false)
 const errorMessage = ref('')
 
 function setMode(value) {
@@ -19,21 +20,18 @@ function setMode(value) {
 
 function showRecord(value) {
   record.value = value
-  stage.value = 'details'
+  detailsOpen.value = true
 }
 
 function reset() {
   record.value = null
+  detailsOpen.value = false
   errorMessage.value = ''
   stage.value = 'capture'
 }
 
 function returnFromDetails() {
-  if (mode.value === 'automatic' && record.value) {
-    stage.value = 'capture'
-    return
-  }
-  reset()
+  detailsOpen.value = false
 }
 </script>
 
@@ -42,28 +40,25 @@ function returnFromDetails() {
     <header v-if="stage !== 'success'" class="exit-page__header">
       <div>
         <h1>Registrar Salida</h1>
-        <p>{{ stage === 'details' ? 'Detalle del vehículo' : 'Captura la placa para comenzar' }}</p>
+        <p>Captura la placa para comenzar</p>
       </div>
       <button v-if="stage !== 'capture'" class="exit-page__back" type="button" @click="returnFromDetails">‹&nbsp; Volver</button>
     </header>
 
     <template v-if="stage !== 'success'">
-      <div v-if="stage !== 'details'" class="exit-mode-tabs">
+      <div class="exit-mode-tabs">
         <button type="button" :class="{ 'exit-mode-tabs__active': mode === 'automatic' }"
           @click="setMode('automatic')">Capturar Placa</button>
         <button type="button" :class="{ 'exit-mode-tabs__active': mode === 'manual' }" @click="setMode('manual')">Buscar
           Visitante</button>
       </div>
-      <SalidaCameraPanel v-if="stage === 'capture' && mode === 'automatic'" :initial-record="record" @back="reset" @found="showRecord" @registered="record = $event; stage = 'success'" />
-      <SalidaManualPanel v-else-if="stage === 'capture'" @found="showRecord" @registered="record = $event; stage = 'success'" />
-      <div v-else class="active-modal-backdrop exit-details-backdrop">
-        <div class="active-details-modal" role="dialog" aria-modal="true" aria-label="Detalle del vehículo">
-          <div class="active-details-modal__scroll"><SalidaDetails :record="record" @back="reset"
-              @registered="record = $event; stage = 'success'" /></div>
-          <button class="active-details-modal__close" type="button" @click="returnFromDetails">Cerrar</button>
-        </div>
-      </div>
+      <SalidaCameraPanel v-if="mode === 'automatic'" :initial-record="record" @back="reset"
+        @found="showRecord" @registered="record = $event; stage = 'success'" />
+      <SalidaManualPanel v-else @found="showRecord"
+        @registered="record = $event; stage = 'success'" />
     </template>
     <SalidaSuccessView v-else :record="record" @panel="reset" />
+    <VehicleDetailsModal v-if="detailsOpen && record" :record="record"
+      @close="returnFromDetails" @registered="record = $event; detailsOpen = false; stage = 'success'" />
   </section>
 </template>

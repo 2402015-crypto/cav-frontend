@@ -2,8 +2,8 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import ConfirmModal from '@/components/admin/ConfirmModal.vue'
-import SalidaDetails from '@/components/operativo/salida/SalidaDetails.vue'
 import SalidaSuccessView from '@/components/operativo/salida/SalidaSuccessView.vue'
+import VehicleDetailsModal from '@/components/operativo/salida/VehicleDetailsModal.vue'
 import { getExitDetails, listActiveExits, registerExit } from '@/services/api/salidas'
 
 const router = useRouter()
@@ -66,7 +66,12 @@ async function openDetails(record) {
   errorMessage.value = ''
   try {
     const response = await getExitDetails(record.idRegistro)
-    selectedRecord.value = response.data.data?.detalle || response.data.data
+    const details = response.data.data
+    selectedRecord.value = {
+      ...details.detalle,
+      historial: details.historial,
+      totalVisitas: details.totalVisitas,
+    }
   } catch (error) {
     errorMessage.value = error.response?.data?.message || 'No fue posible consultar el detalle.'
   }
@@ -84,6 +89,7 @@ async function confirmExit() {
     errorMessage.value = error.response?.data?.message || 'No fue posible registrar la salida.'
     confirmRecord.value = null
   }
+
 }
 
 function goToNewEntry() {
@@ -103,12 +109,14 @@ onMounted(async () => {
 onBeforeUnmount(() => {
   window.clearInterval(refreshTimer)
   window.clearInterval(clockTimer)
+  document.body.style.overflow = ''
 })
 </script>
 
 <template>
   <section class="active-vehicles-page">
-    <header class="active-vehicles-header">
+    <template v-if="!successRecord">
+      <header class="active-vehicles-header">
       <div>
         <h1>Vehículos Activos</h1>
         <p>{{ records.length }} {{ records.length === 1 ? 'vehículo activo' : 'vehículos activos' }} en el hotel</p>
@@ -117,18 +125,18 @@ onBeforeUnmount(() => {
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 5h5a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-5M4 12h10M10 8l4 4-4 4" /></svg>
         Nueva entrada
       </button>
-    </header>
+      </header>
 
-    <div class="active-filters" role="tablist" aria-label="Filtrar vehículos activos">
+      <div class="active-filters" role="tablist" aria-label="Filtrar vehículos activos">
       <button v-for="filter in filters" :key="filter" type="button" role="tab"
         :aria-selected="selectedFilter === filter" :class="{ 'active-filters__selected': selectedFilter === filter }"
         @click="selectedFilter = filter">{{ filter }}</button>
-    </div>
+      </div>
 
-    <p v-if="errorMessage" class="active-vehicles-error" role="alert">{{ errorMessage }}</p>
-    <div v-if="loading" class="active-vehicles-state">Cargando vehículos...</div>
-    <div v-else-if="!activeRecords.length" class="active-vehicles-state">No hay vehículos activos en esta categoría.</div>
-    <div v-else class="active-vehicles-list">
+      <p v-if="errorMessage" class="active-vehicles-error" role="alert">{{ errorMessage }}</p>
+      <div v-if="loading" class="active-vehicles-state">Cargando vehículos...</div>
+      <div v-else-if="!activeRecords.length" class="active-vehicles-state">No hay vehículos activos en esta categoría.</div>
+      <div v-else class="active-vehicles-list">
       <article v-for="record in activeRecords" :key="record.idRegistro" class="active-vehicle-card"
         tabindex="0" @click="openDetails(record)" @keydown.enter="openDetails(record)">
         <div class="active-vehicle-card__top">
@@ -149,24 +157,23 @@ onBeforeUnmount(() => {
         <p class="active-vehicle-card__observations"><strong>Observaciones:</strong> {{ shortObservations(record.observaciones) }}</p>
         <div class="active-vehicle-card__footer">
           <span class="active-status"><i /> Activo</span>
-          <button type="button" class="active-exit-button" @click.stop="confirmRecord = record">Registrar salida</button>
+          <button type="button" class="active-exit-button" @click.stop="confirmRecord = record">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5H6a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h5M20 12H10M16 8l4 4-4 4" /></svg>
+            Registrar salida
+          </button>
         </div>
       </article>
-    </div>
-
-    <div v-if="selectedRecord" class="active-modal-backdrop" @click.self="selectedRecord = null">
-      <div class="active-details-modal" role="dialog" aria-modal="true" aria-label="Detalle del vehículo">
-        <div class="active-details-modal__scroll"><SalidaDetails :record="selectedRecord" /></div>
-        <button class="active-details-modal__close" type="button" @click="selectedRecord = null">Cerrar</button>
       </div>
-    </div>
 
-    <ConfirmModal :open="Boolean(confirmRecord)" variant="operative" title="¿Registrar salida?"
-      :message="confirmRecord ? `Se registrará la salida de ${confirmRecord.placa}.` : ''"
-      confirm-label="Registrar salida" @cancel="confirmRecord = null" @confirm="confirmExit" />
+      <VehicleDetailsModal v-if="selectedRecord" :record="selectedRecord"
+        @close="selectedRecord = null" />
 
-    <div v-if="successRecord" class="active-modal-backdrop">
-      <div class="active-success-modal"><SalidaSuccessView :record="successRecord" @panel="successRecord = null" /></div>
-    </div>
+      <ConfirmModal :open="Boolean(confirmRecord)" variant="operative" title="¿Registrar salida?"
+        :message="confirmRecord ? `Se registrará la salida de ${confirmRecord.placa}.` : ''"
+        confirm-label="Registrar salida" @cancel="confirmRecord = null" @confirm="confirmExit" />
+    </template>
+
+    <SalidaSuccessView v-if="successRecord" class="active-success-screen" :record="successRecord"
+      @panel="successRecord = null" />
   </section>
 </template>
