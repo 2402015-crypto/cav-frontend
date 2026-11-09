@@ -1,11 +1,10 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { registerExit, updateExitObservations } from '@/services/api/salidas'
 
 const props = defineProps({ record: { type: Object, required: true } })
 const emit = defineEmits(['registered', 'back'])
 const observations = ref(props.record.observaciones || '')
-const observationsEditing = ref(false)
 const observationsSaving = ref(false)
 const saving = ref(false)
 const errorMessage = ref('')
@@ -15,6 +14,7 @@ const isTaxi = computed(() => typeName.value.includes('taxi'))
 const isProvider = computed(() => typeName.value.includes('proveedor'))
 const isCollaborator = computed(() => !isTransporter.value && !isTaxi.value && !isProvider.value)
 const typeLabel = computed(() => typeName.value.includes('general') || typeName.value.includes('colaborador') ? 'Colaborador' : props.record.tipoVisitante || 'Visitante')
+const observationsChanged = computed(() => observations.value !== (props.record.observaciones || ''))
 
 const entryTime = computed(() => formatDate(props.record.fechaEntrada))
 const exitTime = computed(() => formatDate(new Date().toISOString()))
@@ -22,6 +22,10 @@ const exitTime = computed(() => formatDate(new Date().toISOString()))
 function formatDate(value) {
   return new Date(value).toLocaleTimeString('es-MX', { hour: 'numeric', minute: '2-digit' })
 }
+
+watch(() => props.record.observaciones, (value) => {
+  if (!observationsSaving.value) observations.value = value || ''
+})
 
 async function submit() {
   if (saving.value) return
@@ -44,7 +48,7 @@ async function saveObservations() {
   try {
     const response = await updateExitObservations(props.record.idRegistro, observations.value)
     observations.value = response.data.data.observaciones || ''
-    observationsEditing.value = false
+    emit('registered', response.data.data)
   } catch (error) {
     errorMessage.value = error.response?.data?.message || 'No fue posible actualizar las observaciones.'
   } finally {
@@ -84,10 +88,9 @@ async function saveObservations() {
               }}</strong></span><span>Marca<strong>{{ record.marca || 'N/A' }}</strong></span><span>Color<strong>{{
                 record.color || 'N/A' }}</strong></span></div>
       </section>
-      <label class="exit-observations"><span>OBSERVACIONES <button type="button"
-            @click="observationsEditing ? saveObservations() : observationsEditing = true">{{ observationsSaving ?
-              'Guardando...' : observationsEditing ? 'Guardar' : 'Añadir' }}</button></span><textarea
-          v-model="observations" :readonly="!observationsEditing" placeholder="Sin observaciones" /></label>
+      <label class="exit-observations"><span>OBSERVACIONES <button type="button" :disabled="!observationsChanged || observationsSaving"
+            @click="saveObservations">{{ observationsSaving ? 'Guardando...' : 'Guardar' }}</button></span><textarea
+          v-model="observations" placeholder="Sin observaciones" /></label>
       <section v-if="record.historial?.length" class="exit-history">
         <header><strong>HISTORIAL DE VISITAS</strong><span>{{ record.totalVisitas }} total</span></header>
         <div class="exit-history__latest"><span>ÚLTIMA VISITA</span>

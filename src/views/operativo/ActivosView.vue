@@ -1,12 +1,10 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import ConfirmModal from '@/components/admin/ConfirmModal.vue'
 import SalidaSuccessView from '@/components/operativo/salida/SalidaSuccessView.vue'
 import VehicleDetailsModal from '@/components/operativo/salida/VehicleDetailsModal.vue'
 import { getExitDetails, listActiveExits, registerExit } from '@/services/api/salidas'
 
-const router = useRouter()
 const records = ref([])
 const selectedFilter = ref('Todos')
 const selectedRecord = ref(null)
@@ -92,10 +90,6 @@ async function confirmExit() {
 
 }
 
-function goToNewEntry() {
-  router.push({ name: 'operativo-entrada' })
-}
-
 onMounted(async () => {
   loading.value = true
   await loadRecords()
@@ -121,10 +115,6 @@ onBeforeUnmount(() => {
         <h1>Vehículos Activos</h1>
         <p>{{ records.length }} {{ records.length === 1 ? 'vehículo activo' : 'vehículos activos' }} en el hotel</p>
       </div>
-      <button class="active-new-entry" type="button" @click="goToNewEntry">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 5h5a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-5M4 12h10M10 8l4 4-4 4" /></svg>
-        Nueva entrada
-      </button>
       </header>
 
       <div class="active-filters" role="tablist" aria-label="Filtrar vehículos activos">

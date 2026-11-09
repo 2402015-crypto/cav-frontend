@@ -1130,16 +1130,29 @@
 }
 
 .exit-details-card .exit-observations button {
-  border: 0;
-  background: transparent;
-  color: #75837d;
+  min-width: 70px;
+  min-height: 28px;
+  padding: 0 11px;
+  border: 1px solid #7cb09d;
+  border-radius: 8px;
+  background: #7cb09d;
+  color: #fff;
   cursor: pointer;
   font-size: 10px;
   font-weight: 600;
 }
 
-.exit-details-card .exit-observations textarea[readonly] {
-  cursor: default;
+.exit-details-card .exit-observations button:disabled {
+  border-color: #cbd7d1;
+  background: #cbd7d1;
+  cursor: not-allowed;
+  opacity: .7;
+}
+
+.exit-details-card .exit-observations textarea {
+  min-height: 55px;
+  padding: 7px 0;
+  cursor: text;
 }
 
 .exit-details-card .exit-history {

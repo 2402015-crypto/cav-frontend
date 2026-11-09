@@ -5,7 +5,6 @@ import { getExitDetails, listAccessHistory } from '@/services/api/salidas'
 
 const records = ref([])
 const query = ref('')
-const suggestions = ref([])
 const filtersOpen = ref(false)
 const company = ref('')
 const fromDate = ref('')
@@ -15,21 +14,36 @@ const selectedRecord = ref(null)
 const loading = ref(false)
 const errorMessage = ref('')
 let refreshTimer = null
-let suggestionTimer = null
+let searchTimer = null
 
 const visitorTypes = ['Colaborador', 'Proveedor', 'Transportadora', 'Taxi']
 const totalRecords = computed(() => records.value.length)
 
 function requestParams() {
-  return { q: query.value.trim(), empresa: company.value.trim(), desde: fromDate.value, hasta: toDate.value, tipo: visitorType.value }
+  return { q: query.value.trim(), empresa: company.value.trim(), desde: fromDate.value, hasta: toDate.value }
+}
+
+function visitorCategory(value) {
+  const normalized = (value || '').toLowerCase()
+  if (normalized.includes('transport')) return 'Transportadora'
+  if (normalized.includes('taxi')) return 'Taxi'
+  if (normalized.includes('proveedor')) return 'Proveedor'
+  if (normalized.includes('colaborador') || normalized.includes('general')) return 'Colaborador'
+  return ''
 }
 
 function typeLabel(record) {
-  const value = (record.tipoVisitante || '').toLowerCase()
-  if (value.includes('transport')) return 'Transportadora'
-  if (value.includes('taxi')) return 'Taxi'
-  if (value.includes('proveedor')) return 'Proveedor'
+  const category = visitorCategory(record.tipoVisitante)
+  if (category) return category
   return 'Colaborador'
+}
+
+function matchesVisitorType(record) {
+  return !visitorType.value || visitorCategory(record.tipoVisitante) === visitorType.value
+}
+
+function filterRecords(data) {
+  return data.filter(matchesVisitorType)
 }
 
 function iconPath(record) {
@@ -58,7 +72,7 @@ async function loadHistory() {
   errorMessage.value = ''
   try {
     const response = await listAccessHistory(requestParams())
-    records.value = response.data.data || []
+    records.value = filterRecords(response.data.data || [])
   } catch (error) {
     errorMessage.value = error.response?.data?.message || 'No fue posible consultar el historial.'
   } finally {
@@ -66,29 +80,9 @@ async function loadHistory() {
   }
 }
 
-async function loadSuggestions() {
-  if (query.value.trim().length < 2) {
-    suggestions.value = []
-    return
-  }
-  try {
-    const response = await listAccessHistory({ q: query.value.trim() })
-    const values = (response.data.data || []).flatMap(record => [record.placa, record.conductor])
-    suggestions.value = [...new Set(values.filter(Boolean))].slice(0, 6)
-  } catch {
-    suggestions.value = []
-  }
-}
-
 function onQueryInput() {
-  window.clearTimeout(suggestionTimer)
-  suggestionTimer = window.setTimeout(loadSuggestions, 250)
-}
-
-function chooseSuggestion(value) {
-  query.value = value
-  suggestions.value = []
-  loadHistory()
+  window.clearTimeout(searchTimer)
+  searchTimer = window.setTimeout(loadHistory, 250)
 }
 
 function clearFilters() {
@@ -97,6 +91,12 @@ function clearFilters() {
   toDate.value = ''
   visitorType.value = ''
   loadHistory()
+}
+
+function openDatePicker(event) {
+  if (typeof event.currentTarget.showPicker === 'function') {
+    event.currentTarget.showPicker()
+  }
 }
 
 async function openDetails(record) {
@@ -109,16 +109,23 @@ async function openDetails(record) {
   }
 }
 
+function handleRecordUpdated(updatedRecord) {
+  const index = records.value.findIndex(record => record.idRegistro === updatedRecord.idRegistro)
+  if (index === -1) return
+  records.value[index] = { ...records.value[index], ...updatedRecord }
+  selectedRecord.value = { ...selectedRecord.value, ...updatedRecord }
+}
+
 watch([company, fromDate, toDate, visitorType], loadHistory)
 
 onMounted(async () => {
   await loadHistory()
-  refreshTimer = window.setInterval(loadHistory, 30000)
+  refreshTimer = window.setInterval(loadHistory, 180000)
 })
 
 onBeforeUnmount(() => {
   window.clearInterval(refreshTimer)
-  window.clearTimeout(suggestionTimer)
+  window.clearTimeout(searchTimer)
   document.body.style.overflow = ''
 })
 </script>
@@ -134,29 +141,23 @@ onBeforeUnmount(() => {
       <label for="history-search">BUSCAR POR PLACA O CONDUCTOR</label>
       <div class="access-history-search__input">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" /></svg>
-        <input id="history-search" v-model="query" type="search" placeholder="Placa o nombre..." @input="onQueryInput" @keyup.enter="loadHistory" />
-      </div>
-      <ul v-if="suggestions.length" class="access-history-suggestions">
-        <li v-for="suggestion in suggestions" :key="suggestion">
-          <button type="button" @click="chooseSuggestion(suggestion)">{{ suggestion }}</button>
-        </li>
-      </ul>
+        <input id="history-search" v-model="query" type="search" placeholder="Placa o nombre..." @input="onQueryInput" />
+        </div>
     </section>
 
     <section class="access-history-list">
       <button class="access-history-filter-toggle" type="button" :aria-expanded="filtersOpen" @click="filtersOpen = !filtersOpen">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16l-6 7v5l-4 2v-7L4 5Z" /></svg>
         <strong>FILTROS</strong>
-        <span>{{ filtersOpen ? '⌃' : '⌄' }}</span>
+        <svg class="access-history-filter-toggle__chevron" :class="{ 'access-history-filter-toggle__chevron--up': filtersOpen }" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
       </button>
 
-      <form v-if="filtersOpen" class="access-history-filters" @submit.prevent="loadHistory">
+      <form v-if="filtersOpen" class="access-history-filters" @submit.prevent>
         <label>EMPRESA<input v-model="company" type="search" placeholder="Empresa" /></label>
-        <label>HASTA<input v-model="toDate" type="date" /></label>
-        <label>DESDE<input v-model="fromDate" type="date" /></label>
         <label>TIPO DE VISITANTE<select v-model="visitorType"><option value="">Todos</option><option v-for="type in visitorTypes" :key="type" :value="type">{{ type }}</option></select></label>
+        <label>DESDE<input v-model="fromDate" type="date" @click="openDatePicker" /></label>
+        <label>HASTA<input v-model="toDate" type="date" @click="openDatePicker" /></label>
         <div class="access-history-filters__actions">
-          <button class="access-history-filter-search" type="submit">Buscar</button>
           <button class="access-history-filter-clear" type="button" @click="clearFilters">Limpiar</button>
         </div>
       </form>
@@ -166,7 +167,7 @@ onBeforeUnmount(() => {
       <div v-else-if="!records.length" class="active-vehicles-state">No hay registros con los criterios seleccionados.</div>
       <article v-for="record in records" v-else :key="record.idRegistro" class="access-history-card" tabindex="0" @click="openDetails(record)" @keydown.enter="openDetails(record)">
         <div class="access-history-card__top">
-          <div><h2>{{ record.placa || 'Sin placa' }}</h2><p>{{ record.conductor || 'N/A' }}<span v-if="record.empresa || record.transportadora"> · {{ record.empresa || record.transportadora }}</span></p></div>
+          <div class="access-history-card__identity"><h2>{{ record.placa || 'Sin placa' }}</h2><p><span>{{ record.conductor || 'N/A' }}</span><span v-if="record.empresa || record.transportadora"> · {{ record.empresa || record.transportadora }}</span></p></div>
           <span class="active-type-badge"><svg viewBox="0 0 24 24" aria-hidden="true" v-html="iconPath(record)" />{{ typeLabel(record) }}</span>
         </div>
         <div class="access-history-card__times">
@@ -179,6 +180,6 @@ onBeforeUnmount(() => {
       </article>
     </section>
 
-    <VehicleDetailsModal v-if="selectedRecord" :record="selectedRecord" @close="selectedRecord = null" />
+    <VehicleDetailsModal v-if="selectedRecord" :record="selectedRecord" @close="selectedRecord = null" @registered="handleRecordUpdated" />
   </section>
 </template>

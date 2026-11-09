@@ -17,7 +17,7 @@ async function iniciarSesion() {
   enviando.value = true
   try {
     await authStore.login({ usuario: usuario.value, contrasena: contrasena.value })
-    const redirect = typeof route.query.redirect === 'string'
+    const redirect = !route.query.sessionExpired && typeof route.query.redirect === 'string'
       && route.query.redirect.startsWith('/')
       && !route.query.redirect.startsWith('//')
       ? route.query.redirect

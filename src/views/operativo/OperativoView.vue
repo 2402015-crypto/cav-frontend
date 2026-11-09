@@ -111,7 +111,7 @@ onBeforeUnmount(() => window.clearInterval(dailyStatsTimer))
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 16V6a2 2 0 0 1 2-2h10l5 5v7M3 16h18M6 18.5a2 2 0 1 0 4 0M16 18.5a2 2 0 1 0 4 0" /></svg>
         <span>Activos</span>
       </RouterLink>
-      <RouterLink class="operative-nav__item" active-class="operative-nav__item--active" :to="{ name: 'operativo-buscar' }">
+      <RouterLink class="operative-nav__item" active-class="operative-nav__item--active" :to="{ name: 'operativo-historial' }">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" /></svg>
         <span>Buscar</span>
       </RouterLink>
