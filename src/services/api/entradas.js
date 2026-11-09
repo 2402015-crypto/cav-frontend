@@ -19,6 +19,10 @@ export function getDailyStats() {
   return http.get('/entradas/manual/estadisticas-hoy')
 }
 
+export function getOperationalDashboard() {
+  return http.get('/entradas/manual/dashboard-hoy')
+}
+
 export function suggestBrands(query) {
   return suggestCatalog('marcas', query)
 }

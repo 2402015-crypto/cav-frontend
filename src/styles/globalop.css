@@ -78,6 +78,283 @@
   font-weight: 500;
 }
 
+/* Panel operativo */
+.operative-dashboard {
+  width: min(100%, 720px);
+  min-height: calc(100vh - 154px);
+  margin: 0 auto;
+  padding: 28px 20px 35px;
+  color: #303734;
+}
+
+.operative-dashboard__header {
+  margin-bottom: 25px;
+}
+
+.operative-dashboard__header h1 {
+  margin: 0;
+  color: #303734;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.operative-dashboard__header p {
+  margin: 5px 0 0;
+  color: #717773;
+  font-size: 17px;
+}
+
+.operative-dashboard__stats,
+.operative-dashboard__actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.dashboard-stat {
+  display: grid;
+  min-height: 132px;
+  grid-template-columns: 35px minmax(0, 1fr) 58px;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 16px;
+  border: 1px solid #e6e9e5;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(60, 75, 68, .12);
+  color: #303734;
+  cursor: pointer;
+  text-align: left;
+}
+
+.dashboard-stat svg,
+.dashboard-action svg,
+.dashboard-movement > svg {
+  width: 27px;
+  height: 27px;
+  fill: none;
+  stroke: #7cb09d;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.dashboard-stat--exit svg,
+.dashboard-movement__exit {
+  stroke: #9a6259;
+}
+
+.dashboard-stat--active svg {
+  stroke: #639781;
+}
+
+.dashboard-stat--search svg {
+  stroke: #303734;
+}
+
+.dashboard-stat span {
+  min-width: 0;
+}
+
+.dashboard-stat strong,
+.dashboard-stat small {
+  display: block;
+}
+
+.dashboard-stat strong {
+  font-size: 17px;
+  line-height: 1.2;
+}
+
+.dashboard-stat small {
+  margin-top: 7px;
+  color: #858d88;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.dashboard-stat b {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  place-items: center;
+  border: 1px solid #edf0ed;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(60, 75, 68, .1);
+  color: #303734;
+  font-size: 25px;
+}
+
+.dashboard-stat--active b {
+  color: #639781;
+}
+
+.operative-dashboard__actions {
+  margin-top: 22px;
+}
+
+.dashboard-action {
+  min-height: 188px;
+  padding: 20px 25px;
+  border: 1px solid #dce5df;
+  border-radius: 22px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.dashboard-action--entry {
+  background: #eef6f2;
+}
+
+.dashboard-action--exit {
+  background: #f5efed;
+}
+
+.dashboard-action > span {
+  display: grid;
+  width: 55px;
+  height: 55px;
+  margin-bottom: 28px;
+  place-items: center;
+  border-radius: 15px;
+  background: #7cb09d;
+}
+
+.dashboard-action--exit > span {
+  background: #9a6259;
+}
+
+.dashboard-action svg {
+  stroke: #fff;
+}
+
+.dashboard-action strong,
+.dashboard-action small {
+  display: block;
+}
+
+.dashboard-action strong {
+  font-size: 18px;
+}
+
+.dashboard-action small {
+  margin-top: 8px;
+  color: #7c8580;
+  font-size: 13px;
+}
+
+.operative-dashboard__movements {
+  overflow: hidden;
+  margin-top: 24px;
+  border: 1px solid #dce4df;
+  border-radius: 22px;
+  background: #fff;
+}
+
+.operative-dashboard__movements header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #dce4df;
+}
+
+.operative-dashboard__movements h2 {
+  margin: 0;
+  color: #303734;
+  font-size: 20px;
+}
+
+.dashboard-movement {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 82px;
+  padding: 12px 24px;
+  border-bottom: 1px solid #edf0ed;
+}
+
+.dashboard-movement > svg {
+  width: 24px;
+  height: 24px;
+}
+
+.dashboard-movement div {
+  min-width: 0;
+}
+
+.dashboard-movement div > strong,
+.dashboard-movement div > span {
+  display: block;
+}
+
+.dashboard-movement div > strong {
+  font-size: 17px;
+  letter-spacing: 1px;
+}
+
+.dashboard-movement div > span {
+  overflow: hidden;
+  margin-top: 4px;
+  color: #7d8580;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard-movement em {
+  display: inline-block;
+  margin-right: 7px;
+  padding: 5px 8px;
+  border-radius: 12px;
+  background: #e6f1ec;
+  color: #6aa28c;
+  font-size: 11px;
+  font-style: normal;
+}
+
+.dashboard-movement time {
+  text-align: right;
+}
+
+.dashboard-movement time strong,
+.dashboard-movement time span {
+  display: block;
+}
+
+.dashboard-movement time strong {
+  font-size: 15px;
+}
+
+.dashboard-movement time span {
+  margin-top: 4px;
+  color: #7d8580;
+  font-size: 12px;
+}
+
+.dashboard-empty {
+  padding: 30px 24px;
+  color: #7d8580;
+  font-size: 13px;
+  text-align: center;
+}
+
+.dashboard-more {
+  width: 100%;
+  min-height: 54px;
+  border: 0;
+  background: #fff;
+  color: #717773;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.dashboard-more span {
+  margin-left: 8px;
+  font-size: 22px;
+  vertical-align: -1px;
+}
+
 /* Vehículos activos */
 .active-vehicles-page {
   width: min(100%, 720px);
@@ -731,6 +1008,130 @@
 }
 
 @media (max-width: 600px) {
+  .operative-dashboard {
+    min-height: calc(100vh - 99px);
+    padding: 18px 9px 26px;
+  }
+
+  .operative-dashboard__header {
+    margin-bottom: 18px;
+  }
+
+  .operative-dashboard__header h1 {
+    font-size: 22px;
+  }
+
+  .operative-dashboard__header p {
+    font-size: 14px;
+  }
+
+  .operative-dashboard__stats,
+  .operative-dashboard__actions {
+    gap: 10px;
+  }
+
+  .dashboard-stat {
+    min-height: 106px;
+    grid-template-columns: 25px minmax(0, 1fr) 42px;
+    gap: 7px;
+    padding: 12px 9px;
+    border-radius: 17px;
+  }
+
+  .dashboard-stat svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .dashboard-stat strong {
+    font-size: 13px;
+  }
+
+  .dashboard-stat small {
+    margin-top: 4px;
+    font-size: 10px;
+  }
+
+  .dashboard-stat b {
+    width: 40px;
+    height: 40px;
+    border-radius: 13px;
+    font-size: 18px;
+  }
+
+  .operative-dashboard__actions {
+    margin-top: 14px;
+  }
+
+  .dashboard-action {
+    min-height: 142px;
+    padding: 14px;
+    border-radius: 17px;
+  }
+
+  .dashboard-action > span {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 17px;
+    border-radius: 11px;
+  }
+
+  .dashboard-action strong {
+    font-size: 14px;
+  }
+
+  .dashboard-action small {
+    margin-top: 5px;
+    font-size: 10px;
+  }
+
+  .operative-dashboard__movements {
+    margin-top: 14px;
+    border-radius: 17px;
+  }
+
+  .operative-dashboard__movements header {
+    padding: 15px 14px;
+  }
+
+  .operative-dashboard__movements h2 {
+    font-size: 17px;
+  }
+
+  .dashboard-movement {
+    grid-template-columns: 23px minmax(0, 1fr) auto;
+    gap: 7px;
+    min-height: 70px;
+    padding: 9px 12px;
+  }
+
+  .dashboard-movement > svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .dashboard-movement div > strong {
+    font-size: 14px;
+  }
+
+  .dashboard-movement div > span {
+    font-size: 10px;
+  }
+
+  .dashboard-movement em {
+    margin-right: 4px;
+    padding: 3px 5px;
+    font-size: 9px;
+  }
+
+  .dashboard-movement time strong {
+    font-size: 12px;
+  }
+
+  .dashboard-movement time span {
+    font-size: 10px;
+  }
+
   .active-vehicles-page {
     padding-top: 20px;
   }

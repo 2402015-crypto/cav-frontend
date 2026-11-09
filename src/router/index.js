@@ -36,7 +36,7 @@ const router = createRouter({
         { path: 'entrada', name: 'operativo-entrada', component: EntradaView, meta: { title: 'Registrar entrada', sectionTitle: 'Registrar Entrada' } },
         { path: 'salida', name: 'operativo-salida', component: SalidaView, meta: { title: 'Registrar salida', sectionTitle: 'Registrar Salida' } },
         { path: 'activos', name: 'operativo-activos', component: ActivosView, meta: { title: 'Vehículos activos', sectionTitle: 'Vehículos Activos' } },
-        { path: 'buscar', name: 'operativo-buscar', component: OperativoSectionView, meta: { title: 'Buscar', sectionTitle: 'Buscar' } },
+        { path: 'buscar', name: 'operativo-buscar', component: HistorialAccesosView, meta: { title: 'Buscar', sectionTitle: 'Buscar' } },
         { path: 'historial', name: 'operativo-historial', component: HistorialAccesosView, meta: { title: 'Historial de accesos', sectionTitle: 'Historial de accesos' } },
       ],
     },
