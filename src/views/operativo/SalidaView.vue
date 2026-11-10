@@ -1,9 +1,12 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import SalidaCameraPanel from '@/components/operativo/salida/SalidaCameraPanel.vue'
 import SalidaManualPanel from '@/components/operativo/salida/SalidaManualPanel.vue'
 import SalidaSuccessView from '@/components/operativo/salida/SalidaSuccessView.vue'
 import VehicleDetailsModal from '@/components/operativo/salida/VehicleDetailsModal.vue'
+
+const route = useRoute()
 
 const mode = ref('automatic')
 const stage = ref('capture')
@@ -33,6 +36,12 @@ function reset() {
 function returnFromDetails() {
   detailsOpen.value = false
 }
+
+onMounted(() => {
+  if (route.query.mode === 'manual') {
+    mode.value = 'manual'
+  }
+})
 </script>
 
 <template>

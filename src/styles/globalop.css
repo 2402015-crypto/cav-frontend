@@ -83,12 +83,12 @@
   width: min(100%, 720px);
   min-height: calc(100vh - 154px);
   margin: 0 auto;
-  padding: 28px 20px 35px;
+  padding: 22px 18px 28px;
   color: #303734;
 }
 
 .operative-dashboard__header {
-  margin-bottom: 25px;
+  margin-bottom: 18px;
 }
 
 .operative-dashboard__header h1 {
@@ -108,23 +108,30 @@
 .operative-dashboard__actions {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: 12px;
 }
 
 .dashboard-stat {
   display: grid;
-  min-height: 132px;
+  min-height: 82px;
   grid-template-columns: 35px minmax(0, 1fr) 58px;
   align-items: center;
-  gap: 12px;
-  padding: 20px 16px;
+  gap: 9px;
+  padding: 10px 13px;
   border: 1px solid #e6e9e5;
   border-radius: 22px;
   background: #fff;
   box-shadow: 0 2px 5px rgba(60, 75, 68, .12);
   color: #303734;
-  cursor: pointer;
   text-align: left;
+}
+
+.dashboard-stat--search {
+  cursor: pointer;
+}
+
+.dashboard-stat--search {
+  grid-template-columns: 25px minmax(0, 1fr);
 }
 
 .dashboard-stat svg,
@@ -140,8 +147,12 @@
 }
 
 .dashboard-stat--exit svg,
-.dashboard-movement__exit {
-  stroke: #9a6259;
+.dashboard-movement > svg.dashboard-movement__entry {
+  stroke: #7CB09D !important;
+}
+
+.dashboard-movement > svg.dashboard-movement__exit {
+  stroke: #9A6259 !important;
 }
 
 .dashboard-stat--active svg {
@@ -150,6 +161,25 @@
 
 .dashboard-stat--search svg {
   stroke: #303734;
+}
+
+.dashboard-stat--search {
+  grid-template-columns: 35px minmax(0, 1fr);
+  min-height: 108px;
+  cursor: pointer;
+}
+
+.dashboard-stat--search svg {
+  width: 42px;
+  height: 42px;
+}
+
+.dashboard-stat--search strong {
+  font-size: 22px;
+}
+
+.dashboard-stat--search small {
+  font-size: 17px;
 }
 
 .dashboard-stat span {
@@ -162,12 +192,12 @@
 }
 
 .dashboard-stat strong {
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.2;
 }
 
 .dashboard-stat small {
-  margin-top: 7px;
+  margin-top: 5px;
   color: #858d88;
   font-size: 12px;
   line-height: 1.2;
@@ -175,8 +205,8 @@
 
 .dashboard-stat b {
   display: grid;
-  width: 56px;
-  height: 56px;
+  width: 50px;
+  height: 50px;
   place-items: center;
   border: 1px solid #edf0ed;
   border-radius: 18px;
@@ -186,81 +216,109 @@
   font-size: 25px;
 }
 
+.dashboard-stat--search {
+  min-height: 88px;
+  grid-template-columns: 25px minmax(0, 1fr);
+}
+
+.dashboard-stat--search svg {
+  width: 30px;
+  height: 30px;
+}
+
+.dashboard-stat--search strong {
+  font-size: 15px;
+}
+
+.dashboard-stat--search small {
+  font-size: 11px;
+}
+
 .dashboard-stat--active b {
   color: #639781;
 }
 
 .operative-dashboard__actions {
-  margin-top: 22px;
+  margin-top: 18px;
+  padding: 22px 30px;
+  border: 1px solid #e6e9e5;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(60, 75, 68, .08);
 }
 
 .dashboard-action {
-  min-height: 188px;
-  padding: 20px 25px;
-  border: 1px solid #dce5df;
-  border-radius: 22px;
+  display: flex;
+  min-height: 124px;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 18px;
+  padding: 14px 20px;
+  border: 0;
+  border-radius: 30px;
+  box-shadow: 0 2px 4px rgba(60, 75, 68, .14);
   cursor: pointer;
   text-align: left;
 }
 
 .dashboard-action--entry {
-  background: #eef6f2;
+  background: rgba(124, 176, 157, 0.1);
 }
 
 .dashboard-action--exit {
-  background: #f5efed;
+  background: rgba(158, 106, 96, 0.1);
 }
 
 .dashboard-action > span {
   display: grid;
-  width: 55px;
-  height: 55px;
-  margin-bottom: 28px;
+  width: 82px;
+  height: 82px;
+  flex: 0 0 82px;
+  margin-bottom: 0;
   place-items: center;
-  border-radius: 15px;
-  background: #7cb09d;
-}
-
-.dashboard-action--exit > span {
-  background: #9a6259;
+  border-radius: 0;
+  background: transparent;
 }
 
 .dashboard-action svg {
-  stroke: #fff;
-}
-
-.dashboard-action strong,
-.dashboard-action small {
-  display: block;
+  width: 82px;
+  height: 82px;
+  stroke: #7CB09D;
+  stroke-width: 1.25;
 }
 
 .dashboard-action strong {
-  font-size: 18px;
+  color: #7CB09D;
+  font-size: 25px;
+  font-weight: 400;
+  line-height: 1.18;
 }
 
-.dashboard-action small {
-  margin-top: 8px;
-  color: #7c8580;
-  font-size: 13px;
+.dashboard-action--exit strong {
+  color: #9e6a60;
+}
+
+.dashboard-action--exit svg {
+  stroke: #9e6a60;
 }
 
 .operative-dashboard__movements {
   overflow: hidden;
-  margin-top: 24px;
+  margin-top: 14px;
   border: 1px solid #dce4df;
   border-radius: 22px;
   background: #fff;
 }
 
 .operative-dashboard__movements header {
-  padding: 20px 24px;
+  padding: 13px 20px;
   border-bottom: 1px solid #dce4df;
 }
 
 .operative-dashboard__movements h2 {
   margin: 0;
   color: #303734;
-  font-size: 20px;
+  font-size: 16px;
 }
 
 .dashboard-movement {
@@ -268,8 +326,8 @@
   grid-template-columns: 28px minmax(0, 1fr) auto;
   align-items: center;
   gap: 12px;
-  min-height: 82px;
-  padding: 12px 24px;
+  min-height: 54px;
+  padding: 5px 20px;
   border-bottom: 1px solid #edf0ed;
 }
 
@@ -287,14 +345,20 @@
   display: block;
 }
 
-.dashboard-movement div > strong {
-  font-size: 17px;
+.dashboard-movement__title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.dashboard-movement__title strong {
+  font-size: 16px;
   letter-spacing: 1px;
 }
 
 .dashboard-movement div > span {
   overflow: hidden;
-  margin-top: 4px;
+  margin-top: 2px;
   color: #7d8580;
   font-size: 13px;
   text-overflow: ellipsis;
@@ -303,7 +367,7 @@
 
 .dashboard-movement em {
   display: inline-block;
-  margin-right: 7px;
+  margin: 0;
   padding: 5px 8px;
   border-radius: 12px;
   background: #e6f1ec;
@@ -322,11 +386,11 @@
 }
 
 .dashboard-movement time strong {
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .dashboard-movement time span {
-  margin-top: 4px;
+  margin-top: 2px;
   color: #7d8580;
   font-size: 12px;
 }
@@ -1010,11 +1074,11 @@
 @media (max-width: 600px) {
   .operative-dashboard {
     min-height: calc(100vh - 99px);
-    padding: 18px 9px 26px;
+    padding: 15px 9px 22px;
   }
 
   .operative-dashboard__header {
-    margin-bottom: 18px;
+    margin-bottom: 13px;
   }
 
   .operative-dashboard__header h1 {
@@ -1031,10 +1095,10 @@
   }
 
   .dashboard-stat {
-    min-height: 106px;
+    min-height: 76px;
     grid-template-columns: 25px minmax(0, 1fr) 42px;
     gap: 7px;
-    padding: 12px 9px;
+    padding: 7px 8px;
     border-radius: 17px;
   }
 
@@ -1060,49 +1124,51 @@
   }
 
   .operative-dashboard__actions {
-    margin-top: 14px;
+    margin-top: 10px;
+    padding: 10px;
   }
 
   .dashboard-action {
-    min-height: 142px;
-    padding: 14px;
+    min-height: 84px;
+    gap: 8px;
+    padding: 8px;
     border-radius: 17px;
   }
 
   .dashboard-action > span {
-    width: 40px;
-    height: 40px;
-    margin-bottom: 17px;
-    border-radius: 11px;
+    width: 48px;
+    height: 48px;
+    flex-basis: 48px;
+    border-radius: 14px;
   }
 
   .dashboard-action strong {
-    font-size: 14px;
+    font-size: 15px;
   }
 
-  .dashboard-action small {
-    margin-top: 5px;
-    font-size: 10px;
+  .dashboard-action svg {
+    width: 48px;
+    height: 48px;
   }
 
   .operative-dashboard__movements {
-    margin-top: 14px;
+    margin-top: 10px;
     border-radius: 17px;
   }
 
   .operative-dashboard__movements header {
-    padding: 15px 14px;
+    padding: 10px 10px;
   }
 
   .operative-dashboard__movements h2 {
-    font-size: 17px;
+    font-size: 15px;
   }
 
   .dashboard-movement {
     grid-template-columns: 23px minmax(0, 1fr) auto;
     gap: 7px;
-    min-height: 70px;
-    padding: 9px 12px;
+    min-height: 52px;
+    padding: 5px 12px;
   }
 
   .dashboard-movement > svg {
@@ -1110,7 +1176,7 @@
     height: 20px;
   }
 
-  .dashboard-movement div > strong {
+  .dashboard-movement__title strong {
     font-size: 14px;
   }
 

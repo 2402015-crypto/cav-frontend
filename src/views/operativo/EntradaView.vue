@@ -1,5 +1,6 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import EntradaForm from '@/components/operativo/entrada/FormularioEntrada.vue'
 import EntrySuccessView from '@/components/operativo/entrada/EntrySuccessView.vue'
 import EntryMethodSelector from '@/components/operativo/entrada/EntryMethodSelector.vue'
@@ -7,6 +8,8 @@ import ManualEntryPanel from '@/components/operativo/entrada/ManualEntryPanel.vu
 import OcrCapturePanel from '@/components/operativo/entrada/OcrCapturePanel.vue'
 import RegistroTypeSelector from '@/components/operativo/entrada/RegistroTypeSelector.vue'
 import { searchManualEntry } from '@/services/api/entradas'
+
+const route = useRoute()
 
 const registrationTypes = [
   { key: 'general', label: 'Colaborador', formTitle: 'Registro general', icon: 'person' },
@@ -22,17 +25,18 @@ const capturedPlate = ref('')
 const ocrId = ref(null)
 const manualLookup = ref(null)
 const registeredAt = ref(null)
+const automaticEntryShortcut = ref(false)
 
 const stepLabel = computed(() => step.value === 'type' ? 'Paso 1 de 3' : 'Paso 2 de 3')
 const canGoBack = computed(() => step.value !== 'type')
 
 function selectType(type) {
   selectedType.value = type
-  selectedMethod.value = null
+  selectedMethod.value = automaticEntryShortcut.value ? 'automatic' : null
   capturedPlate.value = ''
   ocrId.value = null
   manualLookup.value = null
-  step.value = 'method'
+  step.value = automaticEntryShortcut.value ? 'capture' : 'method'
 }
 
 function selectAutomatic() {
@@ -103,6 +107,10 @@ function goBack() {
   else if (capturedPlate.value) returnToMethod()
   else returnToTypes()
 }
+
+onMounted(() => {
+  automaticEntryShortcut.value = route.query.method === 'automatic'
+})
 </script>
 
 <template>

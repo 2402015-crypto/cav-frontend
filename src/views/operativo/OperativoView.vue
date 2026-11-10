@@ -99,7 +99,7 @@ onBeforeUnmount(() => window.clearInterval(dailyStatsTimer))
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3.5 10.5 8.5-7 8.5 7v9a1 1 0 0 1-1 1h-5v-5h-5v5h-5a1 1 0 0 1-1-1v-9Z" /></svg>
         <span>Panel</span>
       </RouterLink>
-      <RouterLink class="operative-nav__item" active-class="operative-nav__item--active" :to="{ name: 'operativo-entrada' }">
+      <RouterLink class="operative-nav__item" active-class="operative-nav__item--active" :to="{ name: 'operativo-entrada', query: { method: 'automatic' } }">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 5h5a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-5M4 12h10M10 8l4 4-4 4" /></svg>
         <span>Entrada</span>
       </RouterLink>

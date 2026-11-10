@@ -1155,6 +1155,13 @@
   cursor: text;
 }
 
+.exit-details-card .exit-observations--empty textarea {
+  min-height: 28px;
+  height: 28px;
+  padding: 2px 0;
+  resize: none;
+}
+
 .exit-details-card .exit-history {
   margin: 0;
   padding: 13px 0;
@@ -1172,6 +1179,19 @@
 
 .exit-details-card .exit-history header span {
   color: #639781;
+}
+
+.exit-history__times strong {
+  color: #639781;
+  font-weight: 400;
+}
+
+.exit-history__times .exit-history__exit-time {
+  color: #9A6259;
+}
+
+.exit-history__duration {
+  color: #84928c;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0;
@@ -1207,6 +1227,14 @@
   margin-top: 3px;
   color: #639781;
   font-size: 11px;
+}
+
+.exit-history__latest>div span:nth-child(2) strong {
+  color: #9A6259;
+}
+
+.exit-history__latest>div span:nth-child(3) strong {
+  color: #84928c;
 }
 
 .exit-details-card .exit-history__row {
