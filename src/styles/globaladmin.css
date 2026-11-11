@@ -218,79 +218,781 @@
   margin-left: auto;
 }
 
-.admin-history-header { margin-bottom: 20px; }
-.admin-history-header h1 { margin: 0; color: #f2efe3; font-size: 20px; line-height: 1.2; }
-.admin-history-header p { margin: 5px 0 0; color: #9baaa4; font-size: 13px; }
-.admin-history-panel { position: relative; border: 1px solid rgba(216,222,217,.16); border-radius: 17px; background: #332e2b; }
-.admin-history-filters { margin-bottom: 20px; padding: 16px; }
-.admin-history-panel__title { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; color: #9baaa4; font-size: 11px; }
-.admin-history-panel__title svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.6; }
-.admin-history-filter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.admin-history-panel label { display: flex; flex-direction: column; gap: 6px; color: #9baaa4; font-size: 10px; font-weight: 700; letter-spacing: .3px; }
-.admin-history-panel input, .admin-history-panel select { width: 100%; height: 43px; padding: 0 13px; border: 1px solid rgba(216,222,217,.2); border-radius: 11px; outline: 0; background: #292623; color: #eef2ef; font-size: 13px; }
-.admin-history-panel input[type="date"] { cursor: pointer; color-scheme: dark; }
-.admin-history-panel input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 1; filter: invert(76%) sepia(13%) saturate(550%) hue-rotate(108deg) brightness(96%); }
-.admin-history-panel input::placeholder { color: #717773; }
-.admin-history-panel input:focus, .admin-history-panel select:focus { border-color: #7cb09d; box-shadow: 0 0 0 3px rgba(124,176,157,.12); }
-.admin-history-panel select { cursor: pointer; }
-.admin-history-clear { margin-top: 11px; padding: 0; border: 0; background: none; color: #9baaa4; cursor: pointer; font-size: 11px; }
-.admin-history-download { display: flex; min-height: 99px; align-items: center; justify-content: space-between; gap: 22px; margin-bottom: 16px; padding: 16px; }
-.admin-history-download__copy { display: flex; min-width: 260px; align-items: center; gap: 12px; }
-.admin-history-download__icon { display: grid; width: 41px; height: 41px; flex: 0 0 41px; place-items: center; border-radius: 12px; background: rgba(124,176,157,.12); color: #94c5b3; }
-.admin-history-download__icon svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5; }
-.admin-history-download h2 { margin: 0; color: #f2efe3; font-size: 14px; }
-.admin-history-download p { margin: 4px 0 0; color: #9baaa4; font-size: 11px; }
-.admin-history-date-fields { display: grid; grid-template-columns: repeat(2, 184px); gap: 12px; }
-.admin-history-date-field { position: relative; min-width: 0; }
-.admin-history-date-input { display: flex; width: 100%; height: 43px; align-items: center; justify-content: space-between; padding: 0 12px 0 13px; border: 1px solid rgba(216,222,217,.2); border-radius: 11px; outline: 0; background: #292623; color: #eef2ef; cursor: pointer; font-size: 13px; text-align: left; }
-.admin-history-date-input:focus, .admin-history-date-input:hover { border-color: #7cb09d; box-shadow: 0 0 0 3px rgba(124,176,157,.12); }
-.admin-history-date-input--placeholder { color: #717773; }
-.admin-history-date-input svg { width: 16px; height: 16px; flex: 0 0 16px; fill: none; stroke: #94c5b3; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5; }
-.admin-history-calendar { position: absolute; z-index: 20; top: calc(100% + 7px); right: 0; width: 208px; padding: 11px; border: 1px solid rgba(148,197,179,.32); border-radius: 13px; background: #292623; box-shadow: 0 14px 28px rgba(0,0,0,.35); }
-.admin-history-calendar header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px; color: #f2efe3; }
-.admin-history-calendar header strong { color: #94c5b3; font-size: 11px; text-transform: capitalize; }
-.admin-history-calendar header button { display: grid; width: 24px; height: 24px; place-items: center; padding: 0; border: 0; border-radius: 7px; background: transparent; color: #94c5b3; cursor: pointer; font-size: 21px; line-height: 1; }
-.admin-history-calendar header button:hover { background: rgba(148,197,179,.12); }
-.admin-history-calendar__weekdays, .admin-history-calendar__days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; text-align: center; }
-.admin-history-calendar__weekdays { margin-bottom: 4px; color: #9baaa4; font-size: 9px; font-weight: 700; }
-.admin-history-calendar__days button { width: 24px; height: 24px; padding: 0; border: 0; border-radius: 7px; background: transparent; color: #d8ded9; cursor: pointer; font-size: 11px; }
-.admin-history-calendar__days button:hover:not(:disabled) { background: rgba(124,176,157,.18); color: #fff; }
-.admin-history-calendar__days button.is-selected { background: #7cb09d; color: #181513; font-weight: 700; }
-.admin-history-calendar__days button:disabled { cursor: default; opacity: .18; }
-.admin-history-download__actions { display: flex; gap: 9px; padding-top: 16px; }
-.admin-history-download__actions button { height: 30px; min-width: 79px; padding: 0 12px; border: 0; border-radius: 11px; background: #7cb09d; color: #eef2ef; cursor: pointer; font-size: 11px; font-weight: 600; }
-.admin-history-download__actions button { display: inline-flex; align-items: center; justify-content: center; gap: 5px; }
-.admin-history-download__actions button:disabled { cursor: not-allowed; opacity: .38; }
-.admin-history-download__actions span { margin-right: 4px; font-size: 14px; }
-.admin-history-download__actions svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5; }
-.admin-history-table-wrap { overflow-x: auto; border: 1px solid rgba(216,222,217,.18); border-radius: 17px; background: #332e2b; }
-.admin-history-table { width: 100%; min-width: 930px; border-collapse: collapse; table-layout: fixed; }
-.admin-history-table th, .admin-history-table td { height: 46px; padding: 0 16px; border-bottom: 1px solid rgba(216,222,217,.22); text-align: left; white-space: nowrap; }
-.admin-history-table th { height: 40px; color: #9baaa4; font-size: 10px; font-weight: 700; letter-spacing: .25px; }
-.admin-history-table td { color: #d8ded9; font-size: 13px; }
-.admin-history-table tbody tr:last-child td { border-bottom: 0; }
-.admin-history-table th:nth-child(1) { width: 13%; } .admin-history-table th:nth-child(2) { width: 16%; } .admin-history-table th:nth-child(3) { width: 18%; } .admin-history-table th:nth-child(4) { width: 16%; } .admin-history-table th:nth-child(5) { width: 16%; } .admin-history-table th:nth-child(6) { width: 16%; } .admin-history-table th:nth-child(7) { width: 7%; }
-.admin-history-table__plate, .admin-history-table__driver { color: #f2efe3 !important; font-weight: 700; }
-.admin-history-table__visits { color: #94c5b3 !important; font-weight: 700; text-align: center !important; }
-.admin-history-type { display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px; border-radius: 10px; background: rgba(124,176,157,.11); color: #94c5b3; font-size: 11px; }
-.admin-history-type svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5; }
-.admin-history-state { height: 100px !important; color: #9baaa4 !important; text-align: center !important; }
-.admin-history-feedback { margin-top: -7px; margin-bottom: 12px; color: #d99487; font-size: 12px; }
+.admin-history-header {
+  margin-bottom: 20px;
+}
+
+.admin-history-header h1 {
+  margin: 0;
+  color: #f2efe3;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.admin-history-header p {
+  margin: 5px 0 0;
+  color: #9baaa4;
+  font-size: 13px;
+}
+
+.admin-history-panel {
+  position: relative;
+  border: 1px solid rgba(216, 222, 217, .16);
+  border-radius: 17px;
+  background: #332e2b;
+}
+
+.admin-history-filters {
+  margin-bottom: 20px;
+  padding: 16px;
+}
+
+.admin-history-panel__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: #9baaa4;
+  font-size: 11px;
+}
+
+.admin-history-panel__title svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.6;
+}
+
+.admin-history-filter-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.admin-history-panel label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #9baaa4;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .3px;
+}
+
+.admin-history-panel input,
+.admin-history-panel select {
+  width: 100%;
+  height: 43px;
+  padding: 0 13px;
+  border: 1px solid rgba(216, 222, 217, .2);
+  border-radius: 11px;
+  outline: 0;
+  background: #292623;
+  color: #eef2ef;
+  font-size: 13px;
+}
+
+.admin-history-panel input[type="date"] {
+  cursor: pointer;
+  color-scheme: dark;
+}
+
+.admin-history-panel input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 1;
+  filter: invert(76%) sepia(13%) saturate(550%) hue-rotate(108deg) brightness(96%);
+}
+
+.admin-history-panel input::placeholder {
+  color: #717773;
+}
+
+.admin-history-panel input:focus,
+.admin-history-panel select:focus {
+  border-color: #7cb09d;
+  box-shadow: 0 0 0 3px rgba(124, 176, 157, .12);
+}
+
+.admin-history-panel select {
+  cursor: pointer;
+}
+
+.admin-history-clear {
+  margin-top: 11px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #9baaa4;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.admin-history-download {
+  display: flex;
+  min-height: 99px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  margin-bottom: 16px;
+  padding: 16px;
+}
+
+.admin-history-download__copy {
+  display: flex;
+  min-width: 260px;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-history-download__icon {
+  display: grid;
+  width: 41px;
+  height: 41px;
+  flex: 0 0 41px;
+  place-items: center;
+  border-radius: 12px;
+  background: rgba(124, 176, 157, .12);
+  color: #94c5b3;
+}
+
+.admin-history-download__icon svg {
+  width: 21px;
+  height: 21px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.admin-history-download h2 {
+  margin: 0;
+  color: #f2efe3;
+  font-size: 14px;
+}
+
+.admin-history-download p {
+  margin: 4px 0 0;
+  color: #9baaa4;
+  font-size: 11px;
+}
+
+.admin-history-date-fields {
+  display: grid;
+  grid-template-columns: repeat(2, 184px);
+  gap: 12px;
+}
+
+.admin-history-date-field {
+  position: relative;
+  min-width: 0;
+}
+
+.admin-history-date-input {
+  display: flex;
+  width: 100%;
+  height: 43px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px 0 13px;
+  border: 1px solid rgba(216, 222, 217, .2);
+  border-radius: 11px;
+  outline: 0;
+  background: #292623;
+  color: #eef2ef;
+  cursor: pointer;
+  font-size: 13px;
+  text-align: left;
+}
+
+.admin-history-date-input:focus,
+.admin-history-date-input:hover {
+  border-color: #7cb09d;
+  box-shadow: 0 0 0 3px rgba(124, 176, 157, .12);
+}
+
+.admin-history-date-input--placeholder {
+  color: #717773;
+}
+
+.admin-history-date-input svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  fill: none;
+  stroke: #94c5b3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.admin-history-calendar {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 7px);
+  right: 0;
+  width: 208px;
+  padding: 11px;
+  border: 1px solid rgba(148, 197, 179, .32);
+  border-radius: 13px;
+  background: #292623;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, .35);
+}
+
+.admin-history-calendar header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 9px;
+  color: #f2efe3;
+}
+
+.admin-history-calendar header strong {
+  color: #94c5b3;
+  font-size: 11px;
+  text-transform: capitalize;
+}
+
+.admin-history-calendar header button {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #94c5b3;
+  cursor: pointer;
+  font-size: 21px;
+  line-height: 1;
+}
+
+.admin-history-calendar header button:hover {
+  background: rgba(148, 197, 179, .12);
+}
+
+.admin-history-calendar__weekdays,
+.admin-history-calendar__days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+  text-align: center;
+}
+
+.admin-history-calendar__weekdays {
+  margin-bottom: 4px;
+  color: #9baaa4;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.admin-history-calendar__days button {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #d8ded9;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.admin-history-calendar__days button:hover:not(:disabled) {
+  background: rgba(124, 176, 157, .18);
+  color: #fff;
+}
+
+.admin-history-calendar__days button.is-selected {
+  background: #7cb09d;
+  color: #181513;
+  font-weight: 700;
+}
+
+.admin-history-calendar__days button:disabled {
+  cursor: default;
+  opacity: .18;
+}
+
+.admin-history-download__actions {
+  display: flex;
+  gap: 9px;
+  padding-top: 16px;
+}
+
+.admin-history-download__actions button {
+  height: 30px;
+  min-width: 79px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 11px;
+  background: #7cb09d;
+  color: #eef2ef;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.admin-history-download__actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.admin-history-download__actions button:disabled {
+  cursor: not-allowed;
+  opacity: .38;
+}
+
+.admin-history-download__actions .admin-history-download__clear {
+  min-width: auto;
+  padding: 0 7px;
+  background: transparent;
+  color: #9baaa4;
+  font-size: 10px;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.admin-history-download__actions .admin-history-download__clear:hover:not(:disabled) {
+  color: #d8ded9;
+  background: transparent;
+}
+
+.admin-history-download__actions span {
+  margin-right: 4px;
+  font-size: 14px;
+}
+
+.admin-history-download__actions svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.admin-history-table-wrap {
+  overflow-x: auto;
+  border: 1px solid rgba(216, 222, 217, .18);
+  border-radius: 17px;
+  background: #332e2b;
+}
+
+.admin-history-table {
+  width: 100%;
+  min-width: 930px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.admin-history-table th,
+.admin-history-table td {
+  height: 46px;
+  padding: 0 16px;
+  border-bottom: 1px solid rgba(216, 222, 217, .22);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.admin-history-table th {
+  height: 40px;
+  color: #9baaa4;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .25px;
+}
+
+.admin-history-table td {
+  color: #d8ded9;
+  font-size: 13px;
+}
+
+.admin-history-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.admin-history-table__row--clickable {
+  cursor: pointer;
+  transition: background-color 140ms ease;
+}
+
+.admin-history-table__row--clickable:hover,
+.admin-history-table__row--clickable:focus-visible {
+  outline: 0;
+  background: rgba(124, 176, 157, .08);
+}
+
+.admin-history-table th:nth-child(1) {
+  width: 13%;
+}
+
+.admin-history-table th:nth-child(2) {
+  width: 16%;
+}
+
+.admin-history-table th:nth-child(3) {
+  width: 18%;
+}
+
+.admin-history-table th:nth-child(4) {
+  width: 16%;
+}
+
+.admin-history-table th:nth-child(5) {
+  width: 16%;
+}
+
+.admin-history-table th:nth-child(6) {
+  width: 16%;
+}
+
+.admin-history-table th:nth-child(7) {
+  width: 7%;
+}
+
+.admin-history-table__plate,
+.admin-history-table__driver {
+  color: #f2efe3 !important;
+  font-weight: 700;
+}
+
+.admin-history-table__visits {
+  color: #94c5b3 !important;
+  font-weight: 700;
+  text-align: center !important;
+}
+
+.admin-history-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  border-radius: 10px;
+  background: rgba(124, 176, 157, .11);
+  color: #94c5b3;
+  font-size: 11px;
+}
+
+.admin-history-type svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.admin-history-state {
+  height: 100px !important;
+  color: #9baaa4 !important;
+  text-align: center !important;
+}
+
+.admin-history-feedback {
+  margin-top: -7px;
+  margin-bottom: 12px;
+  color: #d99487;
+  font-size: 12px;
+}
+
+.admin-history-feedback--loading {
+  color: #9BAAA4;
+}
+
+/* ========================================================================== */
+/* 3. Detalle administrativo de vehículo                                     */
+/* ========================================================================== */
+
+.admin-vehicle-detail-page {
+  min-height: 100dvh;
+  padding: 27px 24px 60px;
+  background: #24211f;
+  color: #d8ded9;
+}
+
+.admin-vehicle-detail-header,
+.admin-vehicle-summary,
+.admin-vehicle-detail-page>.admin-history-download,
+.admin-vehicle-access-panel {
+  width: min(100%, 1128px);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.admin-vehicle-detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.admin-vehicle-detail-header h1 {
+  margin: 0;
+  color: #f2efe3;
+  font-size: 20px;
+}
+
+.admin-vehicle-detail-header p {
+  margin: 5px 0 0;
+  color: #9baaa4;
+  font-size: 13px;
+}
+
+.admin-vehicle-back {
+  display: inline-flex;
+  height: 30px;
+  align-items: center;
+  gap: 7px;
+  padding: 0 13px;
+  border: 0;
+  border-radius: 12px;
+  background: rgba(124, 176, 157, .8);
+  color: #eef2ef;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.admin-vehicle-back:first-letter {
+  font-size: 19px;
+  line-height: 1;
+}
+
+.admin-vehicle-summary {
+  margin-bottom: 6px;
+  padding: 22px 20px 20px;
+  border: 1px solid rgba(216, 222, 217, .16);
+  border-radius: 17px;
+  background: #332e2b;
+}
+
+.admin-vehicle-summary__identity {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 22px;
+}
+
+.admin-vehicle-summary__icon {
+  display: grid;
+  width: 49px;
+  height: 49px;
+  place-items: center;
+  border-radius: 14px;
+  background: rgba(124, 176, 157, .14);
+  color: #94c5b3;
+}
+
+.admin-vehicle-summary__icon svg {
+  width: 25px;
+  height: 25px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.admin-vehicle-summary h2 {
+  margin: 0 0 6px;
+  color: #f2efe3;
+  font-size: 20px;
+}
+
+.admin-vehicle-summary__fields {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px 28px;
+}
+
+.admin-vehicle-summary__fields span {
+  min-width: 0;
+  color: #9baaa4;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.admin-vehicle-summary__fields strong {
+  display: block;
+  overflow: hidden;
+  margin-top: 6px;
+  color: #f2efe3;
+  font-size: 14px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-vehicle-summary__observations strong {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.45;
+}
+
+.admin-vehicle-detail-page>.admin-history-download {
+  margin-bottom: 20px;
+}
+
+.admin-vehicle-access-panel {
+  overflow: hidden;
+  border: 1px solid rgba(216, 222, 217, .18);
+  border-radius: 17px;
+  background: #332e2b;
+}
+
+.admin-vehicle-access-panel header {
+  padding: 15px 16px;
+  border-bottom: 1px solid rgba(216, 222, 217, .16);
+}
+
+.admin-vehicle-access-panel h2 {
+  margin: 0;
+  color: #f2efe3;
+  font-size: 14px;
+}
+
+.admin-vehicle-access-panel table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.admin-vehicle-access-panel th,
+.admin-vehicle-access-panel td {
+  height: 48px;
+  padding: 0 16px;
+  border-bottom: 1px solid rgba(216, 222, 217, .18);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.admin-vehicle-access-panel th {
+  height: 40px;
+  color: #9baaa4;
+  font-size: 10px;
+  letter-spacing: .2px;
+}
+
+.admin-vehicle-access-panel td {
+  color: #d8ded9;
+  font-size: 13px;
+}
+
+.admin-vehicle-access-panel tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.admin-vehicle-access__entry {
+  color: #7cb09d !important;
+  font-weight: 600;
+}
+
+.admin-vehicle-access__exit {
+  color: #d99487 !important;
+  font-weight: 600;
+}
+
+.admin-vehicle-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  border-radius: 10px;
+  background: rgba(155, 170, 164, .12);
+  color: #9baaa4;
+  font-size: 11px;
+}
+
+.admin-vehicle-status i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.admin-vehicle-status--active {
+  background: rgba(124, 176, 157, .12);
+  color: #7cb09d;
+}
 
 @media (max-width: 900px) {
-  .admin-history-download { align-items: stretch; flex-wrap: wrap; }
-  .admin-history-date-fields { flex: 1; }
-  .admin-history-download__actions { align-items: flex-end; }
+  .admin-history-download {
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  .admin-history-date-fields {
+    flex: 1;
+  }
+
+  .admin-history-download__actions {
+    align-items: flex-end;
+  }
 }
 
 @media (max-width: 600px) {
-  .admin-history-page { padding: 20px 14px 40px; }
-  .admin-history-filter-grid { grid-template-columns: 1fr; }
-  .admin-history-download { display: grid; gap: 16px; }
-  .admin-history-download__copy { min-width: 0; }
-  .admin-history-date-fields { grid-template-columns: 1fr 1fr; }
-  .admin-history-download__actions { padding-top: 0; }
-  .admin-history-download__actions button { flex: 1; }
+  .admin-history-page {
+    padding: 20px 14px 40px;
+  }
+
+  .admin-history-filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-history-download {
+    display: grid;
+    gap: 16px;
+  }
+
+  .admin-history-download__copy {
+    min-width: 0;
+  }
+
+  .admin-history-date-fields {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .admin-history-download__actions {
+    padding-top: 0;
+  }
+
+  .admin-history-download__actions button {
+    flex: 1;
+  }
+
+  .admin-vehicle-detail-page {
+    padding: 20px 14px 40px;
+  }
+
+  .admin-vehicle-detail-header {
+    margin-bottom: 18px;
+  }
+
+  .admin-vehicle-summary__fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .admin-vehicle-access-panel {
+    overflow-x: auto;
+  }
+
+  .admin-vehicle-access-panel table {
+    min-width: 650px;
+  }
 }
 
 /* ========================================================================== */
@@ -385,7 +1087,7 @@
   gap: 6px;
 }
 
-.user-form__field > span {
+.user-form__field>span {
   color: #9baaa4;
   font-size: 10px;
   font-weight: 700;
@@ -513,11 +1215,25 @@
   font-size: 13px;
 }
 
-.users-table th:nth-child(1) { width: 23%; }
-.users-table th:nth-child(2) { width: 12%; }
-.users-table th:nth-child(3) { width: 16%; }
-.users-table th:nth-child(4) { width: 12%; }
-.users-table th:nth-child(5) { width: 37%; }
+.users-table th:nth-child(1) {
+  width: 23%;
+}
+
+.users-table th:nth-child(2) {
+  width: 12%;
+}
+
+.users-table th:nth-child(3) {
+  width: 16%;
+}
+
+.users-table th:nth-child(4) {
+  width: 12%;
+}
+
+.users-table th:nth-child(5) {
+  width: 37%;
+}
 
 .users-table tbody tr:last-child td {
   border-bottom: 0;
@@ -614,13 +1330,13 @@
 
 .table-action--toggle {
   border: 0;
-  background: #7cb09d;
+  background: rgba(124, 176, 157, 0.8);
   color: #fff;
   cursor: pointer;
 }
 
 .table-action--toggle:hover {
-  background: #94c5b3;
+  background: rgba(148, 197, 179, 0.8);
 }
 
 .table-action--toggle:disabled {
@@ -633,12 +1349,12 @@
   padding-left: 4px;
   border: 0;
   background: transparent;
-  color: #7CB09D;
+  color: #9BAAA4;
   cursor: pointer;
 }
 
 .table-action--delete:hover {
-  color: #eef2ef;
+  color: #d8ded9;
 }
 
 .users-table__empty {

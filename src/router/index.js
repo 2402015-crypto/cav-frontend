@@ -12,6 +12,7 @@ import AdminSectionView from '@/views/admin/AdminSectionView.vue'
 import UsersView from '@/views/admin/UsersView.vue'
 import CatalogosView from '@/views/admin/CatalogosView.vue'
 import HistorialRegistrosView from '@/views/admin/HistorialRegistrosView.vue'
+import VehiculoDetalleView from '@/views/admin/VehiculoDetalleView.vue'
 import UnauthorizedView from '@/views/UnauthorizedView.vue'
 import { useAuthStore } from '@/stores/auth'
 
@@ -51,6 +52,7 @@ const router = createRouter({
         { path: 'usuarios', name: 'admin-usuarios', component: UsersView, meta: { title: 'Usuarios', sectionTitle: 'Usuarios' } },
         { path: 'bitacora', name: 'admin-bitacora', component: AdminSectionView, meta: { title: 'Bitácora', sectionTitle: 'Bitácora' } },
         { path: 'historial', name: 'admin-historial', component: HistorialRegistrosView, meta: { title: 'Historial de registros', sectionTitle: 'Historial de registros' } },
+        { path: 'historial/vehiculo/:id', name: 'admin-vehiculo-detalle', component: VehiculoDetalleView, meta: { title: 'Detalle del vehículo', sectionTitle: 'Detalle del vehículo' } },
         { path: 'configuracion', name: 'admin-configuracion', component: CatalogosView, meta: { title: 'Catálogos', sectionTitle: 'Catálogos' } },
       ],
     },

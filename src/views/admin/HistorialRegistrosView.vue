@@ -1,7 +1,10 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import DownloadRangePanel from '@/components/admin/DownloadRangePanel.vue'
 import { listAccessHistory } from '@/services/api/salidas'
 
+const router = useRouter()
 const records = ref([])
 const query = ref('')
 const visitorType = ref('')
@@ -111,6 +114,10 @@ async function loadHistory() {
 function onQueryInput() {
   window.clearTimeout(searchTimer)
   searchTimer = window.setTimeout(loadHistory, 250)
+}
+
+function openRecord(record) {
+  router.push({ name: 'admin-vehiculo-detalle', params: { id: record.idRegistro } })
 }
 
 function onDateChange() {
@@ -313,42 +320,12 @@ onBeforeUnmount(() => {
       <button class="admin-history-clear" type="button" @click="clearFilters">Limpiar filtros</button>
     </section>
 
-    <section class="admin-history-panel admin-history-download">
-      <div class="admin-history-download__copy">
-        <span class="admin-history-download__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM15 3v5h5M9 13h6M9 17h6" /></svg></span>
-        <div><h2>Descargar lista de vehículos registrados</h2><p>Selecciona un rango de fechas de registro.</p></div>
-      </div>
-      <div class="admin-history-date-fields">
-        <div class="admin-history-date-field">
-          <label for="history-from">DESDE</label>
-          <button id="history-from" class="admin-history-date-input" type="button" :class="{ 'admin-history-date-input--placeholder': !fromDate }" @click="openCalendar('from')">
-            <span>{{ dateDisplay(fromDate) }}</span>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2" /><path d="M8 3v4m8-4v4M4 10h16" /></svg>
-          </button>
-          <div v-if="activeDateField === 'from'" class="admin-history-calendar" role="dialog" aria-label="Seleccionar fecha desde">
-            <header><button type="button" aria-label="Mes anterior" @click="changeCalendarMonth(-1)">‹</button><strong>{{ calendarTitle }}</strong><button type="button" aria-label="Mes siguiente" @click="changeCalendarMonth(1)">›</button></header>
-            <div class="admin-history-calendar__weekdays"><span v-for="day in weekdayLabels" :key="day">{{ day }}</span></div>
-            <div class="admin-history-calendar__days"><button v-for="(day, index) in calendarDays" :key="`${day}-${index}`" type="button" :disabled="!day" :class="{ 'is-selected': isSelectedDate(day) }" @click="selectCalendarDate(day)">{{ day || '' }}</button></div>
-          </div>
-        </div>
-        <div class="admin-history-date-field">
-          <label for="history-to">HASTA</label>
-          <button id="history-to" class="admin-history-date-input" type="button" :class="{ 'admin-history-date-input--placeholder': !toDate }" @click="openCalendar('to')">
-            <span>{{ dateDisplay(toDate) }}</span>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2" /><path d="M8 3v4m8-4v4M4 10h16" /></svg>
-          </button>
-          <div v-if="activeDateField === 'to'" class="admin-history-calendar" role="dialog" aria-label="Seleccionar fecha hasta">
-            <header><button type="button" aria-label="Mes anterior" @click="changeCalendarMonth(-1)">‹</button><strong>{{ calendarTitle }}</strong><button type="button" aria-label="Mes siguiente" @click="changeCalendarMonth(1)">›</button></header>
-            <div class="admin-history-calendar__weekdays"><span v-for="day in weekdayLabels" :key="day">{{ day }}</span></div>
-            <div class="admin-history-calendar__days"><button v-for="(day, index) in calendarDays" :key="`${day}-${index}`" type="button" :disabled="!day || isDisabledDate(day)" :class="{ 'is-selected': isSelectedDate(day) }" @click="selectCalendarDate(day)">{{ day || '' }}</button></div>
-          </div>
-        </div>
-      </div>
-      <div class="admin-history-download__actions">
-        <button type="button" :disabled="!hasDateRange || exporting" @click="downloadPdf"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM15 3v5h5M9 13h6M9 17h4" /></svg> PDF</button>
-        <button type="button" :disabled="!hasDateRange || exporting" @click="downloadExcel"><span>▤</span> Excel</button>
-      </div>
-    </section>
+    <DownloadRangePanel
+      title="Descargar lista de vehículos registrados"
+      description="Selecciona un rango de fechas de registro."
+      file-prefix="historial-registros"
+      :load-records="(filters) => listAccessHistory({ ...filters, q: query, tipo: visitorType }).then(response => response.data.data || [])"
+    />
 
     <p v-if="errorMessage" class="admin-history-feedback admin-history-feedback--error" role="alert">{{ errorMessage }}</p>
     <section class="admin-history-table-wrap">
@@ -357,7 +334,7 @@ onBeforeUnmount(() => {
         <tbody>
           <tr v-if="loading"><td colspan="7" class="admin-history-state">Cargando historial...</td></tr>
           <tr v-else-if="!records.length"><td colspan="7" class="admin-history-state">No hay registros con los criterios seleccionados.</td></tr>
-          <tr v-for="record in records" v-else :key="record.idRegistro">
+          <tr v-for="record in records" v-else :key="record.idRegistro" class="admin-history-table__row--clickable" tabindex="0" @click="openRecord(record)" @keydown.enter="openRecord(record)">
             <td class="admin-history-table__plate">{{ record.placa || '—' }}</td>
             <td class="admin-history-table__driver">{{ record.conductor || '—' }}</td>
             <td>{{ record.empresa || record.transportadora || '—' }}</td>
