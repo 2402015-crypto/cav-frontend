@@ -48,13 +48,14 @@ Copy-Item .env.example .env
 npm run dev
 ```
 
-La aplicacion se sirve normalmente en `http://localhost:5173`.
+La aplicacion se sirve normalmente en `http://localhost:5173`. Para acceder desde otro
+dispositivo de la red local, inicia Vite y abre `http://172.18.130.80:5173`.
 
 ## Variables de entorno
 
 | Variable | Descripcion | Ejemplo |
 |---|---|---|
-| `VITE_API_URL` | URL base de la API backend | `http://localhost:8080/api/v1` |
+| `VITE_API_URL` | URL base de la API backend | Vacía en desarrollo (usa el proxy de Vite) |
 | `VITE_API_TIMEOUT` | Tiempo maximo de espera en milisegundos | `10000` |
 
 ## Autor
