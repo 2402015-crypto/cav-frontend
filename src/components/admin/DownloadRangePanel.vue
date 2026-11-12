@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onBeforeUnmount, ref } from 'vue'
+import { registerAuditExport } from '@/services/api/auditoria'
 
 const props = defineProps({
   title: { type: String, default: 'Descargar registros' },
@@ -160,6 +161,7 @@ async function exportRecords(format) {
     } else {
       downloadFile(createPdf(records), `${props.filePrefix}-${fromDate.value}-${toDate.value}.pdf`, 'application/pdf')
     }
+    await registerAuditExport(`Exportó reporte ${props.title} del ${fromDate.value} al ${toDate.value} en formato ${format.toUpperCase()}.`)
   } catch (error) {
     errorMessage.value = error.response?.data?.message || 'No fue posible generar la descarga.'
   } finally {

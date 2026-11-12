@@ -2026,3 +2026,116 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+.admin-audit-filters {
+  display: flex;
+  align-items: end;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.admin-audit-filter {
+  display: grid;
+  gap: .4rem;
+  min-width: 190px;
+  flex: 1;
+}
+.admin-audit-filter label {
+  color: #687b74;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+.admin-audit-filter input,
+.admin-audit-filter select {
+  border: 1px solid #d5dfda;
+  border-radius: 10px;
+  color: #42534d;
+  padding: .7rem .8rem;
+  background: #fff;
+}
+.admin-audit-search {
+  border: 0;
+  border-radius: 10px;
+  background: #7cb09d;
+  color: #fff;
+  font-weight: 700;
+  padding: .72rem 1.2rem;
+  cursor: pointer;
+}
+.admin-audit-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.admin-audit-table th,
+.admin-audit-table td {
+  padding: .9rem 1rem;
+  border-bottom: 1px solid #e7eeeb;
+  text-align: left;
+}
+.admin-audit-table th {
+  color: #7b8b85;
+  font-size: .72rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.admin-audit-table tr.is-clickable {
+  cursor: pointer;
+}
+.admin-audit-table tr.is-clickable:hover {
+  background: #f3f8f5;
+}
+.admin-audit-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgb(39 54 48 / 38%);
+}
+.admin-audit-modal {
+  position: relative;
+  width: min(620px, 100%);
+  border-radius: 18px;
+  background: #fff;
+  padding: 2rem;
+  box-shadow: 0 18px 60px rgb(39 54 48 / 22%);
+}
+.admin-audit-modal__close {
+  position: absolute;
+  top: .7rem;
+  right: 1rem;
+  border: 0;
+  background: transparent;
+  color: #9baaa4;
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+.admin-audit-modal dl {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  gap: .8rem 1rem;
+  margin: 1.5rem 0 0;
+}
+.admin-audit-modal dt {
+  color: #7b8b85;
+  font-size: .78rem;
+  font-weight: 700;
+}
+.admin-audit-modal dd {
+  margin: 0;
+  color: #40524b;
+}
+.admin-audit-modal__vehicle {
+  border-top: 1px solid #e7eeeb;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+}
+.admin-audit-modal__vehicle h3 {
+  color: #40524b;
+  font-size: 1rem;
+}
+.admin-audit-modal__vehicle p {
+  color: #61736b;
+  margin: .45rem 0;
+}
