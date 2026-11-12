@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import DownloadRangePanel from '@/components/admin/DownloadRangePanel.vue'
 import { getAuditRecord, listAuditRecords } from '@/services/api/auditoria'
 import { listUsers } from '@/services/api/users'
@@ -19,10 +19,8 @@ const selectedRecord = ref(null)
 const actionOptions = [
   { value: 'REGISTRO_ENTRADA', label: 'Entradas' },
   { value: 'REGISTRO_SALIDA', label: 'Salidas' },
-  { value: 'CREO_USUARIO', label: 'Gestión de usuarios' },
-  { value: 'ANADIO_OBSERVACIONES', label: 'Añadió observaciones' },
-  { value: 'MODIFICO_OBSERVACIONES', label: 'Modificó observaciones' },
-  { value: 'ELIMINO_OBSERVACIONES', label: 'Eliminó observaciones' },
+  { value: 'GESTION_USUARIOS', label: 'Gestión de usuarios' },
+  { value: 'OBSERVACIONES', label: 'Observaciones' },
   { value: 'EXPORTO_REPORTE', label: 'Reportes del sistema' },
 ]
 
@@ -43,6 +41,28 @@ function formatDate(value) {
   return value ? new Date(value).toLocaleString('es-MX', { dateStyle: 'medium', timeStyle: 'short' }) : 'N/A'
 }
 
+function formatDay(value) {
+  return value ? new Date(value).toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A'
+}
+
+function formatTime(value) {
+  return value ? new Date(value).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }) : 'N/A'
+}
+
+function auditId(value) {
+  return value === null || value === undefined ? 'N/A' : `RE-${String(value).padStart(4, '0')}`
+}
+
+function isDetailAction(record) {
+  return ['REGISTRO_ENTRADA', 'REGISTRO_SALIDA', 'ANADIO_OBSERVACIONES', 'MODIFICO_OBSERVACIONES', 'ELIMINO_OBSERVACIONES'].includes(record.accion)
+}
+
+function actionTitle(record) {
+  if (record.accion === 'REGISTRO_ENTRADA') return 'Entrada registrada'
+  if (record.accion === 'REGISTRO_SALIDA') return 'Salida registrada'
+  return 'Cambio de observaciones'
+}
+
 async function loadRecords(extra = {}) {
   const response = await listAuditRecords(params(extra))
   return response.data.data || []
@@ -61,7 +81,7 @@ async function search() {
 }
 
 async function openRecord(record) {
-  if (!['REGISTRO_ENTRADA', 'REGISTRO_SALIDA'].includes(record.accion)) return
+  if (!isDetailAction(record)) return
   try {
     const response = await getAuditRecord(record.id)
     const audit = response.data.data
@@ -75,6 +95,14 @@ async function openRecord(record) {
     errorMessage.value = error.response?.data?.message || 'No fue posible consultar el detalle.'
   }
 }
+
+watch(selectedRecord, (record) => {
+  document.body.style.overflow = record ? 'hidden' : ''
+})
+
+onBeforeUnmount(() => {
+  document.body.style.overflow = ''
+})
 
 function clearFilters() {
   plate.value = ''
@@ -104,7 +132,6 @@ onMounted(async () => {
   <main class="admin-history-page admin-audit-page">
     <header class="admin-history-header">
       <div>
-        <p class="admin-eyebrow">ADMINISTRACIÓN</p>
         <h1>Bitácora del sistema</h1>
       </div>
       <div class="admin-history-counter"><strong>{{ totalRecords }}</strong><span>acciones registradas</span></div>
@@ -137,23 +164,25 @@ onMounted(async () => {
       title="Descargar bitácora"
       description="Selecciona un rango para consultar y exportar las acciones."
       file-prefix="bitacora"
+      export-mode="audit"
       :load-records="(range) => loadRecords(range)"
       @range-change="onRangeChange"
     />
 
     <p v-if="errorMessage" class="admin-history-feedback admin-history-feedback--error">{{ errorMessage }}</p>
-    <section class="admin-history-panel admin-audit-table-panel">
+    <section class="admin-history-table-wrap admin-audit-table-panel">
       <div v-if="loading" class="admin-history-loading">Cargando bitácora...</div>
-      <table v-else class="admin-audit-table">
-        <thead><tr><th>ID</th><th>Usuario</th><th>Acción</th><th>Fecha y hora</th></tr></thead>
+      <table v-else class="admin-history-table admin-audit-table">
+        <thead><tr><th>ID</th><th>Usuario</th><th>Acción</th><th>Fecha</th><th>Hora</th></tr></thead>
         <tbody>
-          <tr v-for="record in records" :key="record.id" :class="{ 'is-clickable': ['REGISTRO_ENTRADA', 'REGISTRO_SALIDA'].includes(record.accion) }" @click="openRecord(record)">
-            <td>{{ record.id }}</td>
+          <tr v-for="record in records" :key="record.id" :class="{ 'admin-history-table__row--clickable': isDetailAction(record) }" @click="openRecord(record)">
+            <td>{{ auditId(record.id) }}</td>
             <td>{{ record.usuario || 'N/A' }}</td>
             <td>{{ record.descripcion || record.accion }}</td>
-            <td>{{ formatDate(record.fecha) }}</td>
+            <td>{{ formatDay(record.fecha) }}</td>
+            <td>{{ formatTime(record.fecha) }}</td>
           </tr>
-          <tr v-if="!records.length"><td colspan="4" class="admin-history-empty">No hay acciones para los filtros seleccionados.</td></tr>
+          <tr v-if="!records.length"><td colspan="5" class="admin-history-empty">No hay acciones para los filtros seleccionados.</td></tr>
         </tbody>
       </table>
     </section>
@@ -161,23 +190,38 @@ onMounted(async () => {
     <div v-if="selectedRecord" class="admin-audit-modal-backdrop" @click.self="selectedRecord = null">
       <section class="admin-audit-modal" role="dialog" aria-modal="true">
         <button class="admin-audit-modal__close" type="button" aria-label="Cerrar" @click="selectedRecord = null">×</button>
-        <p class="admin-eyebrow">DETALLE DE ACCIÓN #{{ selectedRecord.id }}</p>
-        <h2>{{ selectedRecord.descripcion || selectedRecord.accion }}</h2>
+        <p class="admin-audit-modal__eyebrow">DETALLE DE LA ACCIÓN</p>
+        <h2>{{ actionTitle(selectedRecord) }}</h2>
         <dl>
           <dt>Usuario</dt><dd>{{ selectedRecord.usuario || 'N/A' }}</dd>
+          <dt>Acción realizada</dt><dd>{{ selectedRecord.descripcion || 'N/A' }}</dd>
           <dt>Fecha y hora</dt><dd>{{ formatDate(selectedRecord.fecha) }}</dd>
-          <dt>Placa</dt><dd>{{ selectedRecord.placa || 'N/A' }}</dd>
-          <dt>Registro de acceso</dt><dd>{{ selectedRecord.idRegistro || 'N/A' }}</dd>
-          <dt>Observaciones</dt><dd>{{ selectedRecord.observaciones || 'N/A' }}</dd>
+          <dt>Identificador</dt><dd>{{ auditId(selectedRecord.id) }}</dd>
         </dl>
         <div v-if="selectedRecord.vehicle" class="admin-audit-modal__vehicle">
-          <h3>Datos del vehículo</h3>
-          <p><strong>Conductor:</strong> {{ selectedRecord.vehicle.conductor || 'N/A' }}</p>
-          <p><strong>Tipo:</strong> {{ selectedRecord.vehicle.tipoVisitante || 'N/A' }}</p>
-          <p><strong>Empresa / transportadora:</strong> {{ selectedRecord.vehicle.empresa || selectedRecord.vehicle.transportadora || 'N/A' }}</p>
-          <p><strong>Entrada:</strong> {{ formatDate(selectedRecord.vehicle.fechaEntrada) }}</p>
-          <p><strong>Salida:</strong> {{ selectedRecord.vehicle.fechaSalida ? formatDate(selectedRecord.vehicle.fechaSalida) : 'Sin salida' }}</p>
-          <p><strong>Observaciones:</strong> {{ selectedRecord.vehicle.observaciones || 'N/A' }}</p>
+          <div class="admin-audit-modal__vehicle-heading">
+            <div>
+              <p class="admin-audit-modal__eyebrow">DATOS REGISTRADOS DEL VEHÍCULO</p>
+              <h3>{{ selectedRecord.vehicle.placa || selectedRecord.placa || 'N/A' }}</h3>
+            </div>
+            <span class="admin-history-type">{{ selectedRecord.vehicle.tipoVisitante || 'N/A' }}</span>
+          </div>
+          <div class="admin-audit-modal__vehicle-grid">
+            <p><strong>NOMBRE COMPLETO</strong>{{ selectedRecord.vehicle.conductor || 'N/A' }}</p>
+            <p><strong>EMPRESA / TRANSPORTADORA</strong>{{ selectedRecord.vehicle.empresa || selectedRecord.vehicle.transportadora || 'N/A' }}</p>
+            <p><strong>TIPO DE REGISTRO</strong>{{ selectedRecord.vehicle.tipoVisitante || 'N/A' }}</p>
+            <p><strong>MARCA</strong>{{ selectedRecord.vehicle.marca || 'N/A' }}</p>
+            <p><strong>COLOR</strong>{{ selectedRecord.vehicle.color || 'N/A' }}</p>
+            <p><strong>VILLA / DESTINO</strong>{{ selectedRecord.vehicle.villa || selectedRecord.vehicle.destino || 'N/A' }}</p>
+          </div>
+          <div class="admin-audit-modal__times">
+            <p><strong>Entrada registrada</strong>{{ formatDate(selectedRecord.vehicle.fechaEntrada) }}</p>
+            <p><strong>Salida registrada</strong>{{ selectedRecord.vehicle.fechaSalida ? formatDate(selectedRecord.vehicle.fechaSalida) : 'Sin salida' }}</p>
+          </div>
+          <div class="admin-audit-modal__observations">
+            <strong>OBSERVACIONES</strong>
+            <span>{{ selectedRecord.accion.includes('OBSERVACIONES') ? (selectedRecord.observacion || 'Sin observaciones') : (selectedRecord.vehicle.observaciones || 'Sin observaciones') }}</span>
+          </div>
         </div>
       </section>
     </div>

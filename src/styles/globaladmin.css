@@ -2139,3 +2139,371 @@
   color: #61736b;
   margin: .45rem 0;
 }
+
+/* Ajustes compactos de la bitácora para conservar la escala administrativa. */
+.admin-audit-page {
+  padding-top: 24px;
+}
+.admin-audit-page .admin-history-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.admin-audit-page .admin-history-header h1 {
+  font-size: 20px;
+}
+.admin-audit-page .admin-history-header .admin-eyebrow {
+  margin-bottom: 4px;
+  font-size: 10px;
+}
+.admin-history-counter {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  color: #9baaa4;
+  font-size: 12px;
+}
+.admin-history-counter strong {
+  color: #f2efe3;
+  font-size: 16px;
+  font-weight: 600;
+}
+.admin-audit-filters {
+  align-items: end;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding: 13px 15px;
+}
+.admin-audit-filter {
+  min-width: 0;
+}
+.admin-audit-filter label {
+  color: #9baaa4;
+  font-size: 10px;
+  letter-spacing: .3px;
+}
+.admin-audit-filter input,
+.admin-audit-filter select {
+  height: 39px;
+  padding: 0 11px;
+  border: 1px solid rgba(216, 222, 217, .2);
+  border-radius: 10px;
+  outline: 0;
+  background: #292623;
+  color: #eef2ef;
+  font-size: 12px;
+}
+.admin-audit-filter input::placeholder {
+  color: #717773;
+}
+.admin-audit-search {
+  height: 39px;
+  padding: 0 17px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+.admin-audit-filters > .admin-history-download__clear {
+  height: 30px;
+  margin-bottom: 4px;
+  padding: 0 5px;
+  border: 0;
+  background: transparent;
+  color: #9baaa4;
+  cursor: pointer;
+  font-size: 10px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.admin-audit-page .admin-history-download {
+  min-height: 84px;
+  gap: 16px;
+  margin-bottom: 14px;
+  padding: 13px 15px;
+}
+.admin-audit-page .admin-history-download__copy {
+  min-width: 210px;
+  gap: 10px;
+}
+.admin-audit-page .admin-history-download__icon {
+  width: 36px;
+  height: 36px;
+  flex-basis: 36px;
+  border-radius: 10px;
+}
+.admin-audit-page .admin-history-download__copy h2 {
+  font-size: 13px;
+}
+.admin-audit-page .admin-history-download__copy p {
+  max-width: 245px;
+  font-size: 10px;
+  line-height: 1.3;
+}
+.admin-audit-page .admin-history-date-fields {
+  grid-template-columns: repeat(2, 150px);
+  gap: 9px;
+}
+.admin-audit-page .admin-history-date-input {
+  height: 39px;
+  padding: 0 10px;
+  font-size: 12px;
+}
+.admin-audit-page .admin-history-download__actions {
+  gap: 6px;
+  padding-top: 13px;
+}
+.admin-audit-page .admin-history-download__actions button {
+  min-width: 66px;
+  height: 29px;
+  padding: 0 9px;
+  border-radius: 9px;
+  font-size: 10px;
+}
+.admin-audit-page .admin-history-download__actions .admin-history-download__clear {
+  min-width: auto;
+  padding: 0 4px;
+}
+.admin-audit-table-panel {
+  overflow: hidden;
+  padding: 0;
+}
+.admin-audit-table th,
+.admin-audit-table td {
+  padding: 0 14px;
+}
+.admin-audit-table th {
+  height: 38px;
+  font-size: 9px;
+}
+.admin-audit-table td {
+  height: 44px;
+  color: #d8ded9;
+  font-size: 12px;
+}
+.admin-audit-table th:first-child,
+.admin-audit-table td:first-child {
+  width: 58px;
+}
+.admin-audit-table th:last-child,
+.admin-audit-table td:last-child {
+  width: 180px;
+}
+.admin-audit-table tr.is-clickable:hover {
+  background: #3a3532;
+}
+
+@media (max-width: 900px) {
+  .admin-audit-page .admin-history-download {
+    display: grid;
+    grid-template-columns: 1fr auto;
+  }
+  .admin-audit-page .admin-history-download__copy {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-audit-page .admin-history-header {
+    align-items: start;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .admin-audit-filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .admin-audit-filter:first-child,
+  .admin-audit-search {
+    grid-column: 1 / -1;
+  }
+  .admin-audit-filters > .admin-history-download__clear {
+    justify-self: start;
+  }
+  .admin-audit-page .admin-history-download {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .admin-audit-page .admin-history-date-fields {
+    grid-template-columns: 1fr 1fr;
+  }
+  .admin-audit-page .admin-history-download__actions {
+    padding-top: 0;
+  }
+  .admin-audit-table {
+    min-width: 620px;
+  }
+  .admin-audit-table-panel {
+    overflow-x: auto;
+  }
+}
+
+.admin-audit-table-panel {
+  overflow-x: auto;
+  padding: 0;
+}
+.admin-audit-table {
+  min-width: 760px;
+  table-layout: fixed;
+}
+.admin-audit-table th,
+.admin-audit-table td {
+  height: 46px;
+  padding: 0 16px;
+  border-bottom: 1px solid rgba(216, 222, 217, .22);
+}
+.admin-audit-table th:nth-child(1) { width: 15%; }
+.admin-audit-table th:nth-child(2) { width: 18%; }
+.admin-audit-table th:nth-child(3) { width: 39%; }
+.admin-audit-table th:nth-child(4) { width: 17%; }
+.admin-audit-table th:nth-child(5) { width: 11%; }
+.admin-audit-table td {
+  color: #d8ded9;
+  font-size: 13px;
+}
+.admin-audit-table td:first-child {
+  color: #f2efe3;
+  font-weight: 700;
+}
+.admin-audit-table tr.is-clickable:hover,
+.admin-audit-table tr.admin-history-table__row--clickable:hover {
+  background: rgba(124, 176, 157, .08);
+}
+.admin-audit-modal-backdrop {
+  overflow: hidden;
+  padding: 20px;
+}
+.admin-audit-modal {
+  max-height: min(760px, calc(100dvh - 40px));
+  overflow-y: auto;
+  width: min(720px, 100%);
+  border: 1px solid rgba(216, 222, 217, .18);
+  border-radius: 17px;
+  background: #332e2b;
+  color: #d8ded9;
+  padding: 22px 24px 24px;
+  scrollbar-width: thin;
+  scrollbar-color: #7cb09d transparent;
+}
+.admin-audit-modal__close {
+  top: 12px;
+  right: 16px;
+  color: #94c5b3;
+  font-size: 24px;
+  line-height: 1;
+}
+.admin-audit-modal__eyebrow {
+  margin: 0 0 6px;
+  color: #9baaa4;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+}
+.admin-audit-modal h2 {
+  margin: 0 0 20px;
+  color: #f2efe3;
+  font-size: 20px;
+}
+.admin-audit-modal dl {
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin: 0;
+}
+.admin-audit-modal dt {
+  color: #9baaa4;
+  font-size: 11px;
+}
+.admin-audit-modal dd {
+  margin-top: -8px;
+  color: #f2efe3;
+  font-size: 14px;
+  font-weight: 600;
+}
+.admin-audit-modal__vehicle {
+  border-top: 1px solid rgba(216, 222, 217, .22);
+  margin-top: 20px;
+  padding-top: 18px;
+}
+.admin-audit-modal__vehicle-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.admin-audit-modal__vehicle-heading h3 {
+  margin: 0;
+  color: #f2efe3;
+  font-size: 22px;
+}
+.admin-audit-modal__vehicle-heading .admin-history-type {
+  flex: 0 0 auto;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: rgba(124, 176, 157, .16);
+  color: #94c5b3;
+  font-size: 11px;
+}
+.admin-audit-modal__vehicle-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px 28px;
+}
+.admin-audit-modal__vehicle-grid p,
+.admin-audit-modal__times p,
+.admin-audit-modal__observations {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  color: #f2efe3;
+  font-size: 14px;
+  font-weight: 600;
+}
+.admin-audit-modal__vehicle-grid strong,
+.admin-audit-modal__times strong,
+.admin-audit-modal__observations strong {
+  color: #9baaa4;
+  font-size: 10px;
+  letter-spacing: .25px;
+}
+.admin-audit-modal__times {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 20px;
+}
+.admin-audit-modal__times p:first-child {
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(124, 176, 157, .75);
+}
+.admin-audit-modal__times p:last-child {
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(217, 148, 135, .72);
+}
+.admin-audit-modal__times p strong {
+  color: #d8ded9;
+}
+.admin-audit-modal__observations {
+  margin-top: 18px;
+  padding: 15px 16px;
+  border-radius: 14px;
+  background: #1d2925;
+}
+.admin-audit-modal__observations span {
+  color: #f2efe3;
+  font-weight: 400;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+  .admin-audit-modal {
+    padding: 18px;
+  }
+  .admin-audit-modal__vehicle-grid,
+  .admin-audit-modal__times {
+    grid-template-columns: 1fr;
+  }
+}

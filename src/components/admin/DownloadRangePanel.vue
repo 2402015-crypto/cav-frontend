@@ -6,6 +6,7 @@ const props = defineProps({
   title: { type: String, default: 'Descargar registros' },
   description: { type: String, default: 'Selecciona un rango de fechas de registro.' },
   filePrefix: { type: String, default: 'registros' },
+  exportMode: { type: String, default: 'access' },
   loadRecords: { type: Function, required: true },
 })
 
@@ -115,6 +116,41 @@ function typeLabel(value) {
   return 'Colaborador'
 }
 
+function auditId(value) {
+  return value === null || value === undefined ? 'N/A' : `RE-${String(value).padStart(4, '0')}`
+}
+
+function createAuditPdf(records) {
+  const text = value => String(value ?? 'N/A').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\x20-\x7E]/g, '').replace(/([\\()])/g, '\\$1')
+  const lines = [
+    'BITACORA DEL SISTEMA',
+    `Periodo: ${fromDate.value} a ${toDate.value}`,
+    '',
+    'ID | USUARIO | ACCION | FECHA | HORA',
+    ...records.map(record => [
+      auditId(record.id),
+      exportValue(record.usuario),
+      exportValue(record.descripcion || record.accion),
+      record.fecha ? new Date(record.fecha).toLocaleDateString('es-MX') : 'N/A',
+      record.fecha ? new Date(record.fecha).toLocaleTimeString('es-MX') : 'N/A',
+    ].map(text).join(' | ')),
+  ]
+  const content = ['BT', '/F1 8 Tf', '40 800 Td', ...lines.flatMap((line, index) => [index ? '0 -14 Td' : '', `(${text(line)}) Tj`]), 'ET'].filter(Boolean).join('\n')
+  const objects = [
+    '<< /Type /Catalog /Pages 2 0 R >>',
+    '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
+    '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>',
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
+    `<< /Length ${content.length} >>\nstream\n${content}\nendstream`,
+  ]
+  let pdf = '%PDF-1.4\n'
+  const offsets = [0]
+  objects.forEach((object, index) => { offsets.push(pdf.length); pdf += `${index + 1} 0 obj\n${object}\nendobj\n` })
+  const xrefOffset = pdf.length
+  pdf += `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n${offsets.slice(1).map(offset => `${String(offset).padStart(10, '0')} 00000 n \n`).join('')}trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`
+  return pdf
+}
+
 function createPdf(records) {
   const text = value => String(value ?? '—').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\x20-\x7E]/g, '').replace(/([\\()])/g, '\\$1')
   const lines = [
@@ -155,7 +191,12 @@ async function exportRecords(format) {
   errorMessage.value = ''
   try {
     const records = await props.loadRecords({ desde: fromDate.value, hasta: toDate.value })
-    if (format === 'excel') {
+    if (props.exportMode === 'audit' && format === 'excel') {
+      const rows = records.map(record => `<tr><td>${escapeHtml(auditId(record.id))}</td><td>${escapeHtml(exportValue(record.usuario))}</td><td>${escapeHtml(exportValue(record.descripcion || record.accion))}</td><td>${escapeHtml(record.fecha ? new Date(record.fecha).toLocaleDateString('es-MX') : 'N/A')}</td><td>${escapeHtml(record.fecha ? new Date(record.fecha).toLocaleTimeString('es-MX') : 'N/A')}</td></tr>`).join('')
+      downloadFile(`<table><thead><tr><th>ID</th><th>Usuario</th><th>Acción</th><th>Fecha</th><th>Hora</th></tr></thead><tbody>${rows}</tbody></table>`, `${props.filePrefix}-${fromDate.value}-${toDate.value}.xls`, 'application/vnd.ms-excel;charset=utf-8')
+    } else if (props.exportMode === 'audit') {
+      downloadFile(createAuditPdf(records), `${props.filePrefix}-${fromDate.value}-${toDate.value}.pdf`, 'application/pdf')
+    } else if (format === 'excel') {
       const rows = records.map(record => `<tr><td>${escapeHtml(exportValue(record.placa))}</td><td>${escapeHtml(exportValue(record.conductor))}</td><td>${escapeHtml(exportValue(record.empresa || record.transportadora))}</td><td>${escapeHtml(exportValue(typeLabel(record.tipoVisitante)))}</td><td>${escapeHtml(formatDate(record.fechaEntrada || record.entrada))}</td><td>${escapeHtml(formatDate(record.fechaSalida || record.salida))}</td></tr>`).join('')
       downloadFile(`<table><thead><tr><th>Placa</th><th>Conductor</th><th>Empresa</th><th>Tipo</th><th>Entrada</th><th>Salida</th></tr></thead><tbody>${rows}</tbody></table>`, `${props.filePrefix}-${fromDate.value}-${toDate.value}.xls`, 'application/vnd.ms-excel;charset=utf-8')
     } else {
