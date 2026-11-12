@@ -45,7 +45,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="exit-page">
+  <section class="exit-page" :class="{ 'exit-page--capture': stage !== 'success' && mode === 'automatic' }">
     <header v-if="stage !== 'success'" class="exit-page__header">
       <div>
         <h1>Registrar Salida</h1>

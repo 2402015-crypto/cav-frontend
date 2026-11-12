@@ -231,6 +231,10 @@
   color: #3d4542;
 }
 
+.exit-page--capture {
+  width: min(100%, 900px);
+}
+
 .exit-page__header {
   display: flex;
   align-items: flex-start;
@@ -1248,6 +1252,10 @@
 }
 
 @media (max-width: 600px) {
+  .exit-page--capture {
+    width: 100%;
+  }
+
   .exit-register-selected {
     bottom: 64px;
   }

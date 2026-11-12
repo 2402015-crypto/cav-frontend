@@ -1314,6 +1314,10 @@
   color: #3d4542;
 }
 
+.entry-page--capture {
+  width: min(100%, 900px);
+}
+
 .entry-page__header {
   display: flex;
   align-items: flex-start;
@@ -2381,6 +2385,10 @@
 /* ========================================================================== */
 
 @media (max-width: 600px) {
+  .entry-page--capture {
+    width: 100%;
+  }
+
   .operative-header {
     height: 50px;
     padding: 0 18px;

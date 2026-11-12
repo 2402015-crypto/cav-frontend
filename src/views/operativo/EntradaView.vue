@@ -114,7 +114,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="entry-page">
+  <section class="entry-page" :class="{ 'entry-page--capture': step === 'capture' }">
     <header v-if="step !== 'success'" class="entry-page__header">
       <div>
         <h1>Registrar Entrada</h1>
