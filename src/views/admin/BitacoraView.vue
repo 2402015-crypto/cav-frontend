@@ -15,6 +15,7 @@ const toDate = ref('')
 const loading = ref(false)
 const errorMessage = ref('')
 const selectedRecord = ref(null)
+let detailRefreshTimer = null
 
 const actionOptions = [
   { value: 'REGISTRO_ENTRADA', label: 'Entradas' },
@@ -57,10 +58,33 @@ function isDetailAction(record) {
   return ['REGISTRO_ENTRADA', 'REGISTRO_SALIDA', 'ANADIO_OBSERVACIONES', 'MODIFICO_OBSERVACIONES', 'ELIMINO_OBSERVACIONES'].includes(record.accion)
 }
 
+function isObservationAction(record) {
+  return ['ANADIO_OBSERVACIONES', 'MODIFICO_OBSERVACIONES', 'ELIMINO_OBSERVACIONES'].includes(record?.accion)
+}
+
 function actionTitle(record) {
   if (record.accion === 'REGISTRO_ENTRADA') return 'Entrada registrada'
   if (record.accion === 'REGISTRO_SALIDA') return 'Salida registrada'
   return 'Cambio de observaciones'
+}
+
+function visitorType(value) {
+  const normalized = (value || '').toLowerCase()
+  if (normalized.includes('transport')) return 'Transportadora'
+  if (normalized.includes('taxi')) return 'Taxi'
+  if (normalized.includes('proveedor')) return 'Proveedor'
+  return 'Colaborador'
+}
+
+function visitorIconPath(type) {
+  if (type === 'Taxi') return '<rect x="4" y="5" width="16" height="12" rx="2"/><path d="M7 17v2m10-2v2M4 12h16M8 5l1-2h6l2 3"/><circle cx="8" cy="14" r="1"/><circle cx="16" cy="14" r="1"/>'
+  if (type === 'Proveedor') return '<path d="M3 6h11v10H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/>'
+  if (type === 'Colaborador') return '<circle cx="12" cy="8" r="3"/><path d="M5 20c.8-3.4 3-5 7-5s6.2 1.6 7 5"/>'
+  return '<path d="M3 16V6a2 2 0 0 1 2-2h10l5 5v7M3 16h18M6 18.5a2 2 0 1 0 4 0M16 18.5a2 2 0 1 0 4 0"/>'
+}
+
+function valueOrNA(value) {
+  return value === null || value === undefined || value === '' ? 'N/A' : value
 }
 
 async function loadRecords(extra = {}) {
@@ -96,11 +120,33 @@ async function openRecord(record) {
   }
 }
 
+async function refreshSelectedRecord() {
+  const recordId = selectedRecord.value?.idRegistro
+  if (!recordId || isObservationAction(selectedRecord.value)) return
+  try {
+    const response = await getExitDetails(recordId)
+    selectedRecord.value = {
+      ...selectedRecord.value,
+      vehicle: response.data.data.detalle,
+    }
+  } catch (error) {
+    errorMessage.value = error.response?.data?.message || 'No fue posible actualizar las observaciones.'
+  }
+}
+
 watch(selectedRecord, (record) => {
   document.body.style.overflow = record ? 'hidden' : ''
+  if (detailRefreshTimer) {
+    window.clearInterval(detailRefreshTimer)
+    detailRefreshTimer = null
+  }
+  if (record?.idRegistro && !isObservationAction(record)) {
+    detailRefreshTimer = window.setInterval(refreshSelectedRecord, 5000)
+  }
 })
 
 onBeforeUnmount(() => {
+  if (detailRefreshTimer) window.clearInterval(detailRefreshTimer)
   document.body.style.overflow = ''
 })
 
@@ -202,25 +248,42 @@ onMounted(async () => {
           <div class="admin-audit-modal__vehicle-heading">
             <div>
               <p class="admin-audit-modal__eyebrow">DATOS REGISTRADOS DEL VEHÍCULO</p>
-              <h3>{{ selectedRecord.vehicle.placa || selectedRecord.placa || 'N/A' }}</h3>
+              <h3>{{ valueOrNA(selectedRecord.vehicle.placa || selectedRecord.placa) }}</h3>
             </div>
-            <span class="admin-history-type">{{ selectedRecord.vehicle.tipoVisitante || 'N/A' }}</span>
+            <span class="admin-history-type">
+              <svg viewBox="0 0 24 24" aria-hidden="true" v-html="visitorIconPath(visitorType(selectedRecord.vehicle.tipoVisitante))" />
+              {{ visitorType(selectedRecord.vehicle.tipoVisitante) }}
+            </span>
           </div>
           <div class="admin-audit-modal__vehicle-grid">
-            <p><strong>NOMBRE COMPLETO</strong>{{ selectedRecord.vehicle.conductor || 'N/A' }}</p>
-            <p><strong>EMPRESA / TRANSPORTADORA</strong>{{ selectedRecord.vehicle.empresa || selectedRecord.vehicle.transportadora || 'N/A' }}</p>
-            <p><strong>TIPO DE REGISTRO</strong>{{ selectedRecord.vehicle.tipoVisitante || 'N/A' }}</p>
-            <p><strong>MARCA</strong>{{ selectedRecord.vehicle.marca || 'N/A' }}</p>
-            <p><strong>COLOR</strong>{{ selectedRecord.vehicle.color || 'N/A' }}</p>
-            <p><strong>VILLA / DESTINO</strong>{{ selectedRecord.vehicle.villa || selectedRecord.vehicle.destino || 'N/A' }}</p>
+            <p><strong>NOMBRE COMPLETO</strong>{{ valueOrNA(selectedRecord.vehicle.conductor) }}</p>
+            <p v-if="['Proveedor', 'Transportadora'].includes(visitorType(selectedRecord.vehicle.tipoVisitante))"><strong>{{ visitorType(selectedRecord.vehicle.tipoVisitante) === 'Transportadora' ? 'TRANSPORTADORA' : 'EMPRESA' }}</strong>{{ valueOrNA(selectedRecord.vehicle.empresa || selectedRecord.vehicle.transportadora) }}</p>
+            <p><strong>TIPO DE REGISTRO</strong>{{ visitorType(selectedRecord.vehicle.tipoVisitante) }}</p>
+            <template v-if="visitorType(selectedRecord.vehicle.tipoVisitante) === 'Transportadora'">
+              <p><strong>MARCA</strong>{{ valueOrNA(selectedRecord.vehicle.marca) }}</p>
+              <p><strong>TIPO DE MOVIMIENTO</strong>{{ valueOrNA(selectedRecord.vehicle.tipoMovimiento) }}</p>
+              <p><strong>VILLA</strong>{{ valueOrNA(selectedRecord.vehicle.villa) }}</p>
+              <p><strong>PASAJEROS (PAX)</strong>{{ valueOrNA(selectedRecord.vehicle.numeroPax) }}</p>
+            </template>
+            <template v-else-if="visitorType(selectedRecord.vehicle.tipoVisitante) === 'Taxi'">
+              <p><strong>MARCA</strong>{{ valueOrNA(selectedRecord.vehicle.marca) }}</p>
+              <p><strong>NÚMERO DE UNIDAD</strong>{{ valueOrNA(selectedRecord.vehicle.numeroUnidad) }}</p>
+              <p><strong>VILLA</strong>{{ valueOrNA(selectedRecord.vehicle.villa) }}</p>
+              <p><strong>DESTINO</strong>{{ valueOrNA(selectedRecord.vehicle.destino) }}</p>
+            </template>
+            <template v-else>
+              <p><strong>MARCA</strong>{{ valueOrNA(selectedRecord.vehicle.marca) }}</p>
+              <p><strong>COLOR</strong>{{ valueOrNA(selectedRecord.vehicle.color) }}</p>
+              <p><strong>ÁREA DE DESTINO</strong>{{ valueOrNA(selectedRecord.vehicle.area) }}</p>
+            </template>
           </div>
-          <div class="admin-audit-modal__times">
+          <div v-if="isObservationAction(selectedRecord)" class="admin-audit-modal__times">
             <p><strong>Entrada registrada</strong>{{ formatDate(selectedRecord.vehicle.fechaEntrada) }}</p>
             <p><strong>Salida registrada</strong>{{ selectedRecord.vehicle.fechaSalida ? formatDate(selectedRecord.vehicle.fechaSalida) : 'Sin salida' }}</p>
           </div>
           <div class="admin-audit-modal__observations">
             <strong>OBSERVACIONES</strong>
-            <span>{{ selectedRecord.accion.includes('OBSERVACIONES') ? (selectedRecord.observacion || 'Sin observaciones') : (selectedRecord.vehicle.observaciones || 'Sin observaciones') }}</span>
+            <span>{{ isObservationAction(selectedRecord) ? (selectedRecord.observacion || 'Sin observaciones') : (selectedRecord.vehicle.observaciones || 'Sin observaciones') }}</span>
           </div>
         </div>
       </section>
