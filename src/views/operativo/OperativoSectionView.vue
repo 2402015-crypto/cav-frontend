@@ -100,7 +100,8 @@ onBeforeUnmount(() => window.clearInterval(refreshTimer))
     <div v-if="loading" class="active-vehicles-state">Cargando panel...</div>
 
     <template v-else>
-      <section class="operative-dashboard__stats" aria-label="Resumen del día">
+      <section class="operative-dashboard__stats-panel" aria-label="Resumen del día">
+        <div class="operative-dashboard__stats">
         <article class="dashboard-stat dashboard-stat--entry">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 5h5a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-5M4 12h10M10 8l4 4-4 4" /></svg>
           <span><strong>Entradas hoy</strong><small>Movimientos de entrada</small></span><b>{{ dashboard.entradas }}</b>
@@ -117,6 +118,7 @@ onBeforeUnmount(() => window.clearInterval(refreshTimer))
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" /></svg>
           <span><strong>Buscar visitante</strong><small>Buscar por placa o conductor</small></span>
         </article>
+        </div>
       </section>
 
       <section class="operative-dashboard__actions">
@@ -140,7 +142,8 @@ onBeforeUnmount(() => window.clearInterval(refreshTimer))
           <time><strong>{{ formatTime(movement(record).timestamp) }}</strong><span>{{ movement(record).isExit ? 'Salida' : 'Entrada' }}</span></time>
         </article>
         <button v-if="dashboard.movimientos?.length > 5" class="dashboard-more" type="button" @click="showAllMovements = !showAllMovements">
-          {{ showAllMovements ? 'Ver menos' : 'Ver más' }} <span>{{ showAllMovements ? '⌃' : '›' }}</span>
+          {{ showAllMovements ? 'Ver menos' : 'Ver más' }}
+          <svg class="dashboard-more__icon" :class="{ 'dashboard-more__icon--expanded': showAllMovements }" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
         </button>
       </section>
     </template>

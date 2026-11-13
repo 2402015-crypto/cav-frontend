@@ -87,7 +87,10 @@ function isDisabled(day) {
 }
 
 function downloadFile(content, filename, type) {
-  const blob = new Blob([content], { type })
+  const normalizedContent = type.includes('excel') || type.includes('spreadsheet')
+    ? `\uFEFF${content}`
+    : content
+  const blob = new Blob([normalizedContent], { type })
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url
@@ -193,12 +196,12 @@ async function exportRecords(format) {
     const records = await props.loadRecords({ desde: fromDate.value, hasta: toDate.value })
     if (props.exportMode === 'audit' && format === 'excel') {
       const rows = records.map(record => `<tr><td>${escapeHtml(auditId(record.id))}</td><td>${escapeHtml(exportValue(record.usuario))}</td><td>${escapeHtml(exportValue(record.descripcion || record.accion))}</td><td>${escapeHtml(record.fecha ? new Date(record.fecha).toLocaleDateString('es-MX') : 'N/A')}</td><td>${escapeHtml(record.fecha ? new Date(record.fecha).toLocaleTimeString('es-MX') : 'N/A')}</td></tr>`).join('')
-      downloadFile(`<table><thead><tr><th>ID</th><th>Usuario</th><th>Acción</th><th>Fecha</th><th>Hora</th></tr></thead><tbody>${rows}</tbody></table>`, `${props.filePrefix}-${fromDate.value}-${toDate.value}.xls`, 'application/vnd.ms-excel;charset=utf-8')
+      downloadFile(`<html><head><meta charset="UTF-8"></head><body><table><thead><tr><th>ID</th><th>Usuario</th><th>Acción</th><th>Fecha</th><th>Hora</th></tr></thead><tbody>${rows}</tbody></table></body></html>`, `${props.filePrefix}-${fromDate.value}-${toDate.value}.xls`, 'application/vnd.ms-excel;charset=utf-8')
     } else if (props.exportMode === 'audit') {
       downloadFile(createAuditPdf(records), `${props.filePrefix}-${fromDate.value}-${toDate.value}.pdf`, 'application/pdf')
     } else if (format === 'excel') {
       const rows = records.map(record => `<tr><td>${escapeHtml(exportValue(record.placa))}</td><td>${escapeHtml(exportValue(record.conductor))}</td><td>${escapeHtml(exportValue(record.empresa || record.transportadora))}</td><td>${escapeHtml(exportValue(typeLabel(record.tipoVisitante)))}</td><td>${escapeHtml(formatDate(record.fechaEntrada || record.entrada))}</td><td>${escapeHtml(formatDate(record.fechaSalida || record.salida))}</td></tr>`).join('')
-      downloadFile(`<table><thead><tr><th>Placa</th><th>Conductor</th><th>Empresa</th><th>Tipo</th><th>Entrada</th><th>Salida</th></tr></thead><tbody>${rows}</tbody></table>`, `${props.filePrefix}-${fromDate.value}-${toDate.value}.xls`, 'application/vnd.ms-excel;charset=utf-8')
+      downloadFile(`<html><head><meta charset="UTF-8"></head><body><table><thead><tr><th>Placa</th><th>Conductor</th><th>Empresa</th><th>Tipo</th><th>Entrada</th><th>Salida</th></tr></thead><tbody>${rows}</tbody></table></body></html>`, `${props.filePrefix}-${fromDate.value}-${toDate.value}.xls`, 'application/vnd.ms-excel;charset=utf-8')
     } else {
       downloadFile(createPdf(records), `${props.filePrefix}-${fromDate.value}-${toDate.value}.pdf`, 'application/pdf')
     }

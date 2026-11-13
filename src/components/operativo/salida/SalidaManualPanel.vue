@@ -66,7 +66,7 @@ onMounted(load)
 <template>
   <section class="exit-active-panel">
     <label for="active-exit-search">BUSCAR POR PLACA O CONDUCTOR</label>
-    <input id="active-exit-search" v-model="query" type="search" placeholder="Placa o nombre..." />
+    <input id="active-exit-search" v-model="query" type="search" placeholder="Buscar por placa o conductor" />
     <p v-if="errorMessage" class="exit-form-error" role="alert">{{ errorMessage }}</p>
     <button v-if="selectedId" class="exit-register-selected" type="button" :disabled="selecting === selectedId" @click="registerSelected">&nbsp; {{ selecting === selectedId ? 'Registrando...' : 'Registrar Salida · ' + new Date().toLocaleTimeString('es-MX', { hour: 'numeric', minute: '2-digit' }) }}</button>
     <p v-if="loading" class="exit-active-status">Cargando vehículos activos...</p>

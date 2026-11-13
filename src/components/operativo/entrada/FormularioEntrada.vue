@@ -40,6 +40,7 @@ const transporterSuggestions = ref([])
 const activeSuggestion = ref('')
 const saving = ref(false)
 const errorMessage = ref('')
+let suggestionRequest = 0
 
 function sanitizePax(event) {
   const digitsOnly = event.target.value.replace(/\D/g, '')
@@ -55,6 +56,7 @@ const valid = computed(() => form.value.nombreCompleto.trim() && form.value.plac
 
 async function suggest(kind, value) {
   activeSuggestion.value = kind
+  const requestId = ++suggestionRequest
   if (!value.trim()) {
     if (kind === 'marca') brandSuggestions.value = []
     else if (kind === 'color') colorSuggestions.value = []
@@ -67,11 +69,13 @@ async function suggest(kind, value) {
       ? await suggestBrands(value.trim())
       : kind === 'color' ? await suggestColors(value.trim())
         : kind === 'empresa' ? await suggestCompanies(value.trim()) : await suggestTransporters(value.trim())
+    if (requestId !== suggestionRequest) return
     if (kind === 'marca') brandSuggestions.value = response.data.data || []
     else if (kind === 'color') colorSuggestions.value = response.data.data || []
     else if (kind === 'empresa') companySuggestions.value = response.data.data || []
     else transporterSuggestions.value = response.data.data || []
   } catch {
+    if (requestId !== suggestionRequest) return
     if (kind === 'marca') brandSuggestions.value = []
     else if (kind === 'color') colorSuggestions.value = []
     else if (kind === 'empresa') companySuggestions.value = []
@@ -123,12 +127,12 @@ async function submit() {
       <label>FECHA<input :value="fecha" type="text" readonly /></label>
       <label>HORA DE ENTRADA<input :value="hora" type="text" readonly /></label>
       <label>{{ isTaxi || isTransporter ? 'NOMBRE COMPLETO DEL CONDUCTOR' : 'NOMBRE COMPLETO' }}<input v-model="form.nombreCompleto" type="text" placeholder="Nombre completo" /></label>
-      <label v-if="isProvider" class="entry-autocomplete">NOMBRE DE LA EMPRESA<input v-model="form.empresa" type="text" placeholder="Escribe para buscar o crear una empresa" @input="suggest('empresa', form.empresa)" @focus="suggest('empresa', form.empresa)" /><small class="entry-field-help">Si la empresa no existe, se guardará automáticamente para futuras sugerencias.</small><span v-if="activeSuggestion === 'empresa' && companySuggestions.length" class="entry-suggestions"><button v-for="item in companySuggestions" :key="item.id" type="button" @mousedown.prevent="chooseSuggestion('empresa', item)">{{ item.nombre }}</button></span></label>
-      <label v-if="isTransporter" class="entry-autocomplete">COMPAÑÍA O AGENCIA<input v-model="form.transportadora" type="text" placeholder="Nombre de la compañía" @input="suggest('transportadora', form.transportadora)" @focus="suggest('transportadora', form.transportadora)" /><small class="entry-field-help">Si la transportadora no existe, se guardará automáticamente para futuras sugerencias.</small><span v-if="activeSuggestion === 'transportadora' && transporterSuggestions.length" class="entry-suggestions"><button v-for="item in transporterSuggestions" :key="item.id" type="button" @mousedown.prevent="chooseSuggestion('transportadora', item)">{{ item.nombre }}</button></span></label>
+      <label v-if="isProvider" class="entry-autocomplete">NOMBRE DE LA EMPRESA<input v-model="form.empresa" type="text" placeholder="Escribe para buscar o crear una empresa" @input="suggest('empresa', form.empresa)" @focus="suggest('empresa', form.empresa)" /><small class="entry-field-help">Si la empresa no existe, se guardará automáticamente para futuras sugerencias.</small><span v-if="activeSuggestion === 'empresa' && companySuggestions.length" class="entry-suggestions"><button v-for="item in companySuggestions" :key="item.id" type="button" @pointerdown.prevent="chooseSuggestion('empresa', item)">{{ item.nombre }}</button></span></label>
+      <label v-if="isTransporter" class="entry-autocomplete">COMPAÑÍA O AGENCIA<input v-model="form.transportadora" type="text" placeholder="Nombre de la compañía" @input="suggest('transportadora', form.transportadora)" @focus="suggest('transportadora', form.transportadora)" /><small class="entry-field-help">Si la transportadora no existe, se guardará automáticamente para futuras sugerencias.</small><span v-if="activeSuggestion === 'transportadora' && transporterSuggestions.length" class="entry-suggestions"><button v-for="item in transporterSuggestions" :key="item.id" type="button" @pointerdown.prevent="chooseSuggestion('transportadora', item)">{{ item.nombre }}</button></span></label>
       <label v-if="!isTransporter && !isTaxi">{{ isProvider ? 'ÁREA DE DESTINO' : 'ÁREA' }}<input v-model="form.area" type="text" :placeholder="isProvider ? 'Área de destino' : 'Nombre del área'" /></label>
-      <label class="entry-autocomplete">MARCA DEL VEHÍCULO<input v-model="form.marca" type="text" :placeholder="isProvider || isTransporter || isTaxi ? 'N/A' : 'Marca'" @input="suggest('marca', form.marca)" @focus="suggest('marca', form.marca)" /><span v-if="activeSuggestion === 'marca' && brandSuggestions.length" class="entry-suggestions"><button v-for="item in brandSuggestions" :key="item.id" type="button" @mousedown.prevent="chooseSuggestion('marca', item)">{{ item.nombre }}</button></span></label>
+      <label class="entry-autocomplete">MARCA DEL VEHÍCULO<input v-model="form.marca" type="text" :placeholder="isProvider || isTransporter || isTaxi ? 'N/A' : 'Marca'" @input="suggest('marca', form.marca)" @focus="suggest('marca', form.marca)" /><span v-if="activeSuggestion === 'marca' && brandSuggestions.length" class="entry-suggestions"><button v-for="item in brandSuggestions" :key="item.id" type="button" @pointerdown.prevent="chooseSuggestion('marca', item)">{{ item.nombre }}</button></span></label>
       <label>PLACA VEHICULAR<input v-model="form.placa" type="text" readonly /></label>
-      <label v-if="!isTransporter && !isTaxi" class="entry-autocomplete">COLOR<input v-model="form.color" type="text" :placeholder="isProvider ? 'N/A' : 'Color'" @input="suggest('color', form.color)" @focus="suggest('color', form.color)" /><span v-if="activeSuggestion === 'color' && colorSuggestions.length" class="entry-suggestions"><button v-for="item in colorSuggestions" :key="item.id" type="button" @mousedown.prevent="chooseSuggestion('color', item)">{{ item.nombre }}</button></span></label>
+      <label v-if="!isTransporter && !isTaxi" class="entry-autocomplete">COLOR<input v-model="form.color" type="text" :placeholder="isProvider ? 'N/A' : 'Color'" @input="suggest('color', form.color)" @focus="suggest('color', form.color)" /><span v-if="activeSuggestion === 'color' && colorSuggestions.length" class="entry-suggestions"><button v-for="item in colorSuggestions" :key="item.id" type="button" @pointerdown.prevent="chooseSuggestion('color', item)">{{ item.nombre }}</button></span></label>
       <label v-if="isTransporter">TIPO DE MOVIMIENTO
         <span class="entry-movement-options"><button type="button" :class="{ 'entry-movement-option--active': form.tipoMovimiento === 'IN' }" @click="form.tipoMovimiento = 'IN'">▣&nbsp; IN</button><button type="button" :class="{ 'entry-movement-option--active': form.tipoMovimiento === 'OUT' }" @click="form.tipoMovimiento = 'OUT'">□&nbsp; OUT</button></span>
       </label>

@@ -419,6 +419,114 @@
   vertical-align: -1px;
 }
 
+.operative-dashboard__stats-panel {
+  padding: 14px;
+  border: 1px solid #e6e9e5;
+  border-radius: 22px;
+  background: #f8faf8;
+  box-shadow: 0 2px 5px rgba(60, 75, 68, .06);
+}
+
+.operative-dashboard__stats-panel + .operative-dashboard__actions {
+  margin-top: 16px;
+}
+
+.operative-dashboard__actions {
+  margin-top: 0;
+  padding: 16px 22px;
+}
+
+.dashboard-action {
+  min-height: 104px;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 22px;
+}
+
+.dashboard-action > span,
+.dashboard-action svg {
+  width: 64px;
+  height: 64px;
+  flex-basis: 64px;
+}
+
+.dashboard-action strong {
+  font-size: 19px;
+}
+
+.operative-dashboard__movements {
+  margin-top: 16px;
+  border-radius: 18px;
+}
+
+.operative-dashboard__movements header {
+  padding: 8px 14px;
+}
+
+.operative-dashboard__movements h2 {
+  font-size: 13px;
+}
+
+.dashboard-movement {
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  gap: 9px;
+  min-height: 43px;
+  padding: 3px 14px;
+}
+
+.dashboard-movement > svg {
+  width: 21px;
+  height: 21px;
+}
+
+.dashboard-movement__title strong {
+  font-size: 12px;
+}
+
+.dashboard-movement div > span {
+  font-size: 11px;
+}
+
+.dashboard-movement em {
+  padding: 3px 7px;
+  font-size: 10px;
+}
+
+.dashboard-movement time strong {
+  font-size: 12px;
+}
+
+.dashboard-movement time span {
+  font-size: 10px;
+}
+
+.dashboard-empty {
+  padding: 20px 16px;
+  font-size: 11px;
+}
+
+.dashboard-more {
+  min-height: 38px;
+  font-size: 12px;
+}
+
+.dashboard-more__icon {
+  width: 16px;
+  height: 16px;
+  margin-left: 6px;
+  vertical-align: -3px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+  transition: transform 160ms ease;
+}
+
+.dashboard-more__icon--expanded {
+  transform: rotate(180deg);
+}
+
 /* Vehículos activos */
 .active-vehicles-page {
   width: min(100%, 720px);
@@ -1157,18 +1265,18 @@
   }
 
   .operative-dashboard__movements header {
-    padding: 10px 10px;
+    padding: 8px 10px;
   }
 
   .operative-dashboard__movements h2 {
-    font-size: 15px;
+    font-size: 13px;
   }
 
   .dashboard-movement {
     grid-template-columns: 23px minmax(0, 1fr) auto;
     gap: 7px;
-    min-height: 52px;
-    padding: 5px 12px;
+    min-height: 43px;
+    padding: 3px 10px;
   }
 
   .dashboard-movement > svg {
@@ -1177,7 +1285,7 @@
   }
 
   .dashboard-movement__title strong {
-    font-size: 14px;
+    font-size: 12px;
   }
 
   .dashboard-movement div > span {

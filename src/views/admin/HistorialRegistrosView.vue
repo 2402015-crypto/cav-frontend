@@ -184,7 +184,10 @@ function clearFilters() {
 }
 
 function downloadFile(content, filename, type) {
-  const blob = new Blob([content], { type })
+  const normalizedContent = type.includes('excel') || type.includes('spreadsheet')
+    ? `\uFEFF${content}`
+    : content
+  const blob = new Blob([normalizedContent], { type })
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url
