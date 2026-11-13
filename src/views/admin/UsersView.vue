@@ -1,14 +1,12 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
-import { createUser, deleteUser as deleteUserRequest, listUsers, setUserStatus, updateUser } from '@/services/api/users'
-import ConfirmModal from '@/components/admin/ConfirmModal.vue'
+import { createUser, listUsers, setUserStatus, updateUser } from '@/services/api/users'
 import UserForm from '@/components/admin/UserForm.vue'
 import UsersTable from '@/components/admin/UsersTable.vue'
 
 const users = ref([])
 const loading = ref(true)
 const errorMessage = ref('')
-const pendingUser = ref(null)
 const updatingUserId = ref(null)
 const formMode = ref(null)
 const formUser = ref(null)
@@ -42,10 +40,6 @@ async function toggleStatus(user) {
   } finally {
     updatingUserId.value = null
   }
-}
-
-function askToDelete(user) {
-  pendingUser.value = user
 }
 
 function openCreateForm() {
@@ -93,19 +87,6 @@ async function saveUser(payload) {
   }
 }
 
-async function deleteUser() {
-  if (!pendingUser.value) return
-  const userId = pendingUser.value.id
-  errorMessage.value = ''
-  try {
-    await deleteUserRequest(userId)
-    users.value = users.value.filter((user) => user.id !== userId)
-    pendingUser.value = null
-  } catch (error) {
-    errorMessage.value = error.response?.data?.message || 'No fue posible eliminar el usuario.'
-  }
-}
-
 onMounted(loadUsers)
 </script>
 
@@ -142,14 +123,6 @@ onMounted(loadUsers)
       :updating-user-id="updatingUserId"
       @toggle-status="toggleStatus"
       @edit="openEditForm"
-      @delete="askToDelete"
-    />
-
-    <ConfirmModal
-      :open="Boolean(pendingUser)"
-      message="¿Desea eliminar este usuario?"
-      @cancel="pendingUser = null"
-      @confirm="deleteUser"
     />
   </section>
 </template>

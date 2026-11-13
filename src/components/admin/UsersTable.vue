@@ -12,7 +12,7 @@ defineProps({
   },
 })
 
-defineEmits(['toggle-status', 'delete', 'edit'])
+defineEmits(['toggle-status', 'edit'])
 
 function roleLabel(role) {
   return role === 'ADMIN' ? 'Administrador' : 'Guardia'
@@ -53,12 +53,14 @@ function roleLabel(role) {
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 16-.8 4.8L8 20l10.8-10.8a2.8 2.8 0 0 0-4-4L4 16Z" /><path d="m13.5 6.5 4 4" /></svg>
                 Editar
               </button>
-              <button class="table-action table-action--toggle" type="button" :disabled="updatingUserId === user.id" @click="$emit('toggle-status', user)">
+              <button
+                class="table-action table-action--toggle"
+                :class="user.estado === 'ACTIVO' ? 'table-action--deactivate' : 'table-action--activate'"
+                type="button"
+                :disabled="updatingUserId === user.id"
+                @click="$emit('toggle-status', user)"
+              >
                 {{ updatingUserId === user.id ? 'Actualizando...' : user.estado === 'ACTIVO' ? 'Desactivar' : 'Activar' }}
-              </button>
-              <button class="table-action table-action--delete" type="button" @click="$emit('delete', user)">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M10 11v6M14 11v6M7 7l1 13h8l1-13M9 7V4h6v3" /></svg>
-                Eliminar
               </button>
             </div>
           </td>
