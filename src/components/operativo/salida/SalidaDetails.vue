@@ -23,6 +23,10 @@ function formatDate(value) {
   return new Date(value).toLocaleTimeString('es-MX', { hour: 'numeric', minute: '2-digit' })
 }
 
+function updateObservations(event) {
+  observations.value = event.target.value
+}
+
 watch(() => props.record.observaciones, (value) => {
   if (!observationsSaving.value) observations.value = value || ''
 })
@@ -90,7 +94,7 @@ async function saveObservations() {
       </section>
       <label class="exit-observations" :class="{ 'exit-observations--empty': !observations }"><span>OBSERVACIONES <button type="button" :disabled="!observationsChanged || observationsSaving"
             @click="saveObservations">{{ observationsSaving ? 'Guardando...' : 'Guardar' }}</button></span><textarea
-          v-model="observations" placeholder="Sin observaciones" /></label>
+          :value="observations" placeholder="Sin observaciones" @input="updateObservations" /></label>
       <section v-if="record.historial?.length" class="exit-history">
         <header><strong>HISTORIAL DE VISITAS</strong><span>{{ record.totalVisitas }} total</span></header>
         <div class="exit-history__latest"><span>ÚLTIMA VISITA</span>
