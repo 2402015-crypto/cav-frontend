@@ -1,0 +1,36 @@
+.admin-dashboard { min-height: 100%; padding: 34px 30px 60px; color: #d8ded9; background: radial-gradient(circle at 90% 0, rgba(124,176,157,.08), transparent 34%), #24211f; }
+.admin-dashboard__header, .admin-dashboard__section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; max-width: 1400px; margin: 0 auto 30px; }
+.admin-dashboard__eyebrow, .admin-chart-card__tag { margin: 0 0 10px; color: #9cc7b7; font-size: 10px; font-weight: 700; letter-spacing: 2px; }
+.admin-dashboard__eyebrow span, .admin-dashboard__status span { display: inline-block; width: 8px; height: 8px; margin-right: 8px; border-radius: 50%; background: #7cb09d; box-shadow: 0 0 12px #7cb09d; }
+.admin-dashboard h1 { margin: 0; color: #f6f1e7; font-size: clamp(29px, 3vw, 40px); letter-spacing: -.8px; }
+.admin-dashboard__date, .admin-dashboard__section-heading h2 + p { margin: 7px 0 0; color: #8f8984; font-size: 13px; }
+.admin-dashboard__status { padding: 11px 16px; border: 1px solid #4b4642; border-radius: 24px; color: #adabaa; font-size: 12px; white-space: nowrap; }
+.admin-dashboard__summary, .admin-dashboard__charts { display: grid; max-width: 1400px; margin: 0 auto; gap: 10px; }
+.admin-dashboard__summary { grid-template-columns: 1.35fr repeat(3, 1fr); margin-bottom: 34px; }
+.admin-metric { position: relative; min-height: 124px; padding: 16px; border: 1px solid #4b4642; border-radius: 18px; background: #332f2c; }
+.admin-metric--lead { grid-row: span 2; min-height: 248px; }
+.admin-metric__icon { display: grid; width: 40px; height: 40px; place-items: center; border: 1px solid rgba(124,176,157,.35); border-radius: 12px; color: #9cc7b7; font-size: 20px; }
+.admin-metric__chevron { position: absolute; top: 17px; right: 18px; color: #8f8984; font-size: 22px; }
+.admin-metric p { margin: 14px 0 2px; color: #d8ded9; font-size: 13px; font-weight: 600; }
+.admin-metric small { color: #8f8984; font-size: 10px; }
+.admin-metric > strong { display: block; margin-top: 9px; color: #8fbead; font-size: 29px; line-height: 1; }
+.admin-metric--lead > strong { margin: 28px 0 0 34px; font-size: clamp(60px, 7vw, 92px); font-weight: 300; }
+.admin-dashboard__section-heading { align-items: flex-end; margin-bottom: 14px; }
+.admin-dashboard__section-heading h2 { margin: 0; color: #f6f1e7; font-size: 23px; }
+.admin-period { display: flex; padding: 4px; border: 1px solid #4b4642; border-radius: 16px; }
+.admin-period button { padding: 9px 16px; border: 0; border-radius: 11px; background: transparent; color: #8f8984; cursor: pointer; font-size: 12px; }
+.admin-period button.active { background: #7cb09d; color: #17201c; font-weight: 700; }
+.admin-dashboard__charts { grid-template-columns: 1.1fr .9fr; }
+.admin-chart-card { min-width: 0; padding: 28px 30px 16px; border: 1px solid #4b4642; border-radius: 28px; background: #292624; }
+.admin-chart-card--wide { }
+.admin-chart-card__heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+.admin-chart-card__tag { margin-bottom: 12px; color: #8fbead; }
+.admin-chart-card__tag span { margin-left: 12px; color: #77716c; font-weight: 400; }
+.admin-chart-card__tag--cyan { color: #69a4ae; }.admin-chart-card__tag--gold { color: #c6a463; }.admin-chart-card__tag--lilac { color: #aa95bd; }
+.admin-chart-card h3 { margin: 0; color: #f6f1e7; font-size: 19px; }
+.admin-chart-card__heading p:not(.admin-chart-card__tag) { margin: 7px 0 0; color: #8f8984; font-size: 12px; }
+.admin-chart-card__heading > strong { color: #8fbead; font-size: 34px; font-weight: 500; }
+.admin-dashboard__error, .admin-dashboard__loading { max-width: 1400px; margin: 20px auto; padding: 18px; border: 1px solid #795957; border-radius: 12px; color: #e1aaa1; }
+.admin-dashboard__loading { color: #9cc7b7; border-color: #4b6960; }
+@media (max-width: 1050px) { .admin-dashboard__summary { grid-template-columns: repeat(3, 1fr); }.admin-metric--lead { grid-row: span 1; }.admin-dashboard__charts { grid-template-columns: 1fr; } }
+@media (max-width: 650px) { .admin-dashboard { padding: 24px 16px 40px; }.admin-dashboard__header, .admin-dashboard__section-heading { align-items: flex-start; flex-direction: column; }.admin-dashboard__status { align-self: stretch; }.admin-dashboard__summary { grid-template-columns: repeat(2, 1fr); }.admin-metric--lead { grid-column: span 2; }.admin-chart-card { padding: 22px 14px 8px; border-radius: 20px; } }

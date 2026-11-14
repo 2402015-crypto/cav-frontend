@@ -6,6 +6,7 @@ import './styles/global.css'
 import './styles/globalop.css'
 import './styles/formulariosop.css'
 import './styles/globaladmin.css'
+import './styles/dashadmin.css'
 
 import App from './App.vue'
 import router from './router'

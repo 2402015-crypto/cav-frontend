@@ -8,7 +8,7 @@ import HistorialAccesosView from '@/views/operativo/HistorialAccesosView.vue'
 import EntradaView from '@/views/operativo/EntradaView.vue'
 import SalidaView from '@/views/operativo/SalidaView.vue'
 import ActivosView from '@/views/operativo/ActivosView.vue'
-import AdminSectionView from '@/views/admin/AdminSectionView.vue'
+import DashboardAdminView from '@/views/admin/DashboardAdminView.vue'
 import UsersView from '@/views/admin/UsersView.vue'
 import CatalogosView from '@/views/admin/CatalogosView.vue'
 import HistorialRegistrosView from '@/views/admin/HistorialRegistrosView.vue'
@@ -49,7 +49,7 @@ const router = createRouter({
       meta: { requiresAuth: true, roles: ['ADMIN'], title: 'Administración' },
       redirect: { name: 'admin-dashboard' },
       children: [
-        { path: 'dashboard', name: 'admin-dashboard', component: AdminSectionView, meta: { title: 'Dashboard administrativo', sectionTitle: 'Dashboard Administrativo' } },
+        { path: 'dashboard', name: 'admin-dashboard', component: DashboardAdminView, meta: { title: 'Dashboard administrativo', sectionTitle: 'Dashboard Administrativo' } },
         { path: 'usuarios', name: 'admin-usuarios', component: UsersView, meta: { title: 'Usuarios', sectionTitle: 'Usuarios' } },
         { path: 'bitacora', name: 'admin-bitacora', component: BitacoraView, meta: { title: 'Bitácora', sectionTitle: 'Bitácora' } },
         { path: 'historial', name: 'admin-historial', component: HistorialRegistrosView, meta: { title: 'Historial de registros', sectionTitle: 'Historial de registros' } },
