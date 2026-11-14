@@ -1894,6 +1894,19 @@
   width: 100%;
 }
 
+.table-action--delete {
+  padding-right: 4px;
+  padding-left: 4px;
+  border: 0;
+  background: transparent;
+  color: #9BAAA4;
+  cursor: pointer;
+}
+
+.table-action--delete:hover {
+  color: #d8ded9;
+}
+
 .catalog-manager__status {
   padding: 33px 15px;
   border-top: 1px solid rgba(216, 222, 217, 0.16);
