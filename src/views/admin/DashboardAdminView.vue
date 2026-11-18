@@ -49,8 +49,15 @@ const barOptions = (color) => ({
 })
 
 const providerSeries = computed(() => [{ name: 'Accesos', data: providers.value.map((item) => item.accesos) }])
-const transportSeries = computed(() => [{ name: 'Accesos', data: transporters.value.map((item) => item.accesos) }])
-const providerOptions = computed(() => barOptions('#c6a463'))
+const providerOptions = computed(() => ({
+  ...barOptions('#c6a463'),
+  xaxis: {
+    ...barOptions('#c6a463').xaxis,
+    min: 0,
+    max: 35,
+    tickAmount: 4,
+  },
+}))
 const transportOptions = computed(() => ({
   chart: { type: 'donut', toolbar: { show: false }, animations: { enabled: true, speed: 500 } },
   labels: transporters.value.map((item) => item.nombre),
@@ -93,7 +100,6 @@ onBeforeUnmount(() => window.clearInterval(refreshTimer))
         <h1>Panel administrativo</h1>
         <p class="admin-dashboard__date">{{ dateLabel }} · Chablé Maroma</p>
       </div>
-      <span class="admin-dashboard__status"><span /> Sistema operativo</span>
     </header>
 
     <p v-if="error" class="admin-dashboard__error">{{ error }}</p>
@@ -102,19 +108,28 @@ onBeforeUnmount(() => window.clearInterval(refreshTimer))
     <template v-else>
       <section class="admin-dashboard__summary" aria-label="Indicadores del día">
         <article class="admin-metric admin-metric--lead">
-          <div class="admin-metric__icon">▣</div><span class="admin-metric__chevron">›</span>
+          <div class="admin-metric__icon admin-metric__icon--jade">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h12v10H3zM15 10h3l3 3v4h-6zM7 17a2 2 0 1 1-4 0M18 17a2 2 0 1 1-4 0" /></svg>
+          </div><span class="admin-metric__chevron">›</span>
           <p>Registros realizados en el día</p><small>Entradas y salidas registradas</small>
           <strong>{{ summary.registros ?? 0 }}</strong>
         </article>
         <article v-for="metric in [
-          ['vehiculosActivos', 'Vehículos activos', 'Dentro de las instalaciones'],
-          ['entradas', 'Entradas hoy', 'Accesos registrados'],
-          ['salidas', 'Salidas hoy', 'Movimientos completados'],
-          ['empresasTransportadoras', 'Visitas de empresas / compañías', 'Registros únicos'],
-          ['precisionOcr', 'Precisión OCR', 'Reconocimiento de placas'],
-          ['registrosPorUsuario', 'Registros por usuario', 'Promedio diario'],
+          ['vehiculosActivos', 'Vehículos activos', 'Dentro de las instalaciones', 'clock'],
+          ['entradas', 'Entradas hoy', 'Accesos registrados', 'entry'],
+          ['salidas', 'Salidas hoy', 'Movimientos completados', 'exit'],
+          ['empresasTransportadoras', 'Visitas de empresas / compañías', 'Registros únicos', 'document'],
+          ['precisionOcr', 'Precisión OCR', 'Reconocimiento de placas', 'scan'],
+          ['registrosPorUsuario', 'Registros por usuario', 'Promedio diario', 'users'],
         ]" :key="metric[0]" class="admin-metric">
-          <div class="admin-metric__icon">◌</div>
+          <div class="admin-metric__icon" :class="`admin-metric__icon--${metric[3]}`">
+            <svg v-if="metric[3] === 'clock'" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" /><path d="M12 7v5l3 2" /></svg>
+            <svg v-else-if="metric[3] === 'entry'" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h12M12 8l4 4-4 4M16 5h4v14h-4" /></svg>
+            <svg v-else-if="metric[3] === 'exit'" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H8M12 8l-4 4 4 4M8 5H4v14h4" /></svg>
+            <svg v-else-if="metric[3] === 'document'" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l3 3v15H6zM9 11h6M9 15h6" /></svg>
+            <svg v-else-if="metric[3] === 'scan'" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4H5a1 1 0 0 0-1 1v3M16 4h3a1 1 0 0 1 1 1v3M8 20H5a1 1 0 0 1-1-1v-3M16 20h3a1 1 0 0 0 1-1v-3" /></svg>
+            <svg v-else viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3" /><path d="M3.5 19c.7-3 2.5-4.5 5.5-4.5s4.8 1.5 5.5 4.5M16 11a3 3 0 1 0 0-6M16 14.5c2.5.1 4 1.6 4.5 4.5" /></svg>
+          </div>
           <strong>{{ summary[metric[0]] ?? 0 }}{{ metric[0] === 'precisionOcr' ? '%' : '' }}</strong>
           <p>{{ metric[1] }}</p><small>{{ metric[2] }}</small>
         </article>
@@ -130,19 +145,21 @@ onBeforeUnmount(() => window.clearInterval(refreshTimer))
 
       <section class="admin-dashboard__charts">
         <article class="admin-chart-card admin-chart-card--wide">
-          <div class="admin-chart-card__heading"><div><p class="admin-chart-card__tag">DATA/01 <span>— EN VIVO</span></p><h3>Entradas por día</h3><p>Actividad acumulada · últimos {{ period }} días</p></div><strong>{{ summary.entradas ?? 0 }}</strong></div>
+          <div class="admin-chart-card__heading"><div class="admin-chart-card__title"><span class="admin-chart-card__icon admin-chart-card__icon--jade"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h12M12 8l4 4-4 4M16 5h4v14h-4" /></svg></span><div><p class="admin-chart-card__tag">DATA/01 <span>— EN VIVO</span></p><h3>Entradas por día</h3><p>Actividad acumulada · últimos {{ period }} días</p></div></div><strong>{{ summary.entradas ?? 0 }}</strong></div>
           <VueApexCharts type="area" height="270" :options="entriesOptions" :series="entriesSeries" />
         </article>
         <article class="admin-chart-card">
-          <div class="admin-chart-card__heading"><div><p class="admin-chart-card__tag admin-chart-card__tag--cyan">DATA/02 <span>— EN VIVO</span></p><h3>Desempeño OCR</h3><p>Precisión del reconocimiento de placas</p></div><strong>{{ summary.precisionOcr ?? 0 }}%</strong></div>
+          <div class="admin-chart-card__heading"><div class="admin-chart-card__title"><span class="admin-chart-card__icon admin-chart-card__icon--cyan"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4H5a1 1 0 0 0-1 1v3M16 4h3a1 1 0 0 1 1 1v3M8 20H5a1 1 0 0 1-1-1v-3M16 20h3a1 1 0 0 0 1-1v-3" /></svg></span><div><p class="admin-chart-card__tag admin-chart-card__tag--cyan">DATA/02 <span>— EN VIVO</span></p><h3>Desempeño OCR</h3><p>Precisión del reconocimiento de placas</p></div></div><strong>{{ summary.precisionOcr ?? 0 }}%</strong></div>
           <VueApexCharts type="area" height="270" :options="ocrOptions" :series="ocrSeries" />
         </article>
-        <article class="admin-chart-card">
-          <div class="admin-chart-card__heading"><div><p class="admin-chart-card__tag admin-chart-card__tag--gold">DATA/03 <span>— EN VIVO</span></p><h3>Proveedores frecuentes</h3><p>Proveedores con más de 3 visitas</p></div><strong>{{ providers.length }}</strong></div>
-          <VueApexCharts type="bar" height="270" :options="providerOptions" :series="providerSeries" />
+        <article class="admin-chart-card admin-chart-card--providers">
+          <div class="admin-chart-card__heading"><div class="admin-chart-card__title"><span class="admin-chart-card__icon admin-chart-card__icon--gold"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l3 3v15H6zM9 11h6M9 15h6" /></svg></span><div><p class="admin-chart-card__tag admin-chart-card__tag--gold">DATA/03 <span>— EN VIVO</span></p><h3>Proveedores frecuentes</h3><p>Proveedores con más de 3 visitas</p></div></div><strong>{{ providers.length }}</strong></div>
+          <div class="admin-chart-card__provider-chart">
+            <VueApexCharts type="bar" height="270" :options="providerOptions" :series="providerSeries" />
+          </div>
         </article>
         <article class="admin-chart-card">
-          <div class="admin-chart-card__heading"><div><p class="admin-chart-card__tag admin-chart-card__tag--lilac">DATA/04 <span>— EN VIVO</span></p><h3>Transportadoras frecuentes</h3><p>Participación por cantidad de accesos</p></div><strong>{{ transporters.length }}</strong></div>
+          <div class="admin-chart-card__heading"><div class="admin-chart-card__title"><span class="admin-chart-card__icon admin-chart-card__icon--lilac"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h12v10H3zM15 10h3l3 3v4h-6zM7 17a2 2 0 1 1-4 0M18 17a2 2 0 1 1-4 0" /></svg></span><div><p class="admin-chart-card__tag admin-chart-card__tag--lilac">DATA/04 <span>— EN VIVO</span></p><h3>Transportadoras frecuentes</h3><p>Participación por cantidad de accesos</p></div></div><strong>{{ transporters.length }}</strong></div>
           <VueApexCharts type="donut" height="270" :options="transportOptions" :series="transporters.map((item) => item.accesos)" />
         </article>
       </section>
