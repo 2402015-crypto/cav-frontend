@@ -140,7 +140,10 @@ onBeforeUnmount(() => window.clearInterval(refreshTimer))
           <div class="admin-metric__icon admin-metric__icon--jade">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h12v10H3zM15 10h3l3 3v4h-6zM7 17a2 2 0 1 1-4 0M18 17a2 2 0 1 1-4 0" /></svg>
           </div><span class="admin-metric__chevron">›</span>
-          <p>Registros realizados en el día</p><small>Entradas y salidas registradas</small>
+          <div class="admin-metric__lead-copy">
+            <p>Registros realizados en el día</p>
+            <small>Entradas y salidas registradas</small>
+          </div>
           <strong>{{ summary.registros ?? 0 }}</strong>
         </article>
         <article v-for="metric in [
@@ -187,12 +190,12 @@ onBeforeUnmount(() => window.clearInterval(refreshTimer))
         <div class="admin-dashboard__charts-track" :style="{ transform: `translateX(-${activeChart * 100}%)` }">
           <article class="admin-chart-card admin-chart-card--slide" :class="{ active: activeChart === 0 }">
             <div class="admin-chart-card__heading"><div class="admin-chart-card__title"><span class="admin-chart-card__icon admin-chart-card__icon--jade"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h12M12 8l4 4-4 4M16 5h4v14h-4" /></svg></span><div><p class="admin-chart-card__tag">DATA/01 <span>— EN VIVO</span></p><h3>Entradas por día</h3><p>Actividad acumulada · últimos {{ period }} días</p></div></div><strong>{{ periodEntriesTotal }}</strong></div>
-            <VueApexCharts :key="`entries-${activeChart}`" type="area" height="360" :options="entriesOptions" :series="entriesSeries" />
+            <VueApexCharts :key="`entries-${activeChart}`" type="area" height="310" :options="entriesOptions" :series="entriesSeries" />
           </article>
           <article class="admin-chart-card admin-chart-card--slide admin-chart-card--providers" :class="{ active: activeChart === 1 }">
             <div class="admin-chart-card__heading"><div class="admin-chart-card__title"><span class="admin-chart-card__icon admin-chart-card__icon--gold"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l3 3v15H6zM9 11h6M9 15h6" /></svg></span><div><p class="admin-chart-card__tag admin-chart-card__tag--gold">DATA/02 <span>— EN VIVO</span></p><h3>Proveedores frecuentes</h3><p>{{ period === 30 ? 'Proveedores con más visitas en los últimos 30 días.' : 'Proveedores con al menos 2 registros de acceso' }}</p></div></div><strong>{{ providers.length }}</strong></div>
             <div class="admin-chart-card__provider-chart">
-              <VueApexCharts :key="`providers-${activeChart}`" type="bar" height="360" :options="providerOptions" :series="providerSeries" />
+              <VueApexCharts :key="`providers-${activeChart}`" type="bar" height="310" :options="providerOptions" :series="providerSeries" />
             </div>
           </article>
           <article class="admin-chart-card admin-chart-card--slide admin-chart-card--transporters" :class="{ active: activeChart === 2 }">
@@ -212,7 +215,7 @@ onBeforeUnmount(() => window.clearInterval(refreshTimer))
           </article>
           <article class="admin-chart-card admin-chart-card--slide" :class="{ active: activeChart === 3 }">
             <div class="admin-chart-card__heading"><div class="admin-chart-card__title"><span class="admin-chart-card__icon admin-chart-card__icon--cyan"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4H5a1 1 0 0 0-1 1v3M16 4h3a1 1 0 0 1 1 1v3M8 20H5a1 1 0 0 1-1-1v-3M16 20h3a1 1 0 0 0 1-1v-3" /></svg></span><div><p class="admin-chart-card__tag admin-chart-card__tag--cyan">DATA/04 <span>— EN VIVO</span></p><h3>Desempeño OCR</h3><p>Precisión del reconocimiento de placas</p></div></div><strong>{{ summary.precisionOcr ?? 0 }}%</strong></div>
-            <VueApexCharts :key="`ocr-${activeChart}`" type="area" height="360" :options="ocrOptions" :series="ocrSeries" />
+            <VueApexCharts :key="`ocr-${activeChart}`" type="area" height="310" :options="ocrOptions" :series="ocrSeries" />
           </article>
         </div>
       </section>
