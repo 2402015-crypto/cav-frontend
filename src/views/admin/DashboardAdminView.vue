@@ -1,9 +1,10 @@
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import VueApexCharts from 'vue3-apexcharts'
 import { getAdminDashboard } from '@/services/api/dashboardAdmin'
 
 const period = ref(7)
+const activeChart = ref(0)
 const dashboard = ref(null)
 const loading = ref(true)
 const error = ref('')
@@ -14,6 +15,7 @@ const entries = computed(() => dashboard.value?.entradas || [])
 const ocr = computed(() => dashboard.value?.ocr || [])
 const providers = computed(() => dashboard.value?.proveedores || [])
 const transporters = computed(() => dashboard.value?.transportadoras || [])
+const periodEntriesTotal = computed(() => entries.value.reduce((total, point) => total + (Number(point.valor) || 0), 0))
 
 const dateLabel = computed(() => {
   const date = dashboard.value?.fecha ? new Date(`${dashboard.value.fecha}T12:00:00`) : new Date()
@@ -21,7 +23,12 @@ const dateLabel = computed(() => {
 })
 
 const lineOptions = (color, max = null) => ({
-  chart: { type: 'area', toolbar: { show: false }, zoom: { enabled: false }, animations: { enabled: true, speed: 500 } },
+  chart: {
+    type: 'area',
+    toolbar: { show: false },
+    zoom: { enabled: false },
+    animations: { enabled: true, easing: 'easeout', speed: 520, dynamicAnimation: { enabled: true, speed: 520 } },
+  },
   colors: [color],
   stroke: { curve: 'smooth', width: 3 },
   fill: { type: 'gradient', gradient: { opacityFrom: 0.35, opacityTo: 0.02 } },
@@ -38,9 +45,9 @@ const entriesOptions = computed(() => ({ ...lineOptions('#8fbead'), xaxis: { ...
 const ocrOptions = computed(() => ({ ...lineOptions('#69a4ae', 100), xaxis: { ...lineOptions('#69a4ae').xaxis, categories: ocr.value.map((point) => point.etiqueta) }, yaxis: { min: 0, max: 100, labels: { style: { colors: '#8f8984' } } } }))
 
 const barOptions = (color) => ({
-  chart: { type: 'bar', toolbar: { show: false }, animations: { enabled: true, speed: 500 } },
+  chart: { type: 'bar', toolbar: { show: false }, animations: { enabled: true, easing: 'easeout', speed: 520, dynamicAnimation: { enabled: true, speed: 520 } } },
   colors: [color],
-  plotOptions: { bar: { horizontal: true, borderRadius: 4, barHeight: '42%' } },
+  plotOptions: { bar: { horizontal: true, borderRadius: 4, barHeight: '28px' } },
   dataLabels: { enabled: false },
   grid: { borderColor: '#4b4642', strokeDashArray: 4 },
   xaxis: { labels: { style: { colors: '#8f8984' } }, categories: providers.value.map((item) => item.nombre) },
@@ -49,22 +56,32 @@ const barOptions = (color) => ({
 })
 
 const providerSeries = computed(() => [{ name: 'Accesos', data: providers.value.map((item) => item.accesos) }])
+const providerMax = computed(() => {
+  const highest = providers.value.reduce((maximum, item) => Math.max(maximum, Number(item.accesos) || 0), 0)
+  return Math.max(2, highest)
+})
 const providerOptions = computed(() => ({
   ...barOptions('#c6a463'),
   xaxis: {
     ...barOptions('#c6a463').xaxis,
     min: 0,
-    max: 35,
+    max: providerMax.value,
     tickAmount: 4,
   },
 }))
 const transportOptions = computed(() => ({
-  chart: { type: 'donut', toolbar: { show: false }, animations: { enabled: true, speed: 500 } },
+  chart: { type: 'donut', toolbar: { show: false }, animations: { enabled: true, easing: 'easeout', speed: 520, animateGradually: { enabled: true, delay: 0 }, dynamicAnimation: { enabled: true, speed: 520 } } },
   labels: transporters.value.map((item) => item.nombre),
   colors: ['#aa95bd', '#8dc1c9', '#c6a463', '#8fbead', '#b48f9a', '#7c9fb0'],
-  dataLabels: { enabled: true, style: { colors: ['#f6f1e7'] } },
-  legend: { position: 'bottom', labels: { colors: '#adabaa' } },
-  plotOptions: { pie: { donut: { size: '66%' } } },
+  dataLabels: {
+    enabled: true,
+    formatter: (value) => `${Number(value).toFixed(1)}%`,
+    textAnchor: 'middle',
+    style: { fontSize: '11px', fontWeight: 700, colors: ['#f6f1e7'] },
+    dropShadow: { enabled: false },
+  },
+  legend: { show: false },
+  plotOptions: { pie: { donut: { size: '58%' } } },
   tooltip: { theme: 'dark' },
 }))
 
@@ -84,7 +101,19 @@ function startRefresh() {
   refreshTimer = window.setInterval(loadDashboard, 30000)
 }
 
+function previousChart() {
+  activeChart.value = (activeChart.value - 1 + 4) % 4
+}
+
+function nextChart() {
+  activeChart.value = (activeChart.value + 1) % 4
+}
+
 watch(period, loadDashboard)
+watch(activeChart, async () => {
+  await nextTick()
+  window.dispatchEvent(new Event('resize'))
+})
 onMounted(() => {
   loadDashboard()
   startRefresh()
@@ -137,31 +166,55 @@ onBeforeUnmount(() => window.clearInterval(refreshTimer))
 
       <div class="admin-dashboard__section-heading">
         <div><p class="admin-dashboard__eyebrow">ANALYTICS CORE</p><h2>Inteligencia operativa</h2><p>Explora el comportamiento de accesos y reconocimiento vehicular.</p></div>
-        <div class="admin-period" role="group" aria-label="Periodo de consulta">
-          <button :class="{ active: period === 7 }" @click="period = 7">7 días</button>
-          <button :class="{ active: period === 30 }" @click="period = 30">30 días</button>
+        <div class="admin-dashboard__analytics-controls">
+          <div class="admin-period" role="group" aria-label="Periodo de consulta">
+            <button :class="{ active: period === 7 }" @click="period = 7">7 días</button>
+            <button :class="{ active: period === 30 }" @click="period = 30">30 días</button>
+          </div>
+          <div class="admin-chart-navigation" aria-label="Navegación de gráficas">
+            <button type="button" aria-label="Gráfica anterior" @click="previousChart">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 6-6 6 6 6" /></svg>
+            </button>
+            <span aria-live="polite"><strong>{{ String(activeChart + 1).padStart(2, '0') }}</strong> / 04</span>
+            <button type="button" aria-label="Siguiente gráfica" @click="nextChart">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6" /></svg>
+            </button>
+          </div>
         </div>
       </div>
 
-      <section class="admin-dashboard__charts">
-        <article class="admin-chart-card admin-chart-card--wide">
-          <div class="admin-chart-card__heading"><div class="admin-chart-card__title"><span class="admin-chart-card__icon admin-chart-card__icon--jade"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h12M12 8l4 4-4 4M16 5h4v14h-4" /></svg></span><div><p class="admin-chart-card__tag">DATA/01 <span>— EN VIVO</span></p><h3>Entradas por día</h3><p>Actividad acumulada · últimos {{ period }} días</p></div></div><strong>{{ summary.entradas ?? 0 }}</strong></div>
-          <VueApexCharts type="area" height="270" :options="entriesOptions" :series="entriesSeries" />
-        </article>
-        <article class="admin-chart-card">
-          <div class="admin-chart-card__heading"><div class="admin-chart-card__title"><span class="admin-chart-card__icon admin-chart-card__icon--cyan"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4H5a1 1 0 0 0-1 1v3M16 4h3a1 1 0 0 1 1 1v3M8 20H5a1 1 0 0 1-1-1v-3M16 20h3a1 1 0 0 0 1-1v-3" /></svg></span><div><p class="admin-chart-card__tag admin-chart-card__tag--cyan">DATA/02 <span>— EN VIVO</span></p><h3>Desempeño OCR</h3><p>Precisión del reconocimiento de placas</p></div></div><strong>{{ summary.precisionOcr ?? 0 }}%</strong></div>
-          <VueApexCharts type="area" height="270" :options="ocrOptions" :series="ocrSeries" />
-        </article>
-        <article class="admin-chart-card admin-chart-card--providers">
-          <div class="admin-chart-card__heading"><div class="admin-chart-card__title"><span class="admin-chart-card__icon admin-chart-card__icon--gold"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l3 3v15H6zM9 11h6M9 15h6" /></svg></span><div><p class="admin-chart-card__tag admin-chart-card__tag--gold">DATA/03 <span>— EN VIVO</span></p><h3>Proveedores frecuentes</h3><p>Proveedores con más de 3 visitas</p></div></div><strong>{{ providers.length }}</strong></div>
-          <div class="admin-chart-card__provider-chart">
-            <VueApexCharts type="bar" height="270" :options="providerOptions" :series="providerSeries" />
-          </div>
-        </article>
-        <article class="admin-chart-card">
-          <div class="admin-chart-card__heading"><div class="admin-chart-card__title"><span class="admin-chart-card__icon admin-chart-card__icon--lilac"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h12v10H3zM15 10h3l3 3v4h-6zM7 17a2 2 0 1 1-4 0M18 17a2 2 0 1 1-4 0" /></svg></span><div><p class="admin-chart-card__tag admin-chart-card__tag--lilac">DATA/04 <span>— EN VIVO</span></p><h3>Transportadoras frecuentes</h3><p>Participación por cantidad de accesos</p></div></div><strong>{{ transporters.length }}</strong></div>
-          <VueApexCharts type="donut" height="270" :options="transportOptions" :series="transporters.map((item) => item.accesos)" />
-        </article>
+      <section class="admin-dashboard__charts-carousel" aria-label="Gráficas administrativas">
+        <div class="admin-dashboard__charts-track" :style="{ transform: `translateX(-${activeChart * 100}%)` }">
+          <article class="admin-chart-card admin-chart-card--slide" :class="{ active: activeChart === 0 }">
+            <div class="admin-chart-card__heading"><div class="admin-chart-card__title"><span class="admin-chart-card__icon admin-chart-card__icon--jade"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h12M12 8l4 4-4 4M16 5h4v14h-4" /></svg></span><div><p class="admin-chart-card__tag">DATA/01 <span>— EN VIVO</span></p><h3>Entradas por día</h3><p>Actividad acumulada · últimos {{ period }} días</p></div></div><strong>{{ periodEntriesTotal }}</strong></div>
+            <VueApexCharts :key="`entries-${activeChart}`" type="area" height="360" :options="entriesOptions" :series="entriesSeries" />
+          </article>
+          <article class="admin-chart-card admin-chart-card--slide admin-chart-card--providers" :class="{ active: activeChart === 1 }">
+            <div class="admin-chart-card__heading"><div class="admin-chart-card__title"><span class="admin-chart-card__icon admin-chart-card__icon--gold"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l3 3v15H6zM9 11h6M9 15h6" /></svg></span><div><p class="admin-chart-card__tag admin-chart-card__tag--gold">DATA/02 <span>— EN VIVO</span></p><h3>Proveedores frecuentes</h3><p>{{ period === 30 ? 'Proveedores con más visitas en los últimos 30 días.' : 'Proveedores con al menos 2 registros de acceso' }}</p></div></div><strong>{{ providers.length }}</strong></div>
+            <div class="admin-chart-card__provider-chart">
+              <VueApexCharts :key="`providers-${activeChart}`" type="bar" height="360" :options="providerOptions" :series="providerSeries" />
+            </div>
+          </article>
+          <article class="admin-chart-card admin-chart-card--slide admin-chart-card--transporters" :class="{ active: activeChart === 2 }">
+            <div class="admin-chart-card__heading"><div class="admin-chart-card__title"><span class="admin-chart-card__icon admin-chart-card__icon--lilac"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h12v10H3zM15 10h3l3 3v4h-6zM7 17a2 2 0 1 1-4 0M18 17a2 2 0 1 1-4 0" /></svg></span><div><p class="admin-chart-card__tag admin-chart-card__tag--lilac">DATA/03 <span>— EN VIVO</span></p><h3>Transportadoras frecuentes</h3><p>Participación por cantidad de accesos</p></div></div><strong>{{ transporters.length }}</strong></div>
+            <div class="admin-chart-card__transport-chart">
+              <div class="admin-chart-card__donut">
+                <VueApexCharts :key="`transporters-${activeChart}`" type="donut" height="330" :options="transportOptions" :series="transporters.map((item) => item.accesos)" />
+              </div>
+              <div class="admin-chart-card__transport-list" aria-label="Desglose de transportadoras">
+                <div v-for="(transporter, index) in transporters" :key="transporter.nombre" class="admin-chart-card__transport-item">
+                  <span class="admin-chart-card__transport-color" :style="{ background: ['#aa95bd', '#8dc1c9', '#c6a463', '#8fbead', '#b48f9a', '#7c9fb0'][index % 6] }" />
+                  <span class="admin-chart-card__transport-name">{{ transporter.nombre }}</span>
+                  <strong>{{ transporter.accesos }}</strong>
+                </div>
+              </div>
+            </div>
+          </article>
+          <article class="admin-chart-card admin-chart-card--slide" :class="{ active: activeChart === 3 }">
+            <div class="admin-chart-card__heading"><div class="admin-chart-card__title"><span class="admin-chart-card__icon admin-chart-card__icon--cyan"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4H5a1 1 0 0 0-1 1v3M16 4h3a1 1 0 0 1 1 1v3M8 20H5a1 1 0 0 1-1-1v-3M16 20h3a1 1 0 0 0 1-1v-3" /></svg></span><div><p class="admin-chart-card__tag admin-chart-card__tag--cyan">DATA/04 <span>— EN VIVO</span></p><h3>Desempeño OCR</h3><p>Precisión del reconocimiento de placas</p></div></div><strong>{{ summary.precisionOcr ?? 0 }}%</strong></div>
+            <VueApexCharts :key="`ocr-${activeChart}`" type="area" height="360" :options="ocrOptions" :series="ocrSeries" />
+          </article>
+        </div>
       </section>
     </template>
   </section>

@@ -48,8 +48,7 @@
     font-size: 13px;
 }
 
-.admin-dashboard__summary,
-.admin-dashboard__charts {
+.admin-dashboard__summary {
     display: grid;
     max-width: 1400px;
     margin: 0 auto;
@@ -73,6 +72,23 @@
 .admin-metric--lead {
     grid-row: span 2;
     min-height: 248px;
+}
+
+.admin-metric--lead {
+    display: flex;
+    align-items: flex-start;
+}
+
+.admin-metric--lead>strong {
+    position: absolute;
+    inset: 92px 20px 18px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    font-size: clamp(68px, 7vw, 112px);
+    font-weight: 300;
+    line-height: 1;
 }
 
 .admin-metric__icon {
@@ -153,9 +169,15 @@
 }
 
 .admin-metric--lead>strong {
-    margin: 28px 0 0 34px;
-    font-size: clamp(60px, 7vw, 92px);
+    position: absolute;
+    inset: 92px 20px 18px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    font-size: clamp(68px, 7vw, 112px);
     font-weight: 300;
+    line-height: 1;
 }
 
 .admin-dashboard__section-heading {
@@ -192,8 +214,69 @@
     font-weight: 700;
 }
 
-.admin-dashboard__charts {
-    grid-template-columns: 1.1fr .9fr;
+.admin-dashboard__analytics-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-chart-navigation {
+    display: flex;
+    height: 46px;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    border: 1px solid #4b4642;
+    border-radius: 15px;
+    background: #332f2c;
+}
+
+.admin-chart-navigation button {
+    display: grid;
+    width: 30px;
+    height: 36px;
+    padding: 0;
+    place-items: center;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: #c9ccc8;
+    cursor: pointer;
+}
+
+.admin-chart-navigation button:hover {
+    background: #403c38;
+    color: #f6f1e7;
+}
+
+.admin-chart-navigation button svg {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+}
+
+.admin-chart-navigation span {
+    min-width: 62px;
+    color: #8f8984;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.admin-chart-navigation strong {
+    color: #f6f1e7;
+}
+
+.admin-dashboard__charts-carousel {
+    max-width: 1400px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 28px;
 }
 
 .admin-chart-card {
@@ -204,6 +287,108 @@
     background: #292624;
 }
 
+.admin-dashboard__charts-track {
+    display: flex;
+    width: 100%;
+    transition: transform 520ms cubic-bezier(.22, .75, .24, 1);
+    will-change: transform;
+}
+
+.admin-chart-card--slide {
+    width: 100%;
+    min-width: 100%;
+    min-height: 510px;
+    box-sizing: border-box;
+}
+
+.admin-chart-card--slide.active {
+    animation: admin-chart-enter 520ms cubic-bezier(.22, .75, .24, 1) both;
+}
+
+@keyframes admin-chart-enter {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(.985);
+        filter: blur(2px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+.admin-chart-card--providers .admin-chart-card__provider-chart {
+    width: 100%;
+    height: 360px;
+    align-items: stretch;
+}
+
+.admin-chart-card--providers .admin-chart-card__provider-chart > div {
+    width: 100%;
+}
+
+.admin-chart-card--providers .apexcharts-canvas,
+.admin-chart-card--providers .apexcharts-canvas svg {
+    width: 100% !important;
+}
+
+.admin-chart-card--transporters {
+    min-height: 490px;
+}
+
+.admin-chart-card__transport-chart {
+    display: grid;
+    height: 330px;
+    grid-template-columns: minmax(280px, 1.15fr) minmax(220px, .85fr);
+    align-items: center;
+    gap: 24px;
+    margin-top: 10px;
+}
+
+.admin-chart-card__donut {
+    min-width: 0;
+}
+
+.admin-chart-card__transport-list {
+    display: flex;
+    max-height: 300px;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.admin-chart-card__transport-item {
+    display: grid;
+    min-height: 42px;
+    grid-template-columns: 10px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border: 1px solid #45403d;
+    border-radius: 10px;
+    background: #302d2a;
+}
+
+.admin-chart-card__transport-color {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.admin-chart-card__transport-name {
+    overflow: hidden;
+    color: #d8ded9;
+    font-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.admin-chart-card__transport-item strong {
+    color: #d7b66e;
+    font-size: 18px;
+}
 
 .admin-chart-card__heading {
     display: flex;
@@ -315,9 +500,6 @@
         grid-row: span 1;
     }
 
-    .admin-dashboard__charts {
-        grid-template-columns: 1fr;
-    }
 }
 
 @media (max-width: 650px) {
@@ -331,12 +513,23 @@
         flex-direction: column;
     }
 
+    .admin-dashboard__analytics-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+
     .admin-dashboard__summary {
         grid-template-columns: repeat(2, 1fr);
     }
 
     .admin-metric--lead {
         grid-column: span 2;
+        min-height: 220px;
+    }
+
+    .admin-metric--lead>strong {
+        inset: 78px 20px 16px 20px;
+        font-size: 72px;
     }
 
     .admin-chart-card {
@@ -348,5 +541,19 @@
         width: 42px;
         height: 42px;
         flex-basis: 42px;
+    }
+
+    .admin-chart-card--transporters {
+        min-height: 760px;
+    }
+
+    .admin-chart-card__transport-chart {
+        height: auto;
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
+
+    .admin-chart-card__transport-list {
+        max-height: 220px;
     }
 }
