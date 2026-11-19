@@ -1,9 +1,11 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import VueApexCharts from 'vue3-apexcharts'
 import { getAdminDashboard } from '@/services/api/dashboardAdmin'
 
 const period = ref(7)
+const router = useRouter()
 const activeChart = ref(0)
 const dashboard = ref(null)
 const loading = ref(true)
@@ -58,15 +60,16 @@ const barOptions = (color) => ({
 const providerSeries = computed(() => [{ name: 'Accesos', data: providers.value.map((item) => item.accesos) }])
 const providerMax = computed(() => {
   const highest = providers.value.reduce((maximum, item) => Math.max(maximum, Number(item.accesos) || 0), 0)
-  return Math.max(2, highest)
+  return Math.max(2, Math.ceil(highest / 2) * 2)
 })
+const providerTickAmount = computed(() => providerMax.value / 2)
 const providerOptions = computed(() => ({
   ...barOptions('#c6a463'),
   xaxis: {
     ...barOptions('#c6a463').xaxis,
     min: 0,
     max: providerMax.value,
-    tickAmount: 4,
+    tickAmount: providerTickAmount.value,
   },
 }))
 const transportOptions = computed(() => ({
@@ -109,6 +112,10 @@ function nextChart() {
   activeChart.value = (activeChart.value + 1) % 4
 }
 
+function openTodayAccessHistory() {
+  router.push({ name: 'admin-historial-hoy' })
+}
+
 watch(period, loadDashboard)
 watch(activeChart, async () => {
   await nextTick()
@@ -136,7 +143,7 @@ onBeforeUnmount(() => window.clearInterval(refreshTimer))
 
     <template v-else>
       <section class="admin-dashboard__summary" aria-label="Indicadores del día">
-        <article class="admin-metric admin-metric--lead">
+        <button type="button" class="admin-metric admin-metric--lead" aria-label="Ver registros de accesos del día" @click="openTodayAccessHistory">
           <div class="admin-metric__icon admin-metric__icon--jade">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h12v10H3zM15 10h3l3 3v4h-6zM7 17a2 2 0 1 1-4 0M18 17a2 2 0 1 1-4 0" /></svg>
           </div><span class="admin-metric__chevron">›</span>
@@ -145,7 +152,7 @@ onBeforeUnmount(() => window.clearInterval(refreshTimer))
             <small>Entradas y salidas registradas</small>
           </div>
           <strong>{{ summary.registros ?? 0 }}</strong>
-        </article>
+        </button>
         <article v-for="metric in [
           ['vehiculosActivos', 'Vehículos activos', 'Dentro de las instalaciones', 'clock'],
           ['entradas', 'Entradas hoy', 'Accesos registrados', 'entry'],

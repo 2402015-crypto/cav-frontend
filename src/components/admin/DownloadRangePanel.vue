@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onBeforeUnmount, ref } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { registerAuditExport } from '@/services/api/auditoria'
 
 const props = defineProps({
@@ -8,6 +8,9 @@ const props = defineProps({
   filePrefix: { type: String, default: 'registros' },
   exportMode: { type: String, default: 'access' },
   loadRecords: { type: Function, required: true },
+  fixedDate: { type: String, default: '' },
+  compact: { type: Boolean, default: false },
+  hideClear: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['range-change'])
@@ -17,6 +20,12 @@ const activeDateField = ref('')
 const calendarMonth = ref(new Date())
 const exporting = ref(false)
 const errorMessage = ref('')
+watch(() => props.fixedDate, (fixedDate) => {
+  if (fixedDate) {
+    fromDate.value = fixedDate
+    toDate.value = fixedDate
+  }
+}, { immediate: true })
 const calendarTitle = computed(() => calendarMonth.value.toLocaleDateString('es-MX', { month: 'long', year: 'numeric' }))
 const weekdayLabels = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do']
 const calendarDays = computed(() => {
@@ -35,6 +44,14 @@ function dateDisplay(value) {
 }
 
 function clearDateRange() {
+  if (props.fixedDate) {
+    fromDate.value = props.fixedDate
+    toDate.value = props.fixedDate
+    activeDateField.value = ''
+    errorMessage.value = ''
+    emit('range-change', { desde: props.fixedDate, hasta: props.fixedDate })
+    return
+  }
   fromDate.value = ''
   toDate.value = ''
   activeDateField.value = ''
@@ -222,16 +239,29 @@ onBeforeUnmount(() => document.removeEventListener('click', closeCalendarOnOutsi
 </script>
 
 <template>
-  <section class="admin-history-panel admin-history-download">
-    <div class="admin-history-download__copy">
+  <section class="admin-history-panel admin-history-download" :class="{ 'admin-history-download--compact': compact }">
+    <div v-if="compact" class="admin-history-download__compact-copy">
+      <span class="admin-history-download__icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM15 3v5h5M9 13h6M9 17h6" /></svg>
+      </span>
+      <h2>{{ title }}</h2>
+    </div>
+    <div v-if="!compact" class="admin-history-download__copy">
       <span class="admin-history-download__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM15 3v5h5M9 13h6M9 17h6" /></svg></span>
       <div><h2>{{ title }}</h2><p>{{ description }}</p></div>
     </div>
-    <div class="admin-history-date-fields">
+    <div class="admin-history-download__actions">
+      <button v-if="!hideClear" class="admin-history-download__clear" type="button" :disabled="(!fromDate && !toDate) || exporting" @click="clearDateRange">Limpiar</button>
+      <button type="button" :disabled="!hasDateRange || exporting" @click="exportRecords('pdf')">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM15 3v5h5M9 13h6M9 17h4" /></svg>
+        PDF
+      </button>
+      <button type="button" :disabled="!hasDateRange || exporting" @click="exportRecords('excel')">▤ Excel</button>
+    </div>
+    <div v-if="!fixedDate && !compact" class="admin-history-date-fields">
       <div class="admin-history-date-field"><label>DESDE</label><button class="admin-history-date-input" :class="{ 'admin-history-date-input--placeholder': !fromDate }" type="button" @click="openCalendar('from')"><span>{{ dateDisplay(fromDate) }}</span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2" /><path d="M8 3v4m8-4v4M4 10h16" /></svg></button><div v-if="activeDateField === 'from'" class="admin-history-calendar"><header><button type="button" @click="changeCalendarMonth(-1)">‹</button><strong>{{ calendarTitle }}</strong><button type="button" @click="changeCalendarMonth(1)">›</button></header><div class="admin-history-calendar__weekdays"><span v-for="day in weekdayLabels" :key="day">{{ day }}</span></div><div class="admin-history-calendar__days"><button v-for="(day, index) in calendarDays" :key="`${day}-${index}`" type="button" :disabled="!day" :class="{ 'is-selected': isSelected(day) }" @click="selectDate(day)">{{ day || '' }}</button></div></div></div>
       <div class="admin-history-date-field"><label>HASTA</label><button class="admin-history-date-input" :class="{ 'admin-history-date-input--placeholder': !toDate }" type="button" @click="openCalendar('to')"><span>{{ dateDisplay(toDate) }}</span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2" /><path d="M8 3v4m8-4v4M4 10h16" /></svg></button><div v-if="activeDateField === 'to'" class="admin-history-calendar"><header><button type="button" @click="changeCalendarMonth(-1)">‹</button><strong>{{ calendarTitle }}</strong><button type="button" @click="changeCalendarMonth(1)">›</button></header><div class="admin-history-calendar__weekdays"><span v-for="day in weekdayLabels" :key="day">{{ day }}</span></div><div class="admin-history-calendar__days"><button v-for="(day, index) in calendarDays" :key="`${day}-${index}`" type="button" :disabled="!day || isDisabled(day)" :class="{ 'is-selected': isSelected(day) }" @click="selectDate(day)">{{ day || '' }}</button></div></div></div>
     </div>
-    <div class="admin-history-download__actions"><button class="admin-history-download__clear" type="button" :disabled="(!fromDate && !toDate) || exporting" @click="clearDateRange">Limpiar</button><button type="button" :disabled="!hasDateRange || exporting" @click="exportRecords('pdf')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM15 3v5h5M9 13h6M9 17h4" /></svg> PDF</button><button type="button" :disabled="!hasDateRange || exporting" @click="exportRecords('excel')">▤ Excel</button></div>
     <p v-if="errorMessage" class="admin-history-feedback admin-history-feedback--error">{{ errorMessage }}</p>
   </section>
 </template>

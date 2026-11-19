@@ -243,15 +243,24 @@
 }
 
 .admin-history-filters {
+  height: 112px;
+  box-sizing: border-box;
   margin-bottom: 20px;
-  padding: 16px;
+  padding: 10px 16px 8px;
+}
+
+.admin-history-filters--today {
+  height: 120px;
+  padding: 10px 16px 8px;
+  overflow: hidden;
 }
 
 .admin-history-panel__title {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 12px;
+  height: 16px;
+  margin: 0 0 5px;
   color: #9baaa4;
   font-size: 11px;
 }
@@ -270,6 +279,67 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
+}
+
+.admin-history-filter-grid--today {
+  grid-template-columns: minmax(240px, 1fr) 220px 250px;
+  width: 100%;
+  max-width: 1128px;
+  margin: 0;
+  align-items: start;
+}
+
+.admin-history-filter-grid--today label {
+  gap: 3px;
+}
+
+.admin-history-filter-grid--today .admin-history-download--compact {
+  display: block;
+  width: 100%;
+  height: 61px;
+  align-self: start;
+  margin: 0 auto;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.admin-history-filter-grid--today .admin-history-download--compact .admin-history-download__actions {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  max-width: 250px;
+  margin: 0 auto;
+  justify-content: center;
+  gap: 5px;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.admin-history-filter-grid--today .admin-history-download--compact .admin-history-download__actions button {
+  height: 30px;
+  min-width: 78px;
+  max-width: 82px;
+  flex: 0 0 82px;
+  box-sizing: border-box;
+  padding: 0 8px;
+  justify-content: center;
+  border: 0;
+  border-radius: 8px;
+  background: #7cb09d;
+  color: #f2efe3;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.admin-history-filter-grid--today .admin-history-download--compact .admin-history-download__actions button svg {
+  width: 14px;
+  height: 14px;
+  margin-right: 4px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
 }
 
 .admin-history-panel label {
@@ -328,6 +398,65 @@
   color: #9baaa4;
   cursor: pointer;
   font-size: 11px;
+}
+
+.admin-history-filter-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 2px;
+}
+
+.admin-history-filter-footer .admin-history-clear {
+  margin-top: 0;
+}
+
+.admin-history-download--compact {
+  min-height: auto;
+  width: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.admin-history-download__compact-copy {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  max-width: 250px;
+  height: 28px;
+  transform: translateY(-10px);
+  margin: 0 auto -7px;
+  text-align: left;
+}
+
+.admin-history-download__compact-copy h2 {
+  margin: 0;
+  color: #f2efe3;
+  font-size: 11px;
+  line-height: 1.2;
+  white-space: normal;
+}
+
+.admin-history-download__compact-copy .admin-history-download__icon {
+  width: 28px;
+  height: 28px;
+  flex-basis: 28px;
+  border-radius: 8px;
+}
+
+.admin-history-download__compact-copy .admin-history-download__icon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.admin-history-download--compact .admin-history-download__actions {
+  padding: 0;
 }
 
 .admin-history-download {
@@ -929,6 +1058,14 @@
 }
 
 @media (max-width: 900px) {
+  .admin-history-filters--today {
+    height: 120px;
+  }
+
+  .admin-history-filter-grid--today {
+    grid-template-columns: minmax(220px, 1fr) minmax(170px, .72fr) minmax(178px, .72fr);
+  }
+
   .admin-history-download {
     align-items: stretch;
     flex-wrap: wrap;
@@ -944,12 +1081,28 @@
 }
 
 @media (max-width: 600px) {
+  .admin-history-filters--today {
+    height: auto;
+  }
+
   .admin-history-page {
     padding: 20px 14px 40px;
   }
 
   .admin-history-filter-grid {
     grid-template-columns: 1fr;
+  }
+
+  .admin-history-filter-grid--today {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-history-filter-grid--today .admin-history-download--compact {
+    min-height: 72px;
+  }
+
+  .admin-history-filter-grid--today .admin-history-download--compact .admin-history-download__actions {
+    max-width: none;
   }
 
   .admin-history-download {

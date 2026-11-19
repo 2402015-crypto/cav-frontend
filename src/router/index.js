@@ -53,6 +53,7 @@ const router = createRouter({
         { path: 'usuarios', name: 'admin-usuarios', component: UsersView, meta: { title: 'Usuarios', sectionTitle: 'Usuarios' } },
         { path: 'bitacora', name: 'admin-bitacora', component: BitacoraView, meta: { title: 'Bitácora', sectionTitle: 'Bitácora' } },
         { path: 'historial', name: 'admin-historial', component: HistorialRegistrosView, meta: { title: 'Historial de registros', sectionTitle: 'Historial de registros' } },
+        { path: 'historial/hoy', name: 'admin-historial-hoy', component: HistorialRegistrosView, meta: { title: 'Registros de accesos del día', sectionTitle: 'Registros de accesos del día', todayOnly: true } },
         { path: 'historial/vehiculo/:id', name: 'admin-vehiculo-detalle', component: VehiculoDetalleView, meta: { title: 'Detalle del vehículo', sectionTitle: 'Detalle del vehículo' } },
         { path: 'configuracion', name: 'admin-configuracion', component: CatalogosView, meta: { title: 'Catálogos', sectionTitle: 'Catálogos' } },
       ],

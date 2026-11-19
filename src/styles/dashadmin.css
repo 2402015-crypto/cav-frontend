@@ -72,6 +72,10 @@
 .admin-metric--lead {
     grid-row: span 2;
     min-height: 210px;
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
 }
 
 .admin-metric--lead {

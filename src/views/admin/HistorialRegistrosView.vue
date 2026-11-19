@@ -1,10 +1,12 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import DownloadRangePanel from '@/components/admin/DownloadRangePanel.vue'
 import { listAccessHistory } from '@/services/api/salidas'
 
 const router = useRouter()
+const route = useRoute()
+const todayOnly = computed(() => route.meta.todayOnly === true)
 const records = ref([])
 const query = ref('')
 const visitorType = ref('')
@@ -177,8 +179,10 @@ function closeCalendarOnOutsideClick(event) {
 function clearFilters() {
   query.value = ''
   visitorType.value = ''
-  fromDate.value = ''
-  toDate.value = ''
+  if (!todayOnly.value) {
+    fromDate.value = ''
+    toDate.value = ''
+  }
   activeDateField.value = ''
   loadHistory()
 }
@@ -294,6 +298,12 @@ async function downloadPdf() {
 watch(visitorType, loadHistory)
 
 onMounted(() => {
+  if (todayOnly.value) {
+    const today = new Date()
+    const date = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
+    fromDate.value = date
+    toDate.value = date
+  }
   loadHistory()
   document.addEventListener('click', closeCalendarOnOutsideClick)
 })
@@ -307,26 +317,40 @@ onBeforeUnmount(() => {
 <template>
   <section class="admin-history-page">
     <header class="admin-history-header">
-      <h1>Historial de registros</h1>
+      <h1>{{ todayOnly ? 'Registros de accesos del día' : 'Historial de registros' }}</h1>
       <p>{{ totalRecords }} {{ totalRecords === 1 ? 'registro' : 'registros' }}</p>
     </header>
 
-    <section class="admin-history-panel admin-history-filters">
+    <section class="admin-history-panel admin-history-filters" :class="{ 'admin-history-filters--today': todayOnly }">
       <div class="admin-history-panel__title">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16l-6 7v5l-4 2v-7L4 5Z" /></svg>
         <strong>FILTROS</strong>
       </div>
-      <div class="admin-history-filter-grid">
+      <div class="admin-history-filter-grid" :class="{ 'admin-history-filter-grid--today': todayOnly }">
         <label>BUSCAR<input v-model="query" type="search" placeholder="Placa, conductor o empresa" @input="onQueryInput" /></label>
         <label>TIPO DE VISITANTE<select v-model="visitorType"><option value="">Todos</option><option v-for="type in visitorTypes" :key="type.value" :value="type.value">{{ type.label }}</option></select></label>
+        <DownloadRangePanel
+          v-if="todayOnly"
+          compact
+          hide-clear
+          title="Descargar lista de vehículos registrados"
+          description=""
+          :file-prefix="'accesos-del-dia'"
+          :fixed-date="fromDate"
+          :load-records="(filters) => listAccessHistory({ ...filters, q: query, tipo: visitorType }).then(response => response.data.data || [])"
+        />
       </div>
-      <button class="admin-history-clear" type="button" @click="clearFilters">Limpiar filtros</button>
+      <div class="admin-history-filter-footer">
+        <button class="admin-history-clear" type="button" @click="clearFilters">Limpiar filtros</button>
+      </div>
     </section>
 
     <DownloadRangePanel
-      title="Descargar lista de vehículos registrados"
-      description="Selecciona un rango de fechas de registro."
-      file-prefix="historial-registros"
+      v-if="!todayOnly"
+      :title="todayOnly ? 'Descargar registros de accesos del día' : 'Descargar lista de vehículos registrados'"
+      :description="todayOnly ? 'Descarga únicamente los registros del día actual.' : 'Selecciona un rango de fechas de registro.'"
+      :file-prefix="todayOnly ? 'accesos-del-dia' : 'historial-registros'"
+      :fixed-date="todayOnly ? fromDate : ''"
       :load-records="(filters) => listAccessHistory({ ...filters, q: query, tipo: visitorType }).then(response => response.data.data || [])"
     />
 
@@ -344,7 +368,7 @@ onBeforeUnmount(() => {
             <td><span class="admin-history-type"><svg viewBox="0 0 24 24" aria-hidden="true" v-html="iconPath(visitorCategory(record.tipoVisitante))" />{{ visitorCategory(record.tipoVisitante) }}</span></td>
             <td>{{ formatDateTime(record.fechaEntrada) }}</td>
             <td>{{ formatDateTime(record.fechaSalida) }}</td>
-            <td class="admin-history-table__visits">{{ visitsByPlate[record.placa || 'sin-placa'] }}</td>
+            <td class="admin-history-table__visits">{{ record.totalVisitas ?? visitsByPlate[record.placa || 'sin-placa'] }}</td>
           </tr>
         </tbody>
       </table>
