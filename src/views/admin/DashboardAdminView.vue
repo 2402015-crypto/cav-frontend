@@ -116,6 +116,14 @@ function openTodayAccessHistory() {
   router.push({ name: 'admin-historial-hoy' })
 }
 
+function openActiveVehicles() {
+  router.push({ name: 'admin-vehiculos-activos' })
+}
+
+function openCompanyVisits() {
+  router.push({ name: 'admin-visitas-empresas' })
+}
+
 watch(period, loadDashboard)
 watch(activeChart, async () => {
   await nextTick()
@@ -153,14 +161,28 @@ onBeforeUnmount(() => window.clearInterval(refreshTimer))
           </div>
           <strong>{{ summary.registros ?? 0 }}</strong>
         </button>
+        <button type="button" class="admin-metric admin-metric--link" aria-label="Ver vehículos activos" @click="openActiveVehicles">
+          <div class="admin-metric__icon admin-metric__icon--clock">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" /><path d="M12 7v5l3 2" /></svg>
+          </div>
+          <strong>{{ summary.vehiculosActivos ?? 0 }}</strong>
+          <p>Vehículos activos</p><small>Dentro de las instalaciones</small>
+          <span class="admin-metric__chevron">›</span>
+        </button>
+        <button type="button" class="admin-metric admin-metric--link" aria-label="Ver visitas de empresas y compañías" @click="openCompanyVisits">
+          <div class="admin-metric__icon admin-metric__icon--document">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l3 3v15H6zM9 11h6M9 15h6" /></svg>
+          </div>
+          <strong>{{ summary.empresasTransportadoras ?? 0 }}</strong>
+          <p>Visitas de empresas</p><small>Empresas únicas · últimos 7 días</small>
+          <span class="admin-metric__chevron">›</span>
+        </button>
         <article v-for="metric in [
-          ['vehiculosActivos', 'Vehículos activos', 'Dentro de las instalaciones', 'clock'],
           ['entradas', 'Entradas hoy', 'Accesos registrados', 'entry'],
           ['salidas', 'Salidas hoy', 'Movimientos completados', 'exit'],
-          ['empresasTransportadoras', 'Visitas de empresas / compañías', 'Registros únicos', 'document'],
           ['precisionOcr', 'Precisión OCR', 'Reconocimiento de placas', 'scan'],
           ['registrosPorUsuario', 'Registros por usuario', 'Promedio diario', 'users'],
-        ]" :key="metric[0]" class="admin-metric">
+        ]" :key="metric[0]" class="admin-metric" :class="`admin-metric--${metric[0]}`">
           <div class="admin-metric__icon" :class="`admin-metric__icon--${metric[3]}`">
             <svg v-if="metric[3] === 'clock'" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" /><path d="M12 7v5l3 2" /></svg>
             <svg v-else-if="metric[3] === 'entry'" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h12M12 8l4 4-4 4M16 5h4v14h-4" /></svg>

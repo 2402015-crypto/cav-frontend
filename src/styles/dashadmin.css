@@ -71,6 +71,7 @@
 
 .admin-metric--lead {
     grid-row: span 2;
+    grid-column: 1;
     min-height: 210px;
     width: 100%;
     text-align: left;
@@ -81,6 +82,76 @@
 .admin-metric--lead {
     display: flex;
     align-items: flex-start;
+}
+
+.admin-metric--link {
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+    transition: border-color 180ms ease, background 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+}
+
+.admin-metric--link:hover {
+    border-color: #7cb09d;
+    background: #38342f;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(124, 176, 157, .08);
+}
+
+.admin-metric--link:active {
+    transform: translateY(0) scale(.985);
+}
+
+.admin-dashboard__summary > .admin-metric--link:nth-child(2) {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.admin-dashboard__summary > .admin-metric--link:nth-child(3) {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.admin-metric--entradas,
+.admin-metric--precisionOcr {
+    grid-column: 3;
+}
+
+.admin-metric--entradas {
+    grid-row: 1;
+}
+
+.admin-metric--precisionOcr {
+    grid-row: 2;
+}
+
+.admin-metric--salidas,
+.admin-metric--registrosPorUsuario {
+    grid-column: 4;
+}
+
+.admin-metric--salidas {
+    grid-row: 1;
+}
+
+.admin-metric--registrosPorUsuario {
+    grid-row: 2;
+}
+
+.admin-metric--lead {
+    transition: border-color 180ms ease, background 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+}
+
+.admin-metric--lead:hover {
+    border-color: #7cb09d;
+    background: #38342f;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(124, 176, 157, .08);
+}
+
+.admin-metric--lead:active {
+    transform: translateY(0) scale(.985);
 }
 
 .admin-metric__lead-copy {

@@ -13,6 +13,8 @@ import UsersView from '@/views/admin/UsersView.vue'
 import CatalogosView from '@/views/admin/CatalogosView.vue'
 import HistorialRegistrosView from '@/views/admin/HistorialRegistrosView.vue'
 import VehiculoDetalleView from '@/views/admin/VehiculoDetalleView.vue'
+import VehiculosActivosAdminView from '@/views/admin/VehiculosActivosAdminView.vue'
+import VisitasEmpresasAdminView from '@/views/admin/VisitasEmpresasAdminView.vue'
 import BitacoraView from '@/views/admin/BitacoraView.vue'
 import UnauthorizedView from '@/views/UnauthorizedView.vue'
 import { useAuthStore } from '@/stores/auth'
@@ -50,6 +52,8 @@ const router = createRouter({
       redirect: { name: 'admin-dashboard' },
       children: [
         { path: 'dashboard', name: 'admin-dashboard', component: DashboardAdminView, meta: { title: 'Dashboard administrativo', sectionTitle: 'Dashboard Administrativo' } },
+        { path: 'vehiculos-activos', name: 'admin-vehiculos-activos', component: VehiculosActivosAdminView, meta: { title: 'Vehículos activos', sectionTitle: 'Vehículos activos' } },
+        { path: 'visitas-empresas', name: 'admin-visitas-empresas', component: VisitasEmpresasAdminView, meta: { title: 'Visitas de empresas y compañías', sectionTitle: 'Visitas de empresas y compañías' } },
         { path: 'usuarios', name: 'admin-usuarios', component: UsersView, meta: { title: 'Usuarios', sectionTitle: 'Usuarios' } },
         { path: 'bitacora', name: 'admin-bitacora', component: BitacoraView, meta: { title: 'Bitácora', sectionTitle: 'Bitácora' } },
         { path: 'historial', name: 'admin-historial', component: HistorialRegistrosView, meta: { title: 'Historial de registros', sectionTitle: 'Historial de registros' } },

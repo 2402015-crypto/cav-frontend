@@ -187,6 +187,10 @@ onMounted(async () => {
       <div class="admin-audit-filter">
         <label for="audit-plate">Buscar por placa</label>
         <input id="audit-plate" v-model="plate" type="search" placeholder="Número de placa" @keyup.enter="search">
+        <div class="admin-audit-plate-actions">
+          <button class="admin-audit-search" type="button" @click="search">Buscar</button>
+          <button class="admin-history-download__clear" type="button" @click="clearFilters">Limpiar</button>
+        </div>
       </div>
       <div class="admin-audit-filter">
         <label for="audit-user">Usuario</label>
@@ -202,8 +206,6 @@ onMounted(async () => {
           <option v-for="action in actionOptions" :key="action.value" :value="action.value">{{ action.label }}</option>
         </select>
       </div>
-      <button class="admin-audit-search" type="button" @click="search">Buscar</button>
-      <button class="admin-history-download__clear" type="button" @click="clearFilters">Limpiar</button>
     </section>
 
     <DownloadRangePanel
@@ -256,25 +258,25 @@ onMounted(async () => {
             </span>
           </div>
           <div class="admin-audit-modal__vehicle-grid">
-            <p><strong>NOMBRE COMPLETO</strong>{{ valueOrNA(selectedRecord.vehicle.conductor) }}</p>
+            <p><strong>Nombre completo</strong>{{ valueOrNA(selectedRecord.vehicle.conductor) }}</p>
             <p v-if="['Proveedor', 'Transportadora'].includes(visitorType(selectedRecord.vehicle.tipoVisitante))"><strong>{{ visitorType(selectedRecord.vehicle.tipoVisitante) === 'Transportadora' ? 'TRANSPORTADORA' : 'EMPRESA' }}</strong>{{ valueOrNA(selectedRecord.vehicle.empresa || selectedRecord.vehicle.transportadora) }}</p>
-            <p><strong>TIPO DE REGISTRO</strong>{{ visitorType(selectedRecord.vehicle.tipoVisitante) }}</p>
+            <p><strong>Tipo de registro</strong>{{ visitorType(selectedRecord.vehicle.tipoVisitante) }}</p>
             <template v-if="visitorType(selectedRecord.vehicle.tipoVisitante) === 'Transportadora'">
-              <p><strong>MARCA</strong>{{ valueOrNA(selectedRecord.vehicle.marca) }}</p>
-              <p><strong>TIPO DE MOVIMIENTO</strong>{{ valueOrNA(selectedRecord.vehicle.tipoMovimiento) }}</p>
-              <p><strong>VILLA</strong>{{ valueOrNA(selectedRecord.vehicle.villa) }}</p>
-              <p><strong>PASAJEROS (PAX)</strong>{{ valueOrNA(selectedRecord.vehicle.numeroPax) }}</p>
+              <p><strong>Marca</strong>{{ valueOrNA(selectedRecord.vehicle.marca) }}</p>
+              <p><strong>Tipo de movimiento</strong>{{ valueOrNA(selectedRecord.vehicle.tipoMovimiento) }}</p>
+              <p><strong>Villa</strong>{{ valueOrNA(selectedRecord.vehicle.villa) }}</p>
+              <p><strong>Pasajeros (PAX)</strong>{{ valueOrNA(selectedRecord.vehicle.numeroPax) }}</p>
             </template>
             <template v-else-if="visitorType(selectedRecord.vehicle.tipoVisitante) === 'Taxi'">
-              <p><strong>MARCA</strong>{{ valueOrNA(selectedRecord.vehicle.marca) }}</p>
-              <p><strong>NÚMERO DE UNIDAD</strong>{{ valueOrNA(selectedRecord.vehicle.numeroUnidad) }}</p>
-              <p><strong>VILLA</strong>{{ valueOrNA(selectedRecord.vehicle.villa) }}</p>
-              <p><strong>DESTINO</strong>{{ valueOrNA(selectedRecord.vehicle.destino) }}</p>
+              <p><strong>Marca</strong>{{ valueOrNA(selectedRecord.vehicle.marca) }}</p>
+              <p><strong>Número de unidad</strong>{{ valueOrNA(selectedRecord.vehicle.numeroUnidad) }}</p>
+              <p><strong>Villa</strong>{{ valueOrNA(selectedRecord.vehicle.villa) }}</p>
+              <p><strong>Destino</strong>{{ valueOrNA(selectedRecord.vehicle.destino) }}</p>
             </template>
             <template v-else>
-              <p><strong>MARCA</strong>{{ valueOrNA(selectedRecord.vehicle.marca) }}</p>
-              <p><strong>COLOR</strong>{{ valueOrNA(selectedRecord.vehicle.color) }}</p>
-              <p><strong>ÁREA DE DESTINO</strong>{{ valueOrNA(selectedRecord.vehicle.area) }}</p>
+              <p><strong>Marca</strong>{{ valueOrNA(selectedRecord.vehicle.marca) }}</p>
+              <p><strong>Color</strong>{{ valueOrNA(selectedRecord.vehicle.color) }}</p>
+              <p><strong>Área de destino</strong>{{ valueOrNA(selectedRecord.vehicle.area) }}</p>
             </template>
           </div>
           <div v-if="isObservationAction(selectedRecord)" class="admin-audit-modal__times">

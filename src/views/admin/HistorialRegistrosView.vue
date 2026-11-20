@@ -328,7 +328,11 @@ onBeforeUnmount(() => {
       </div>
       <div class="admin-history-filter-grid" :class="{ 'admin-history-filter-grid--today': todayOnly }">
         <label>BUSCAR<input v-model="query" type="search" placeholder="Placa, conductor o empresa" @input="onQueryInput" /></label>
-        <label>TIPO DE VISITANTE<select v-model="visitorType"><option value="">Todos</option><option v-for="type in visitorTypes" :key="type.value" :value="type.value">{{ type.label }}</option></select></label>
+        <div v-if="!todayOnly" class="admin-history-visitor-filter">
+          <label>TIPO DE VISITANTE<select v-model="visitorType"><option value="">Todos</option><option v-for="type in visitorTypes" :key="type.value" :value="type.value">{{ type.label }}</option></select></label>
+          <button class="admin-history-clear" type="button" @click="clearFilters">Limpiar filtros</button>
+        </div>
+        <label v-else>TIPO DE VISITANTE<select v-model="visitorType"><option value="">Todos</option><option v-for="type in visitorTypes" :key="type.value" :value="type.value">{{ type.label }}</option></select></label>
         <DownloadRangePanel
           v-if="todayOnly"
           compact
@@ -340,7 +344,7 @@ onBeforeUnmount(() => {
           :load-records="(filters) => listAccessHistory({ ...filters, q: query, tipo: visitorType }).then(response => response.data.data || [])"
         />
       </div>
-      <div class="admin-history-filter-footer">
+      <div v-if="todayOnly" class="admin-history-filter-footer">
         <button class="admin-history-clear" type="button" @click="clearFilters">Limpiar filtros</button>
       </div>
     </section>
