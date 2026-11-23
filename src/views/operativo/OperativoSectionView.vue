@@ -100,6 +100,7 @@ onBeforeUnmount(() => window.clearInterval(refreshTimer))
     <div v-if="loading" class="active-vehicles-state">Cargando panel...</div>
 
     <template v-else>
+      <div class="operative-dashboard__section-label">RESUMEN DEL DÍA</div>
       <section class="operative-dashboard__stats-panel" aria-label="Resumen del día">
         <div class="operative-dashboard__stats">
         <article class="dashboard-stat dashboard-stat--entry">
@@ -121,6 +122,8 @@ onBeforeUnmount(() => window.clearInterval(refreshTimer))
         </div>
       </section>
 
+      <div class="operative-dashboard__section-label operative-dashboard__section-label--actions">ACCIONES RÁPIDAS</div>
+      <p class="operative-dashboard__section-subtitle">Registra un movimiento de acceso</p>
       <section class="operative-dashboard__actions">
         <button class="dashboard-action dashboard-action--entry" type="button" @click="goTo('operativo-entrada')">
           <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 5h5a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-5M4 12h10M10 8l4 4-4 4" /></svg></span>

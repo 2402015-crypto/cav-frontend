@@ -104,6 +104,25 @@
   font-size: 17px;
 }
 
+.operative-dashboard__section-label {
+  margin: 0 0 10px;
+  color: #69766f;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2.2px;
+}
+
+.operative-dashboard__section-label--actions {
+  margin-top: 22px;
+  margin-bottom: 3px;
+}
+
+.operative-dashboard__section-subtitle {
+  margin: 0 0 8px;
+  color: #858d88;
+  font-size: 14px;
+}
+
 .operative-dashboard__stats,
 .operative-dashboard__actions {
   display: grid;
@@ -239,8 +258,8 @@
 }
 
 .operative-dashboard__actions {
-  margin-top: 18px;
-  padding: 22px 30px;
+  margin-top: 8px;
+  padding: 10px 18px;
   border: 1px solid #e6e9e5;
   border-radius: 22px;
   background: #fff;
@@ -249,7 +268,7 @@
 
 .dashboard-action {
   display: flex;
-  min-height: 124px;
+  min-height: 96px;
   align-items: center;
   justify-content: flex-start;
   gap: 18px;
@@ -433,11 +452,11 @@
 
 .operative-dashboard__actions {
   margin-top: 0;
-  padding: 16px 22px;
+  padding: 10px 18px;
 }
 
 .dashboard-action {
-  min-height: 104px;
+  min-height: 82px;
   gap: 14px;
   padding: 12px 16px;
   border-radius: 22px;
@@ -2491,6 +2510,101 @@
 /* ========================================================================== */
 /* 5. Ajustes responsive de la plantilla operativa                            */
 /* ========================================================================== */
+
+@media (min-width: 601px) and (max-width: 900px) {
+  .operative-header {
+    height: 68px;
+    padding: 0 32px;
+  }
+
+  .operative-logo {
+    width: 142px;
+  }
+
+  .operative-profile {
+    width: 44px;
+    height: 44px;
+  }
+
+  .operative-profile img {
+    width: 42px;
+    height: 42px;
+  }
+
+  .operative-main {
+    padding-top: 68px;
+    padding-bottom: 74px;
+  }
+
+  .operative-nav {
+    height: 74px;
+  }
+
+  .operative-nav__item {
+    gap: 4px;
+  }
+
+  .operative-nav__item svg {
+    width: 27px;
+    height: 27px;
+  }
+
+  .operative-nav__item span {
+    font-size: 11px;
+  }
+
+  .operative-dashboard {
+    width: min(100%, 720px);
+    min-height: calc(100vh - 142px);
+    padding: 26px 24px 24px;
+  }
+
+  .operative-dashboard__header {
+    margin-bottom: 20px;
+  }
+
+  .operative-dashboard__header h1 {
+    font-size: 30px;
+  }
+
+  .operative-dashboard__header p {
+    font-size: 17px;
+  }
+
+  .operative-dashboard__stats-panel {
+    padding: 12px;
+  }
+
+  .operative-dashboard__stats {
+    gap: 12px;
+  }
+
+  .dashboard-stat {
+    min-height: 88px;
+  }
+
+  .operative-dashboard__actions {
+    min-height: 112px;
+    align-items: center;
+    margin-top: 8px;
+    padding: 10px 16px;
+  }
+
+  .dashboard-action {
+    min-height: 88px;
+  }
+
+  .dashboard-action > span,
+  .dashboard-action svg {
+    width: 64px;
+    height: 64px;
+    flex-basis: 64px;
+  }
+
+  .dashboard-action strong {
+    font-size: 19px;
+  }
+}
 
 @media (max-width: 600px) {
   .entry-page--capture {
