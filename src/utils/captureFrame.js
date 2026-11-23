@@ -1,8 +1,10 @@
-export function captureVideoView(video, view) {
+export function captureVideoView(video, view, cropView = null) {
   if (!video || video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA || !video.videoWidth || !video.videoHeight || !view) return ''
 
-  const viewRect = view.getBoundingClientRect()
+  const viewRect = (cropView || view).getBoundingClientRect()
   const videoRect = video.getBoundingClientRect()
+  if (!videoRect.width || !videoRect.height) return ''
+
   const scale = Math.max(videoRect.width / video.videoWidth, videoRect.height / video.videoHeight)
   const renderedWidth = video.videoWidth * scale
   const renderedHeight = video.videoHeight * scale
@@ -13,8 +15,10 @@ export function captureVideoView(video, view) {
   const positionRatioY = parseObjectPosition(positionY)
   const imageOffsetX = overflowX * positionRatioX
   const imageOffsetY = overflowY * positionRatioY
-  const sourceX = ((viewRect.left - videoRect.left) + imageOffsetX) / scale
-  const sourceY = ((viewRect.top - videoRect.top) + imageOffsetY) / scale
+  const visibleLeft = viewRect.left - (videoRect.left - imageOffsetX)
+  const visibleTop = viewRect.top - (videoRect.top - imageOffsetY)
+  const sourceX = visibleLeft / scale
+  const sourceY = visibleTop / scale
   const sourceWidth = viewRect.width / scale
   const sourceHeight = viewRect.height / scale
   const cropX = Math.max(0, Math.min(video.videoWidth, sourceX))
@@ -37,4 +41,22 @@ function parseObjectPosition(value) {
   if (value === 'left' || value === 'top') return 0
   if (value === 'right' || value === 'bottom') return 1
   return 0.5
+}
+
+export async function applyCameraFocusConstraints(stream) {
+  if (!stream) return
+  const track = stream.getVideoTracks()[0]
+  if (!track?.getCapabilities || !track.applyConstraints) return
+
+  const capabilities = track.getCapabilities()
+  const advanced = {}
+  if (capabilities.focusMode?.includes('continuous')) advanced.focusMode = 'continuous'
+  if (capabilities.exposureMode?.includes('continuous')) advanced.exposureMode = 'continuous'
+  if (advanced.focusMode || advanced.exposureMode) {
+    try {
+      await track.applyConstraints({ advanced: [advanced] })
+    } catch {
+      // El navegador no admite todos los controles y puede conservar el enfoque automático.
+    }
+  }
 }

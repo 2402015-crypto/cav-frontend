@@ -2,12 +2,13 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { recognizePlate } from '@/services/api/entradas'
 import { getExitDetails, registerExit, searchActiveExit } from '@/services/api/salidas'
-import { captureVideoView } from '@/utils/captureFrame'
+import { applyCameraFocusConstraints, captureVideoView } from '@/utils/captureFrame'
 
 const emit = defineEmits(['back', 'registered', 'found'])
 const props = defineProps({ initialRecord: { type: Object, default: null } })
 const video = ref(null)
 const cameraView = ref(null)
+const cameraFrame = ref(null)
 const reading = ref(false)
 const captured = ref(Boolean(props.initialRecord))
 const cameraError = ref('')
@@ -52,8 +53,9 @@ async function startCamera() {
       stream.value = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: { ideal: 'environment' },
-          width: { ideal: 1280 },
-          height: { ideal: 720 },
+          width: { ideal: 1920 },
+          height: { ideal: 1080 },
+          aspectRatio: { ideal: 16 / 9 },
         },
         audio: false,
       })
@@ -61,6 +63,7 @@ async function startCamera() {
     if (video.value) {
       video.value.srcObject = stream.value
       await video.value.play()
+      await applyCameraFocusConstraints(stream.value)
     }
     cameraError.value = ''
   } catch {
@@ -91,7 +94,7 @@ async function handleVisibilityChange() {
 }
 
 function captureFrame() {
-  return captureVideoView(video.value, cameraView.value)
+  return captureVideoView(video.value, cameraView.value, cameraFrame.value)
 }
 
 function getErrorMessage(error, fallback) {
@@ -204,7 +207,7 @@ onBeforeUnmount(() => {
       <div ref="cameraView" class="exit-camera-view">
         <video v-if="!capturedImage" ref="video" autoplay muted playsinline aria-label="Cámara para salida" />
         <img v-else :src="capturedImage" alt="Captura temporal de la placa" />
-        <div v-if="!capturedImage" class="exit-camera-frame" aria-hidden="true"><i /><i /><i /><i /></div>
+        <div v-if="!capturedImage" ref="cameraFrame" class="exit-camera-frame" aria-hidden="true"><i /><i /><i /><i /></div>
         <div v-if="reading" class="exit-camera-reading"><span class="exit-loading-dots">···</span><span>Leyendo placa</span></div>
         <div v-else-if="captured" class="exit-camera-detected"><span>✓</span><strong>Placa capturada</strong></div>
         <p v-else-if="ocrError" class="exit-camera-error" role="alert">{{ ocrError }}</p>

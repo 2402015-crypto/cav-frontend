@@ -2022,6 +2022,11 @@
   padding: 15px 0 0;
 }
 
+.entry-ocr-actions--outside {
+  margin: 12px 0;
+  padding: 0;
+}
+
 .entry-secondary-button,
 .entry-primary-button {
   display: inline-flex;

@@ -1,12 +1,13 @@
 <script setup>
 import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { recognizePlate } from '@/services/api/entradas'
-import { captureVideoView } from '@/utils/captureFrame'
+import { applyCameraFocusConstraints, captureVideoView } from '@/utils/captureFrame'
 
 const emit = defineEmits(['back', 'confirm'])
 
 const video = ref(null)
 const cameraView = ref(null)
+const cameraFrame = ref(null)
 const cameraError = ref('')
 const cameraStream = ref(null)
 const capturedImage = ref('')
@@ -28,7 +29,7 @@ function confirmCapture() {
 }
 
 function captureFrame() {
-  return captureVideoView(video.value, cameraView.value)
+  return captureVideoView(video.value, cameraView.value, cameraFrame.value)
 }
 
 function scheduleCaptureRestart() {
@@ -49,8 +50,9 @@ async function startCamera() {
       cameraStream.value = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: { ideal: 'environment' },
-          width: { ideal: 1280 },
-          height: { ideal: 720 },
+          width: { ideal: 1920 },
+          height: { ideal: 1080 },
+          aspectRatio: { ideal: 16 / 9 },
         },
         audio: false,
       })
@@ -58,6 +60,7 @@ async function startCamera() {
     if (video.value) {
       video.value.srcObject = cameraStream.value
       await video.value.play()
+      await applyCameraFocusConstraints(cameraStream.value)
     }
     cameraError.value = ''
   } catch {
@@ -144,7 +147,7 @@ onBeforeUnmount(() => {
       <div ref="cameraView" class="entry-camera-view">
         <video v-if="!capturedImage" ref="video" autoplay muted playsinline aria-label="Vista de cámara para capturar placa" />
         <img v-else :src="capturedImage" alt="Captura temporal de la placa" />
-        <div v-if="!capturedImage" class="entry-camera-frame" aria-hidden="true"><i /><i /><i /><i /></div>
+        <div v-if="!capturedImage" ref="cameraFrame" class="entry-camera-frame" aria-hidden="true"><i /><i /><i /><i /></div>
         <div v-if="reading" class="entry-camera-reading"><span class="entry-loading-dots">···</span><span>Leyendo placa</span></div>
         <div v-else-if="detected" class="entry-camera-detected"><span>✓</span><strong>Placa detectada</strong></div>
         <p v-else-if="ocrError" class="entry-camera-error">{{ ocrError }}</p>
@@ -154,17 +157,17 @@ onBeforeUnmount(() => {
       <button v-if="!detected" class="entry-camera-button" type="button" :disabled="reading" aria-label="Capturar placa" @click="capturePlate"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="12" rx="2" /><path d="M8 7 9.5 4h5L16 7M12 11a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z" /></svg></button>
     </div>
 
+    <div v-if="detected" class="entry-ocr-actions entry-ocr-actions--outside">
+      <button class="entry-secondary-button" type="button" @click="retake">‹&nbsp; Retomar</button>
+      <button class="entry-primary-button" type="button" @click="confirmCapture">✓&nbsp; Confirmar</button>
+    </div>
+
     <div v-if="detected" class="entry-plate-result">
       <label>PLACA DETECTADA</label>
       <strong>{{ detectedPlate }}</strong>
       <p>Puedes editar la placa si el sistema no fue preciso:</p>
       <label for="editable-plate">PLACA EDITABLE</label>
       <div class="entry-plate-input"><input id="editable-plate" v-model="editablePlate" type="text" maxlength="30" @input="normalizeEditablePlate" /><span aria-hidden="true">↗</span></div>
-    </div>
-
-    <div v-if="detected" class="entry-ocr-actions">
-      <button class="entry-secondary-button" type="button" @click="retake">‹&nbsp; Retomar</button>
-      <button v-if="detected" class="entry-primary-button" type="button" @click="confirmCapture">✓&nbsp; Confirmar</button>
     </div>
   </section>
 </template>
