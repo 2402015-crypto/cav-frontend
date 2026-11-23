@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { nextTick, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import SalidaCameraPanel from '@/components/operativo/salida/SalidaCameraPanel.vue'
 import SalidaManualPanel from '@/components/operativo/salida/SalidaManualPanel.vue'
@@ -31,6 +31,14 @@ function reset() {
   detailsOpen.value = false
   errorMessage.value = ''
   stage.value = 'capture'
+  nextTick(() => window.scrollTo({ top: 0, left: 0, behavior: 'auto' }))
+}
+
+function completeRegistration(value) {
+  record.value = value
+  detailsOpen.value = false
+  stage.value = 'success'
+  nextTick(() => window.scrollTo({ top: 0, left: 0, behavior: 'auto' }))
 }
 
 function returnFromDetails() {
@@ -62,12 +70,12 @@ onMounted(() => {
           Visitante</button>
       </div>
       <SalidaCameraPanel v-if="mode === 'automatic'" :initial-record="record" @back="reset"
-        @found="showRecord" @registered="record = $event; stage = 'success'" />
+        @found="showRecord" @registered="completeRegistration" />
       <SalidaManualPanel v-else @found="showRecord"
-        @registered="record = $event; stage = 'success'" />
+        @registered="completeRegistration" />
     </template>
     <SalidaSuccessView v-else :record="record" @panel="reset" />
     <VehicleDetailsModal v-if="detailsOpen && record" :record="record"
-      @close="returnFromDetails" @registered="record = $event; detailsOpen = false; stage = 'success'" />
+      @close="returnFromDetails" @registered="completeRegistration" />
   </section>
 </template>

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import EntradaForm from '@/components/operativo/entrada/FormularioEntrada.vue'
 import EntrySuccessView from '@/components/operativo/entrada/EntrySuccessView.vue'
@@ -89,6 +89,7 @@ function completeRegistration(response) {
   capturedPlate.value = response.placa
   registeredAt.value = new Date(response.fechaEntrada)
   step.value = 'success'
+  nextTick(() => window.scrollTo({ top: 0, left: 0, behavior: 'auto' }))
 }
 
 function returnToPanel() {
