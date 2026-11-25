@@ -75,6 +75,13 @@ async function openDetails(record) {
   }
 }
 
+function handleRecordUpdated(updatedRecord) {
+  const index = records.value.findIndex(record => record.idRegistro === updatedRecord.idRegistro)
+  if (index === -1) return
+  records.value[index] = { ...records.value[index], ...updatedRecord }
+  selectedRecord.value = { ...selectedRecord.value, ...updatedRecord }
+}
+
 async function confirmExit() {
   if (!confirmRecord.value) return
   try {
@@ -156,7 +163,7 @@ onBeforeUnmount(() => {
       </div>
 
       <VehicleDetailsModal v-if="selectedRecord" :record="selectedRecord"
-        @close="selectedRecord = null" />
+        @close="selectedRecord = null" @registered="handleRecordUpdated" />
 
       <ConfirmModal :open="Boolean(confirmRecord)" variant="operative" title="¿Registrar salida?"
         :message="confirmRecord ? `Se registrará la salida de ${confirmRecord.placa}.` : ''"

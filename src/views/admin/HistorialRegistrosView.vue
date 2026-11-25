@@ -127,6 +127,12 @@ function onDateChange() {
   else records.value = []
 }
 
+function handleDownloadRangeChange(range) {
+  fromDate.value = range.desde || ''
+  toDate.value = range.hasta || ''
+  onDateChange()
+}
+
 function dateDisplay(value) {
   if (!value) return 'dd/mm/aaaa'
   const [year, month, day] = value.split('-')
@@ -356,6 +362,7 @@ onBeforeUnmount(() => {
       :file-prefix="todayOnly ? 'accesos-del-dia' : 'historial-registros'"
       :fixed-date="todayOnly ? fromDate : ''"
       :load-records="(filters) => listAccessHistory({ ...filters, q: query, tipo: visitorType }).then(response => response.data.data || [])"
+      @range-change="handleDownloadRangeChange"
     />
 
     <p v-if="errorMessage" class="admin-history-feedback admin-history-feedback--error" role="alert">{{ errorMessage }}</p>
