@@ -12,7 +12,8 @@ export function createManualEntry(payload) {
 export function recognizePlate(image) {
   const formData = new FormData()
   formData.append('image', image, 'capture.jpg')
-  return http.post('/ocr/recognize', formData)
+  const timeout = Math.max(Number(import.meta.env.VITE_API_TIMEOUT || 10000), 35000)
+  return http.post('/ocr/recognize', formData, { timeout })
 }
 
 export function getDailyStats() {

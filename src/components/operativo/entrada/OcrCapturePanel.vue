@@ -34,9 +34,10 @@ function captureFrame() {
 
 function scheduleCaptureRestart() {
   if (retryTimer.value) clearTimeout(retryTimer.value)
-  retryTimer.value = setTimeout(() => {
+  retryTimer.value = setTimeout(async () => {
     retryTimer.value = null
-    retake()
+    await nextTick()
+    await startCamera()
   }, 1800)
 }
 
@@ -109,7 +110,7 @@ async function capturePlate() {
     detected.value = true
     stopCamera()
   } catch (error) {
-    ocrError.value = error.response?.data?.message || 'No fue posible procesar la captura OCR.'
+    ocrError.value = error.response?.data?.message || error.response?.data?.error || error.message || 'No fue posible procesar la captura OCR.'
     capturedImage.value = ''
     scheduleCaptureRestart()
   } finally {
@@ -157,17 +158,17 @@ onBeforeUnmount(() => {
       <button v-if="!detected" class="entry-camera-button" type="button" :disabled="reading" aria-label="Capturar placa" @click="capturePlate"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="12" rx="2" /><path d="M8 7 9.5 4h5L16 7M12 11a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z" /></svg></button>
     </div>
 
-    <div v-if="detected" class="entry-ocr-actions entry-ocr-actions--outside">
-      <button class="entry-secondary-button" type="button" @click="retake">‹&nbsp; Retomar</button>
-      <button class="entry-primary-button" type="button" @click="confirmCapture">✓&nbsp; Confirmar</button>
-    </div>
-
     <div v-if="detected" class="entry-plate-result">
       <label>PLACA DETECTADA</label>
       <strong>{{ detectedPlate }}</strong>
       <p>Puedes editar la placa si el sistema no fue preciso:</p>
       <label for="editable-plate">PLACA EDITABLE</label>
       <div class="entry-plate-input"><input id="editable-plate" v-model="editablePlate" type="text" maxlength="30" @input="normalizeEditablePlate" /><span aria-hidden="true">↗</span></div>
+    </div>
+
+    <div v-if="detected" class="entry-ocr-actions entry-ocr-actions--outside">
+      <button class="entry-secondary-button" type="button" @click="retake">‹&nbsp; Retomar</button>
+      <button class="entry-primary-button" type="button" @click="confirmCapture">✓&nbsp; Confirmar</button>
     </div>
   </section>
 </template>
