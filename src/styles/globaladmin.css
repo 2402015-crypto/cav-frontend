@@ -343,6 +343,26 @@
 .admin-active-vehicles-table th:nth-child(6) { width: 10%; }
 .admin-active-vehicles-table th:nth-child(7) { width: 8%; }
 
+.admin-active-vehicles-table td:nth-child(2),
+.admin-active-vehicles-table td:nth-child(3) {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.35;
+}
+
+.admin-history-driver-text {
+  display: -webkit-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-height: 1.15;
+}
+
 .admin-history-visitor-filter {
   display: grid;
   grid-template-columns: minmax(220px, 1fr) auto;

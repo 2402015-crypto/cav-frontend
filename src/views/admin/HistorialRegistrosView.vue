@@ -367,7 +367,7 @@ onBeforeUnmount(() => {
           <tr v-else-if="!records.length"><td colspan="7" class="admin-history-state">No hay registros con los criterios seleccionados.</td></tr>
           <tr v-for="record in records" v-else :key="record.idRegistro" class="admin-history-table__row--clickable" tabindex="0" @click="openRecord(record)" @keydown.enter="openRecord(record)">
             <td class="admin-history-table__plate">{{ record.placa || '—' }}</td>
-            <td class="admin-history-table__driver">{{ record.conductor || '—' }}</td>
+            <td class="admin-history-table__driver"><span class="admin-history-driver-text">{{ record.conductor || '—' }}</span></td>
             <td>{{ record.empresa || record.transportadora || '—' }}</td>
             <td><span class="admin-history-type"><svg viewBox="0 0 24 24" aria-hidden="true" v-html="iconPath(visitorCategory(record.tipoVisitante))" />{{ visitorCategory(record.tipoVisitante) }}</span></td>
             <td>{{ formatDateTime(record.fechaEntrada) }}</td>

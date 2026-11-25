@@ -122,7 +122,7 @@ onBeforeUnmount(() => {
           <tr v-else-if="!filteredRecords.length"><td colspan="7" class="admin-history-state">No hay vehículos activos.</td></tr>
           <tr v-for="record in filteredRecords" v-else :key="record.idRegistro" class="admin-history-table__row--clickable" tabindex="0" @click="openRecord(record)" @keydown.enter="openRecord(record)">
             <td class="admin-history-table__plate">{{ record.placa || '—' }}</td>
-            <td class="admin-history-table__driver">{{ record.conductor || '—' }}</td>
+            <td class="admin-history-table__driver"><span class="admin-history-driver-text">{{ record.conductor || '—' }}</span></td>
             <td>{{ record.relacionado || '—' }}</td>
             <td><span class="admin-history-type"><svg viewBox="0 0 24 24" aria-hidden="true" v-html="iconPath(visitorCategory(record.tipoVisitante))" />{{ visitorCategory(record.tipoVisitante) }}</span></td>
             <td>{{ formatEntry(record.fechaEntrada) }}</td>
